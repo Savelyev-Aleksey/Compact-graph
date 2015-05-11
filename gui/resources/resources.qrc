@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/graph.png</file>
+        <file>images/open.png</file>
+        <file>images/save.png</file>
+        <file>translations/graph_ru.qm</file>
+        <file>translations/qtbase_ru.qm</file>
+        <file>translations/qthelp_ru.qm</file>
+        <file>images/graph_info.png</file>
+        <file>images/qt-logo.png</file>
+        <file>images/info.png</file>
+    </qresource>
+</RCC>

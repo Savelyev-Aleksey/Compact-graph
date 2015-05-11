@@ -1,0 +1,42 @@
+#ifndef SAVEGRAPHFORM_H
+#define SAVEGRAPHFORM_H
+
+#include <QWidget>
+
+#include "graph/FileTypes.h"
+
+namespace Ui {
+    class SaveGraphForm;
+}
+
+class MainWindow;
+class SaveFrom;
+
+
+
+class SaveGraphForm : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit SaveGraphForm(MainWindow *mainWindow, QWidget *parent);
+    ~SaveGraphForm();
+
+private:
+    Ui::SaveGraphForm *ui;
+    MainWindow *mainWindow;
+
+    ulong nodeId;
+    FileTypes::Type fileTypeId;
+
+    FileTypes::Type getFileType();
+
+    void prepareGraphWidgets();
+
+private slots:
+    void graphTypeChanged();
+    void validateGraphSave();
+    void saveGraph();
+};
+
+#endif // SAVEGRAPHFORM_H

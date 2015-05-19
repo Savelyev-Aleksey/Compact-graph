@@ -5,27 +5,30 @@
 #include <map>
 #include <deque>
 #include <forward_list>
+
 #include "types.h"
+#include "Worker.h"
 
 class ShortPathElem;
 class ShortPathRootElem;
 class GraphBase;
 class Node;
 
+typedef std::pair <const size_t, ShortPathElem*> PathPair;
 // first hierarchy struct, second basic map
 typedef std::map  <size_t, ShortPathRootElem*> RootPathList;
 typedef std::deque <size_t> NodeIdDeque;
-typedef std::deque <Node *> NodeDeque;
+typedef std::deque <const Node *> NodeDeque;
 
 
 
-class ShortPath
+class ShortPath: public Worker
 {
 public:
     ShortPath(GraphBase& graph);
     ~ShortPath();
 
-    void generateAllShortPaths(float pathLimit = 0);
+    void generateAllShortPaths(float pathLimit);
     void generateShortPath(const size_t startNodeId, float pathLimit = 0);
     bool isPathExist(size_t nodeId) const;
 
@@ -49,9 +52,10 @@ protected:
 
 
     bool isNodeForVisit(const NodeDeque& list, size_t nodeId) const;
-    void createPaths(NodeDeque& nodesToVisit, ShortPathRootElem* rootElem,
-                     float pathLimit);
-    void updateParams(ShortPathElem* elem, float difference, size_t indent);
+    void createPath(NodeDeque& nodesToVisit, ShortPathRootElem* rootElem,
+                    float pathLimit);
+    void updateSubpath(PathPair* pair, float difference, size_t indent,
+                       NodeDeque& nodesToVisit);
 
 };
 

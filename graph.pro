@@ -13,6 +13,8 @@ TEMPLATE = app
 
 CONFIG += c++11
 
+#LIBS += lpthread
+
 # for gprof profilers
 #QMAKE_CXXFLAGS_DEBUG += -pg
 #QMAKE_LFLAGS_DEBUG += -pg
@@ -41,7 +43,9 @@ SOURCES += gui/main.cpp\
     gui/SaveShortPathForm.cpp \
     gui/GraphInfoForm.cpp \
     graph/ShortPathRootElem.cpp \
-    gui/AboutForm.cpp
+    gui/AboutForm.cpp \
+    graph/Worker.cpp \
+    gui/GraphWorker.cpp
 
 HEADERS  += \
     graph/Edge.h \
@@ -67,7 +71,9 @@ HEADERS  += \
     gui/GraphInfoForm.h \
     graph/ShortPathRootElem.h \
     graph/types.h \
-    gui/AboutForm.h
+    gui/AboutForm.h \
+    graph/Worker.h \
+    gui/GraphWorker.h
 
 FORMS    += \
     gui/OpenFileForm.ui \

@@ -3,7 +3,7 @@
 
 
 
-WriterBase::WriterBase()
+WriterBase::WriterBase() : Worker()
 {
 
 }

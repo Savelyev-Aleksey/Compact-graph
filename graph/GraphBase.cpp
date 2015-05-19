@@ -40,9 +40,17 @@ void GraphBase::clear()
 }
 
 
-bool GraphBase::isEmpty()
+
+bool GraphBase::isEmpty() const
 {
     return nodeList->size() == 0;
+}
+
+
+
+size_t GraphBase::size() const
+{
+    return nodeList->size();
 }
 
 

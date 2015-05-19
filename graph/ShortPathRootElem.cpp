@@ -26,6 +26,13 @@ ShortPathRootElem::~ShortPathRootElem()
 
 
 
+size_t ShortPathRootElem::size() const
+{
+    return search->size();
+}
+
+
+
 /**
  * @brief ShortPath::clear - Remove nodes from hierarchy elem and clean
  * references in map.

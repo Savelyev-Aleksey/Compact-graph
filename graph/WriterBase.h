@@ -1,8 +1,9 @@
 #ifndef WRITERBASE_H
 #define WRITERBASE_H
 
+#include "Worker.h"
 
-class WriterBase
+class WriterBase : public Worker
 {
 public:
     enum Option

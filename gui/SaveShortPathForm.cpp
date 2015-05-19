@@ -4,7 +4,6 @@
 #include "ui_SaveShortPathForm.h"
 
 #include "MainWindow.h"
-#include "graph/Graph.h"
 #include "graph/WriterBase.h"
 
 
@@ -171,7 +170,7 @@ void SaveShortPathForm::saveShortPath()
     NodeIdDeque nodes;
     nodes.push_back(nodeId);
 
-    Graph& graph = mainWindow->getGraph();
+    GraphWorker& graph = mainWindow->getGraph();
     bool result = graph.saveShortPaths(fileNameLatin.data(), &nodes, pathLimit,
                                        options);
 

@@ -1,6 +1,6 @@
-
 #include <cstddef>
 #include <iostream>
+#include <thread>
 #include <map>
 #include <deque>
 
@@ -16,6 +16,7 @@
 
 
 ShortPath::ShortPath(GraphBase& graph) :
+    Worker(),
     graph(&graph),
     shortPathNodes(new RootPathList)
 { }
@@ -173,16 +174,17 @@ const
 
 
 /**
- * @brief ShortPath::updateParams - update current weight, indent level and
+ * @brief ShortPath::updateSubpath - update current weight, indent level and
  * update this parameters for childs.
  * @param difference - difference beetwen old and new weight
  * @param indent - new element indent
  */
-void ShortPath::updateParams(ShortPathElem* elem, float difference,
-                             size_t indent)
+void ShortPath::updateSubpath(PathPair* pair, float difference,
+                             size_t indent, NodeDeque& nodesToVisit)
 {
-    std::deque <ShortPathElem *> elemList;
-    elemList.push_front(elem);
+    std::deque <PathPair *> elemList;
+    ShortPathElem* elem = pair->second;
+    elemList.push_front(pair);
     float old = elem->getWeight();
     size_t oldIndent = elem->getIndent();
     size_t indentDiff;
@@ -201,10 +203,16 @@ void ShortPath::updateParams(ShortPathElem* elem, float difference,
 
     while (elemList.size())
     {
-        PathList* list = elemList.back()->getPathList();
+        pair = elemList.back();
+        size_t nodeId = pair->first;
+        PathList* list = pair->second->getPathList();
         elemList.pop_back();
         if (!list)
         {
+            if (!isNodeForVisit(nodesToVisit, nodeId))
+            {
+                nodesToVisit.push_back( graph->getNode(nodeId) );
+            }
             continue;
         }
         for (auto it = list->begin(); it != list->end(); ++it)
@@ -217,24 +225,72 @@ void ShortPath::updateParams(ShortPathElem* elem, float difference,
                 elem->setIndent(oldIndent - indentDiff);
             else
                 elem->setIndent(oldIndent + indentDiff);
-            elemList.push_front(elem);
+            pair = &(*it);
+            elemList.push_front(pair);
         }
     }
 }
 
 
 
+/**
+ * @brief ShortPath::generateAllShortPaths - Generate short path in graph
+ * for each node.
+ * @param pathLimit - set max weight for path search
+ */
 void ShortPath::generateAllShortPaths(float pathLimit)
 {
     if (graph->isEmpty())
     {
         return;
     }
+    // Prepare nodes
     NodeMap* list = graph->getNodeMap();
-    for (auto it = list->begin(), end = list->end(); it != end; ++it)
+    size_t count = list->size();
+    size_t end;
+    auto it = list->begin();
+
+    // prepare threads
+    size_t threadsCount = std::thread::hardware_concurrency();
+    if (!threadsCount)
+        threadsCount = 2;
+
+    std::thread* threads[threadsCount];
+
+    startProcess(0, count - 1);
+
+    // create for each node root element
+    for (size_t i = 0; i < count; ++i, ++it)
     {
-        generateShortPath(it->first, pathLimit);
+        initShortPath(it->first);
     }
+    // reset iterator
+    it = list->begin();
+
+    auto func = [this](size_t nodeId, float path){
+        this->generateShortPath(nodeId, path);
+    };
+
+    for (size_t i = 0; i < count; i += threadsCount)
+    {
+        if (isInterrupted())
+            return;
+
+        end = std::min(count - i, threadsCount);
+
+        for (unsigned j = 0; j < end; ++j, ++it)
+        {
+            initShortPath(it->first);
+            threads[j] = new std::thread(func, it->first, pathLimit);
+        }
+        for (unsigned j = 0; j < end; ++j)
+        {
+            threads[j]->join();
+            delete threads[j];
+        }
+        updateProgress(i + end);
+    }
+    completeProcess();
 }
 
 
@@ -255,8 +311,8 @@ void ShortPath::generateShortPath(const size_t startNodeId, float pathLimit)
         return;
     }
 
-    bool pathExists= shortPathNodes->find(startNodeId) != shortPathNodes->end();
-    if (pathExists)
+    auto it = shortPathNodes->find(startNodeId);
+    if (it != shortPathNodes->end() && it->second->size())
     {
         return;
     }
@@ -266,16 +322,23 @@ void ShortPath::generateShortPath(const size_t startNodeId, float pathLimit)
     NodeDeque nodesToVisit;
     nodesToVisit.push_front(nodeIt->second);
 
-    createPaths(nodesToVisit, rootElem, pathLimit);
+    createPath(nodesToVisit, rootElem, pathLimit);
     rootElem->updateEccentricity();
 }
 
 
 
-void ShortPath::createPaths(NodeDeque& nodesToVisit,
+/**
+ * @brief ShortPath::createPath - if path is empty generate new path.
+ * If path exist update them by visiting each node from nodesToVisit.
+ * @param nodesToVisit - list of nodes id which will be visited.
+ * @param rootElem - short path root elem for which will update path.
+ * @param pathLimit - path limit by weight sum.
+ */
+void ShortPath::createPath(NodeDeque& nodesToVisit,
                             ShortPathRootElem* rootElem, float pathLimit)
 {
-    Node* node;
+    const Node* node;
     size_t fromNodeId, currentId;
     float weight;
     bool isFirst = true;
@@ -354,7 +417,10 @@ void ShortPath::createPaths(NodeDeque& nodesToVisit,
                 parent->addNodeElem(currentId, elem);
                 // Update parent in search map
                 search->updateParent(currentId, parent);
-                updateParams(elem, difference, indent);
+                PathPair *p = new PathPair(currentId, elem);
+                updateSubpath(p, difference, indent,
+                              nodesToVisit);
+                delete p;
             }
         }
     }

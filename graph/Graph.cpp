@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <functional>
 #include <cmath>
 
 #include "Graph.h"
@@ -15,6 +16,8 @@
 
 
 Graph::Graph() :
+    ReaderBase(),
+    Worker(),
     graph(new GraphBase()),
     shortPath(new ShortPath(*graph)),
     radius(0),
@@ -184,10 +187,13 @@ void Graph::updateParameters()
  * @param options - available options look in GraphWriter::writeEdges
  * @return - true if file accessed to write and graph written.
  */
-bool Graph::writeEdges(const char* fileName, const unsigned options) const
+bool Graph::writeEdges(const char* fileName, cuint options)
 {
     GraphWriter writer(*graph);
-    return writer.writeEdges(fileName, options);
+    startProcess(&writer);
+    bool result = writer.writeEdges(fileName, options);
+    completeProcess();
+    return result;
 }
 
 
@@ -198,11 +204,13 @@ bool Graph::writeEdges(const char* fileName, const unsigned options) const
  * @param options - available options look in GraphWriter::writeBracketsFlat
  * @return - true if file accessed to write and graph written.
  */
-bool Graph::writeBracketsFlat(const char* fileName, const unsigned options)
-const
+bool Graph::writeBracketsFlat(const char* fileName, cuint options)
 {
     GraphWriter writer(*graph);
-    return writer.writeBracketsFlat(fileName, options);
+    startProcess(&writer);
+    bool result = writer.writeBracketsFlat(fileName, options);
+    completeProcess();
+    return result;
 }
 
 
@@ -217,10 +225,13 @@ const
  * @return - true if file accessed to write and graph written.
  */
 bool Graph::writeBrackets(const char* fileName, const size_t startNodeId,
-                          const size_t pathLimit, const unsigned options) const
+                          const size_t pathLimit, cuint options)
 {
     GraphWriter writer(*graph);
-    return writer.writeBrackets(fileName, startNodeId, pathLimit, options);
+    startProcess(&writer);
+    bool res = writer.writeBrackets(fileName, startNodeId, pathLimit, options);
+    completeProcess();
+    return res;
 }
 
 
@@ -245,7 +256,7 @@ void Graph::generateHypercube(unsigned dimention, float weight)
  * @param smallRadius
  * @param weight - edge weight
  */
-void Graph::generateTorus(unsigned bigRadius, unsigned smallRadius, float weight)
+void Graph::generateTorus(unsigned bigRadius, unsigned smallRadius,float weight)
 {
     clearGraph();
     GraphGenerator generator(*graph);
@@ -254,21 +265,28 @@ void Graph::generateTorus(unsigned bigRadius, unsigned smallRadius, float weight
 
 
 
-bool Graph::isGraphEmpty()
+bool Graph::isGraphEmpty() const
 {
     return graph->isEmpty();
 }
 
 
 
-bool Graph::isShortPathEmpty()
+size_t Graph::graphSize() const
+{
+    return graph->size();
+}
+
+
+
+bool Graph::isShortPathEmpty() const
 {
     return shortPath->isEmpty();
 }
 
 
 
-bool Graph::isPathExist(size_t nodeId)
+bool Graph::isPathExist(size_t nodeId) const
 {
     return shortPath->isPathExist(nodeId);
 }
@@ -291,7 +309,9 @@ size_t Graph::getShortPathCount() const
 
 void Graph::generateAllShortPaths(float pathLimit)
 {
+    startProcess(shortPath);
     shortPath->generateAllShortPaths(pathLimit);
+    completeProcess();
 }
 
 
@@ -450,7 +470,7 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
  * @return true if save successful
  */
 bool Graph::saveShortPaths(const char* fileName, const NodeIdDeque* nodes,
-                      float pathLimit, unsigned options) const
+                      float pathLimit, cuint options) const
 {
     ShortPathWriter writer(*shortPath);
     return writer.savePaths(fileName, nodes, pathLimit, options);
@@ -467,7 +487,7 @@ bool Graph::saveShortPaths(const char* fileName, const NodeIdDeque* nodes,
  * @return true if write successful
  */
 bool Graph::writeExistShortPaths(const char* fileName, const NodeIdDeque* nodes,
-                            unsigned options) const
+                                 cuint options) const
 {
     ShortPathWriter writer(*shortPath);
     return writer.writeExistPaths(fileName, nodes, options);

@@ -118,7 +118,7 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
 void OpenFileForm::readFile()
 {
     ui->openFileButton->setEnabled(false);
-    Graph& graph = mainWindow->getGraph();
+    GraphWorker& graph = mainWindow->getGraph();
     const char* name = fileName.toLocal8Bit().data();
     bool isReaded = graph.readFile(name);
     if (isReaded)

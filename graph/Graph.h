@@ -9,15 +9,16 @@
 #include "WriterBase.h"
 #include "GraphBase.h"
 #include "ShortPath.h"
+#include "Worker.h"
 
 
 class Node;
 
-class Graph : public ReaderBase
+class Graph : public ReaderBase, public Worker
 {
 public:
     Graph();
-    ~Graph();
+    virtual ~Graph();
 
     // Common methods
 
@@ -40,7 +41,8 @@ public:
 public:
     // GraphBase methods
 
-    bool isGraphEmpty();
+    bool isGraphEmpty() const;
+    size_t graphSize() const;
 
     const InfoDeque* getAllInfo() const;
 
@@ -54,31 +56,31 @@ public:
 
 
     // Graph writers
-    bool writeEdges(const char* fileName, const unsigned options =
-                    WriterBase::Option::PRINT_VALUE) const;
+    virtual bool writeEdges(const char* fileName, cuint options =
+                    WriterBase::PRINT_VALUE );
 
-    bool writeBracketsFlat(const char* fileName, const unsigned options =
-                           WriterBase::Option::PRINT_VALUE) const;
+    virtual bool writeBracketsFlat(const char* fileName, cuint options =
+                            WriterBase::PRINT_VALUE );
 
-    bool writeBrackets(const char* fileName, const size_t startNodeId,
-                       const size_t pathLimit = 0, const unsigned options =
-                       WriterBase::Option::PRINT_VALUE) const;
+    virtual bool writeBrackets(const char* fileName, const size_t startNodeId,
+                       const size_t pathLimit = 0,
+                       cuint options = WriterBase::PRINT_VALUE);
 
 public:
     // ShortPath methods
 
-    bool isShortPathEmpty();
-    bool isPathExist(size_t nodeId);
+    bool isShortPathEmpty() const;
+    bool isPathExist(size_t nodeId) const;
     size_t getShortPathCount() const;
 
-    void generateAllShortPaths(float pathLimit = 0);
+    virtual void generateAllShortPaths(float pathLimit = 0);
 
     // ShortPath writers
     bool saveShortPaths(const char* fileName, const NodeIdDeque* nodes =nullptr,
-                   float pathLimit = 0, unsigned options = Option::NONE) const;
+                   float pathLimit = 0, cuint options = Option::NONE) const;
 
     bool writeExistShortPaths(const char* fileName, const NodeIdDeque* nodes,
-                         unsigned options = Option::NONE) const;
+                         cuint options = Option::NONE) const;
 
 
 protected:

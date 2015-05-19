@@ -9,7 +9,7 @@
 
 
 
-GraphWriter::GraphWriter(GraphBase &graph) :
+GraphWriter::GraphWriter(const GraphBase &graph) :
     graph(&graph)
 { }
 
@@ -78,12 +78,20 @@ bool GraphWriter::writeEdges(const char *fileName, const unsigned options)
         graph->printInfo(f);
     }
 
-    size_t nodeFromId, nodeToId;
+    size_t nodeFromId, nodeToId, progress = 0;
     const EdgeList* edges;
     NodeMap* nodeList = graph->getNodeMap();
 
-    for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
+    startProcess(0, nodeList->size());
+
+    for (auto it = nodeList->begin(); it != nodeList->end(); ++it, ++progress)
     {
+        updateProgress(progress);
+        if (isInterrupted())
+        {
+            fclose(f);
+            return false;
+        }
         nodeFromId = it->first;
         edges = it->second->getEdges();
         for (auto jt = edges->begin(); jt != edges->end(); ++jt)
@@ -105,6 +113,7 @@ bool GraphWriter::writeEdges(const char *fileName, const unsigned options)
         }
     }
     fclose(f);
+    completeProcess();
     return true;
 }
 
@@ -140,12 +149,21 @@ bool GraphWriter::writeBracketsFlat(const char* fileName,const unsigned options)
 
     const EdgeList* edges;
     Node* node;
-    size_t toNodeNum;
+    size_t toNodeNum, progress = 0;
     float edgeValue;
     bool isFirst;
     NodeMap* nodeList = graph->getNodeMap();
-    for (auto nodeIt = nodeList->begin(); nodeIt != nodeList->end(); ++nodeIt)
+    startProcess(0, nodeList->size());
+
+    for (auto nodeIt = nodeList->begin(); nodeIt != nodeList->end();
+         ++nodeIt, ++progress)
     {
+        if (isInterrupted())
+        {
+            fclose(f);
+            return false;
+        }
+        updateProgress(progress);
         node = nodeIt->second;
         edges = node->getEdges();
         fprintf(f, "%zu(", nodeIt->first);
@@ -175,6 +193,7 @@ bool GraphWriter::writeBracketsFlat(const char* fileName,const unsigned options)
         fputs(")\n", f);
     }
     fclose(f);
+    completeProcess();
     return true;
 }
 
@@ -250,7 +269,7 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
 
     bool isFirst = true;
     float weight;
-    size_t nodeId;
+    size_t nodeId, process = 0;
     const Node* node;
     size_t currentLimit = 1;
 
@@ -260,11 +279,18 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
     auto edgeIt = edgeList->begin();
     auto edgeEnd = edgeList->end();
 
+    startProcess(0, edgeList->size() - 1);
+
     nodeStack.push_front(startNodeId);
     edgeStack.push_front(EdgeListPairIt(edgeIt, edgeEnd));
 
     while(edgeStack.size())
     {
+        if (isInterrupted())
+        {
+            fclose(f);
+            return false;
+        }
         edgeIt  = edgeStack.front().first;
         edgeEnd = edgeStack.front().second;
         if (edgeIt == edgeEnd)
@@ -272,6 +298,11 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
             --currentLimit;
             nodeStack.pop_front();
             edgeStack.pop_front();
+            if (nodeStack.size() == 1)
+            {
+                ++process;
+                updateProgress(process);
+            }
             if (printIndents)
             {
                 for(unsigned i = 0; i < currentLimit; ++i)
@@ -351,6 +382,7 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
     }
 
     fclose(f);
+    completeProcess();
     return true;
 }
 

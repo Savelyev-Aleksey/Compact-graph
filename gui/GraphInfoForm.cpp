@@ -1,4 +1,3 @@
-
 #include "GraphInfoForm.h"
 #include "ui_GraphInfoForm.h"
 
@@ -36,7 +35,9 @@ GraphInfoForm::~GraphInfoForm()
 void GraphInfoForm::findParameters()
 {
     ui->findParamsButton->setEnabled(false);
-    Graph& graph = mainWindow->getGraph();
+
+    GraphWorker& graph = mainWindow->getGraph();
+
     graph.generateAllShortPaths();
     graph.updateParameters();
 
@@ -54,7 +55,7 @@ void GraphInfoForm::printGraphInfo()
     ui->nodeCountLabel->setText(QString::number(Node::getCount()));
     ui->EdgeCountLabel->setText(QString::number(Edge::getCount()));
 
-    const Graph& graph = mainWindow->getGraph();
+    const GraphWorker& graph = mainWindow->getGraph();
 
     const InfoDeque *info = graph.getAllInfo();
     QString infoStr;
@@ -72,7 +73,7 @@ void GraphInfoForm::printGraphInfo()
 
 void GraphInfoForm::printShortPathInfo()
 {
-    const Graph& graph = mainWindow->getGraph();
+    const GraphWorker& graph = mainWindow->getGraph();
     size_t value = graph.getShortPathCount();
     ui->pathCountLabel->setText( QString::number(value) );
 
@@ -88,7 +89,7 @@ void GraphInfoForm::printShortPathInfo()
 void GraphInfoForm::printTableStat(const UlongMap* map, QTableWidget* table,
                                    bool shrink)
 {
-    const Graph& graph = mainWindow->getGraph();
+    const GraphWorker& graph = mainWindow->getGraph();
     size_t count = graph.statisticParamSum(map);
     double percent;
 
@@ -121,7 +122,7 @@ void GraphInfoForm::printTableStat(const UlongMap* map, QTableWidget* table,
 
 void GraphInfoForm::printGraphStatistic()
 {
-    const Graph& graph = mainWindow->getGraph();
+    const GraphWorker& graph = mainWindow->getGraph();
 
     UlongMap* compact = nullptr;
     UlongMap* map = graph.getNodeDegreeStatistic();
@@ -147,7 +148,7 @@ void GraphInfoForm::printGraphStatistic()
 
 void GraphInfoForm::printShortPathStatistic()
 {
-    const Graph& graph = mainWindow->getGraph();
+    const GraphWorker& graph = mainWindow->getGraph();
 
     UlongMap* compact = nullptr;
     UlongMap* map = graph.getEccentriciyStatistic();

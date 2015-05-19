@@ -12,12 +12,11 @@
 #include "AboutForm.h"
 
 
-#include "graph/Graph.h"
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    graph(this)
 {
     ui->setupUi(this);
 
@@ -161,7 +160,7 @@ void MainWindow::showAbout()
 
 
 
-Graph& MainWindow::getGraph()
+GraphWorker& MainWindow::getGraph()
 {
     return graph;
 }

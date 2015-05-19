@@ -16,9 +16,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QGroupBox" name="typeGroupBox">
        <property name="sizePolicy">
@@ -213,7 +210,7 @@ Turned on:&lt;br&gt;
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path limit. It's nesting level limiter. &lt;/p&gt;&lt;p&gt;Useful if need crop graph or give some graph part that accessible in not more than &amp;quot;path limit&amp;quot; edges.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
-             <string notr="true">0</string>
+             <string notr="true">10</string>
             </property>
             <property name="maxLength">
              <number>10</number>

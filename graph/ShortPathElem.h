@@ -31,6 +31,7 @@ public:
 
     PathList* getPathList() const;
 
+    size_t size() const;
     static size_t getCount();
 
 protected:

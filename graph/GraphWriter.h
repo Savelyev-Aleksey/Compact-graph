@@ -5,12 +5,13 @@
 #include "FileTypes.h"
 #include "WriterBase.h"
 
+
 class GraphBase;
 
 class GraphWriter : public WriterBase
 {
 public:
-    GraphWriter(GraphBase &graph);
+    GraphWriter(const GraphBase &graph);
     ~GraphWriter();
 
     bool writeEdges(const char* fileName,
@@ -22,7 +23,7 @@ public:
                        const unsigned options = Option::PRINT_VALUE);
 
 protected:
-    GraphBase* graph;
+    const GraphBase* graph;
 
     FILE* openFile(const char* fileName);
     bool isNodeVisited(const std::deque<size_t> &list, size_t nodeId) const;

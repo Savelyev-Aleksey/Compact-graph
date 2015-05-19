@@ -35,6 +35,15 @@ ShortPathElem::~ShortPathElem()
 
 
 
+size_t ShortPathElem::size() const
+{
+    if (!list)
+        return 0;
+    return list->size();
+}
+
+
+
 void ShortPathElem::setWeight(float newWeight)
 {
     weight = newWeight;

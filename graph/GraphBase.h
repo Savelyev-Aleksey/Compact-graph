@@ -30,7 +30,9 @@ public:
 
     void clear();
 
-    bool isEmpty();
+    bool isEmpty() const;
+
+    size_t size() const;
 
           Node* getNodeOrCreate(size_t nodeNum);
     const Node* getNode(size_t nodeNum) const;

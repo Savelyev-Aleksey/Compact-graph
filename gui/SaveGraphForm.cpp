@@ -39,7 +39,7 @@ void SaveGraphForm::prepareGraphWidgets()
 
 
     // Set validators
-    ui->pathLimitLineEdit->setValidator(new QIntValidator(0, 100000, this));
+    ui->pathLimitLineEdit->setValidator(new QIntValidator(1, 100000, this));
     ui->startNodeLineEdit->setValidator(new QIntValidator(0, 100000, this));
 
 
@@ -309,7 +309,7 @@ void SaveGraphForm::saveGraph()
         options = options | WriterBase::Option::PRINT_INDENTS;
     }
 
-    Graph* graph = &mainWindow->getGraph();
+    GraphWorker& graph = mainWindow->getGraph();
     QByteArray file = fileName.toLatin1();
 
     bool result = false;
@@ -319,12 +319,12 @@ void SaveGraphForm::saveGraph()
     {
     case FileTypes::Type::NODE_NODE: // no break
     case FileTypes::Type::NODE_NODE_VALUE:
-        result = graph->writeEdges(file.data(), options);
+        result = graph.writeEdges(file.data(), options);
         break;
 
     case FileTypes::Type::BRACKETS_FLAT: // no break
     case FileTypes::Type::BRACKETS_FLAT_VALUE:
-        result = graph->writeBracketsFlat(file.data(), options);
+        result = graph.writeBracketsFlat(file.data(), options);
         break;
 
     case FileTypes::Type::BRACKETS: // no break
@@ -335,7 +335,7 @@ void SaveGraphForm::saveGraph()
         pathLimit = ui->pathLimitLineEdit->text().toUInt(&result);
         if (!result)
             break;
-        result = graph->writeBrackets(file.data(), startNodeId, pathLimit,
+        result = graph.writeBrackets(file.data(), startNodeId, pathLimit,
                                       options);
         break;
 

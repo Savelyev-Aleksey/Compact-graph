@@ -24,6 +24,8 @@ public:
     ShortPathElem* getNodes() const;
     ShortPathElem* getSearch() const;
 
+    size_t size() const;
+
     void setEccentricity(size_t eccentricity);
     void updateEccentricity();
     size_t getEccentricity() const;

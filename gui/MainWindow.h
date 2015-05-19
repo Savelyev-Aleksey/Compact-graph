@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 
-#include "graph/Graph.h"
+
+#include "GraphWorker.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -19,7 +21,7 @@ public:
     ~MainWindow();
 
     void showStatusMessage(const QString& status, int timeout = 0);
-    Graph& getGraph();
+    GraphWorker& getGraph();
 
     void setOpenFileName(const QString &fileName);
     const QString& getOpenFile() const;
@@ -27,7 +29,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Graph graph;
+    GraphWorker graph;
     QString openFile;
     QString openFileName;
 

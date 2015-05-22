@@ -13,7 +13,7 @@ typedef std::pair<PathList::const_iterator,
 class ShortPathElem
 {
 public:
-    ShortPathElem(float weight, size_t indent);
+    ShortPathElem(size_t nodeId, float weight, size_t indent);
     ~ShortPathElem();
 
     ShortPathElem* addNodeElem(size_t nodeNum, float weight, size_t indent);
@@ -26,8 +26,10 @@ public:
     void setIndent(size_t newIndent);
     size_t getIndent() const;
 
+    void setParent(ShortPathElem* newParent);
+    ShortPathElem* getParent() const;
+
     ShortPathElem* findElem(size_t nodeNum) const;
-    void updateParent(size_t nodeNum, ShortPathElem* parent);
 
     PathList* getPathList() const;
 
@@ -37,7 +39,9 @@ public:
 protected:
     static size_t count;
 
+    ShortPathElem* parent;
     PathList* list;
+    size_t nodeId;
     float weight;
     size_t indent;
 

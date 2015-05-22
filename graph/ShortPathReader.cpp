@@ -146,9 +146,9 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
                 }
                 continue;
             }
-            ShortPathElem* elemParent = search->findElem(nodeToNum);
+            elem = search->findElem(nodeToNum);
 
-            if (elemParent != nullptr)
+            if (elem != nullptr)
             {
                 std::clog << "[!] Warning: node " << startNode << "(... "
                           << nodeFromNum << "( " << nodeToNum
@@ -157,8 +157,8 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
             }
             // Add node hierarchy
             elem = parent->addNodeElem(nodeToNum, value, indent);
-            // add node parent where seek in search map
-            search->addNodeElem(nodeToNum, parent);
+            // add node in search map
+            search->addNodeElem(nodeToNum, elem);
         }
         else
         {

@@ -363,10 +363,8 @@ void ShortPath::createPath(NodeDeque& nodesToVisit,
         // First elem have no parent and no weight
         if (!isFirst)
         {
-            // Get parent pointer where placed node
+            // set node by parent for add child elems.
             parent = search->findElem(fromNodeId);
-            // Find in parent node and set node by parent for add child elems.
-            parent = parent->findElem(fromNodeId);
             baseWeight = parent->getWeight();
             // Level for next inserted element
             indent = parent->getIndent() + 1;
@@ -388,15 +386,15 @@ void ShortPath::createPath(NodeDeque& nodesToVisit,
                 continue;
             }
             // Get elem parent for seek node
-            ShortPathElem* oldParent = search->findElem(currentId);
+            ShortPathElem* elem = search->findElem(currentId);
 
             // Node not exists yet
-            if (oldParent == nullptr)
+            if (elem == nullptr)
             {
                 // Add node hierarchy
-                parent->addNodeElem(currentId, weight, indent);
-                // add node parent in search map
-                search->addNodeElem(currentId, parent);
+                elem = parent->addNodeElem(currentId, weight, indent);
+                // add node elem in search map
+                search->addNodeElem(currentId, elem);
 
                 if ( !isNodeForVisit(nodesToVisit, currentId) )
                 {
@@ -406,17 +404,15 @@ void ShortPath::createPath(NodeDeque& nodesToVisit,
                 continue;
             }
             // Update node element
-            // Find element in old parent
-            ShortPathElem* elem = oldParent->findElem(currentId);
             if (elem->getWeight() > weight)
             {
                 float difference = elem->getWeight() - weight;
                 // Remove pointer from old parent
-                oldParent->popNodeElem(currentId);
+                elem->getParent()->popNodeElem(currentId);
                 // Insert into new parent
                 parent->addNodeElem(currentId, elem);
                 // Update parent in search map
-                search->updateParent(currentId, parent);
+                elem->setParent(parent);
                 PathPair *p = new PathPair(currentId, elem);
                 updateSubpath(p, difference, indent,
                               nodesToVisit);

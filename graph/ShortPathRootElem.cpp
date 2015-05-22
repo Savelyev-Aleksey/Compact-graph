@@ -7,13 +7,11 @@
 
 
 ShortPathRootElem::ShortPathRootElem(size_t nodeId) :
-    nodes(new ShortPathElem(0, 0)),
-    search(new ShortPathElem(0, 0)),
+    nodes(new ShortPathElem(nodeId, 0, 0)),
+    search(new ShortPathElem(nodeId, 0, 0)),
     eccentricity(0),
     nodeId(nodeId)
-{
-
-}
+{}
 
 
 
@@ -90,13 +88,10 @@ void ShortPathRootElem::updateEccentricity()
     {
         return;
     }
-    size_t eccentrMax = 0, eccentr, nodeId;
-    ShortPathElem* parent;
+    size_t eccentrMax = 0, eccentr;
     for (auto it = list->begin(), end = list->end(); it != end; ++it)
     {
-        nodeId = it->first;
-        parent = it->second;
-        eccentr = parent->findElem(nodeId)->getIndent();
+        eccentr = it->second->getIndent();
         if (eccentr > eccentrMax)
             eccentrMax = eccentr;
     }

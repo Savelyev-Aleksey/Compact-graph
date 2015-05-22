@@ -16,8 +16,10 @@ size_t ShortPathElem::getCount()
 
 
 
-ShortPathElem::ShortPathElem(float weight, size_t indent) :
+ShortPathElem::ShortPathElem(size_t nodeId, float weight, size_t indent) :
+    parent(nullptr),
     list(nullptr),
+    nodeId(nodeId),
     weight(weight),
     indent(indent)
 {
@@ -71,6 +73,20 @@ size_t ShortPathElem::getIndent() const
 
 
 
+void ShortPathElem::setParent(ShortPathElem *newParent)
+{
+    parent = newParent;
+}
+
+
+
+ShortPathElem* ShortPathElem::getParent() const
+{
+    return parent;
+}
+
+
+
 /**
  * @brief ShortPathElem::addNodeElem - Add elem into node list current elem
  * @param nodeNum - Inserting node id
@@ -85,9 +101,10 @@ ShortPathElem* ShortPathElem::addNodeElem(size_t nodeNum, float weight,
     {
         list = new PathList;
     }
-    ShortPathElem* elem = new ShortPathElem(weight, indent);
-    bool result = list->insert(
-                std::pair<size_t, ShortPathElem* > (nodeNum, elem) ).second;
+    ShortPathElem* elem = new ShortPathElem(nodeNum, weight, indent);
+    elem->setParent(this);
+    bool result = list->insert( std::pair < size_t, ShortPathElem* >
+                                (nodeNum, elem) ).second;
     if (result)
     {
         return elem;
@@ -110,7 +127,7 @@ void ShortPathElem::addNodeElem(size_t nodeNum, ShortPathElem *pathElem)
     {
         list = new PathList;
     }
-    list->insert(std::pair<size_t, ShortPathElem*> (nodeNum, pathElem) );
+    list->insert(std::pair <size_t, ShortPathElem*> (nodeNum, pathElem) );
 }
 
 
@@ -154,28 +171,6 @@ ShortPathElem* ShortPathElem::findElem(size_t nodeNum) const
         return nullptr;
     }
     return it->second;
-}
-
-
-
-/**
- * @brief ShortPathElem::updateParent - Change parent pointer for seek map if
- * node placed to new hierarchy node
- * @param nodeNum - node id
- * @param parent - parent of node with nodeNum id
- */
-void ShortPathElem::updateParent(size_t nodeNum, ShortPathElem* parent)
-{
-    if (!list)
-    {
-        return;
-    }
-    auto it = list->find(nodeNum);
-    if (it == list->end())
-    {
-        return;
-    }
-    it->second = parent;
 }
 
 

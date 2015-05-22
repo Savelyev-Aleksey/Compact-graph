@@ -58,7 +58,7 @@ bool ShortPathWriter::savePaths(const char* fileName, const NodeIdDeque* nodes,
  * @return true if write successful
  */
 bool ShortPathWriter::writeExistPaths(const char* fileName,
-                                      const NodeIdDeque* nodes, unsigned options)
+                                     const NodeIdDeque* nodes, unsigned options)
 {
     if (!nodes)
     {

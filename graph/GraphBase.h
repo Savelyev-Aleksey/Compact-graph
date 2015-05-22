@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <deque>
 #include <map>
+#include <set>
 
 #include "types.h"
 
@@ -13,6 +14,7 @@ class Node;
 class Edge;
 
 typedef std::map <size_t, Node*> NodeMap;
+typedef std::set <size_t> NodeIdSet;
 typedef std::deque < std::pair<char*, char*> > InfoDeque;
 
 
@@ -38,6 +40,7 @@ public:
     const Node* getNode(size_t nodeNum) const;
     const Edge* getEdge(size_t nodeFromNum, size_t nodeToNum) const;
     NodeMap* getNodeMap() const;
+    NodeIdSet* getNodeIds();
 
     UlongMap* getNodeDegreeStatistic() const;
 

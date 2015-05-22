@@ -92,6 +92,23 @@ NodeMap* GraphBase::getNodeMap() const
 
 
 /**
+ * @brief GraphBase::getNodeIds - Return a new set of node ids of graph.
+ * @return set of node ids
+ */
+NodeIdSet* GraphBase::getNodeIds()
+{
+    std::set <size_t>* graphNodes = new std::set <size_t>;
+
+    for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
+    {
+        graphNodes->insert(it->first);
+    }
+    return graphNodes;
+}
+
+
+
+/**
  * @brief GraphBase::getNodeDegreeStatistic - Return graph degree statistic.
  * @return map of Node degree and matched count.
  */

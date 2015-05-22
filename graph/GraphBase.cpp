@@ -342,16 +342,14 @@ Node* GraphBase::newNode(size_t nodeNum)
  */
 Node *GraphBase::getNodeOrCreate(size_t nodeNum)
 {
-    std::map<size_t, Node*>::const_iterator nodeIterator;
-    Node *node;
-    nodeIterator = nodeList->find(nodeNum);
+    auto nodeIterator = nodeList->find(nodeNum);
     if (nodeIterator != nodeList->end())
     {
         node = nodeIterator->second;
     }
     else
     {
-        node = new Node(nodeNum);
+        Node* node = new Node(nodeNum);
         nodeList->insert( std::pair<size_t, Node*>(nodeNum, node) );
     }
     return node;

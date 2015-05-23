@@ -32,11 +32,7 @@ public:
     void deleteEdge();
     void deleteEdge(size_t nodeFromNum);
 
-    static size_t getCount();
-
-private:
-    static size_t count;
-
+protected:
     Node* node1;
     Node* node2;
     float value;

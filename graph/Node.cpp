@@ -8,26 +8,10 @@
 
 
 
-/**
- * Node counter
- */
-size_t Node::count = 0;
-
-
-
-size_t Node::getCount()
-{
-    return Node::count;
-}
-
-
-
 Node::Node(size_t id) :
     nodeId(id),
     edgeList(new EdgeList)
-{
-    count++;
-}
+{}
 
 
 
@@ -38,7 +22,6 @@ Node::~Node()
         it->second->deleteEdge(nodeId);
     }
     delete edgeList;
-    count--;
 }
 
 

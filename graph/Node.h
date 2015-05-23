@@ -33,9 +33,7 @@ public:
 
     WeightedEdges* getValueSortedEdges();
 
-    static size_t getCount();
-private:
-    static size_t count;
+protected:
     size_t nodeId;
     /**
      * @brief edgeList - map contains list of edges

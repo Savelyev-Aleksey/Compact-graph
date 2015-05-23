@@ -12,7 +12,8 @@
 
 GraphBase::GraphBase() :
     nodeList(new NodeMap),
-    info(new InfoDeque)
+    info(new InfoDeque),
+    edgeSize(0)
 { }
 
 
@@ -48,9 +49,16 @@ bool GraphBase::isEmpty() const
 
 
 
-size_t GraphBase::size() const
+size_t GraphBase::nodeCount() const
 {
     return nodeList->size();
+}
+
+
+
+size_t GraphBase::edgeCount() const
+{
+    return edgeSize;
 }
 
 
@@ -65,6 +73,7 @@ void GraphBase::clearNodes()
         delete it->second;
     }
     nodeList->clear();
+    edgeSize = 0;
 }
 
 
@@ -308,6 +317,7 @@ bool GraphBase::addEdge(Node* nodeFrom, Node* nodeTo, float value)
         delete edge;
         return false;
     }
+    ++edgeSize;
     return true;
 }
 
@@ -359,6 +369,7 @@ Node* GraphBase::newNode(size_t nodeNum)
  */
 Node *GraphBase::getNodeOrCreate(size_t nodeNum)
 {
+    Node* node;
     auto nodeIterator = nodeList->find(nodeNum);
     if (nodeIterator != nodeList->end())
     {
@@ -366,7 +377,7 @@ Node *GraphBase::getNodeOrCreate(size_t nodeNum)
     }
     else
     {
-        Node* node = new Node(nodeNum);
+        node = new Node(nodeNum);
         nodeList->insert( std::pair<size_t, Node*>(nodeNum, node) );
     }
     return node;
@@ -416,8 +427,8 @@ const Edge* GraphBase::getEdge(size_t nodeFromNum, size_t nodeToNum) const
 void GraphBase::logStatus()
 {
     std::clog << std::endl << "Print info:" << std::endl
-              << "\tNode count: \t" << Node::getCount() << std::endl
-              << "\tEdge count: \t" << Edge::getCount() << std::endl
+              << "\tNode count: \t" << nodeList->size() << std::endl
+              << "\tEdge count: \t" << edgeSize << std::endl
               << std::endl;
 }
 

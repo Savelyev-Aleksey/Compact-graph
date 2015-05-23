@@ -42,7 +42,8 @@ public:
     // GraphBase methods
 
     bool isGraphEmpty() const;
-    size_t graphSize() const;
+    size_t nodeCount() const;
+    size_t edgeCount() const;
 
     const InfoDeque* getAllInfo() const;
 

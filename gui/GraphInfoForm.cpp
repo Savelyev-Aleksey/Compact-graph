@@ -52,10 +52,12 @@ void GraphInfoForm::printGraphInfo()
     ui->FileNameLabel->setText( mainWindow->getOpenFileName() );
     ui->FileNameLabel->setToolTip( mainWindow->getOpenFile() );
 
-    ui->nodeCountLabel->setText(QString::number(Node::getCount()));
-    ui->EdgeCountLabel->setText(QString::number(Edge::getCount()));
-
     const GraphWorker& graph = mainWindow->getGraph();
+
+    ui->nodeCountLabel->setText( QString::number( graph.nodeCount() ) );
+    ui->EdgeCountLabel->setText( QString::number( graph.edgeCount() ) );
+
+
 
     const InfoDeque *info = graph.getAllInfo();
     QString infoStr;

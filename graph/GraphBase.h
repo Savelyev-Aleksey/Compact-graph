@@ -34,7 +34,8 @@ public:
 
     bool isEmpty() const;
 
-    size_t size() const;
+    size_t nodeCount() const;
+    size_t edgeCount() const;
 
           Node* getNodeOrCreate(size_t nodeNum);
     const Node* getNode(size_t nodeNum) const;
@@ -61,6 +62,8 @@ public:
 protected:
     NodeMap* nodeList;
     InfoDeque* info;
+
+    size_t edgeSize;
 
     void clearInfo();
     void clearNodes();

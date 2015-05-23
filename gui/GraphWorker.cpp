@@ -56,7 +56,7 @@ void GraphWorker::progressDialog(size_t size, const QString& title,
 
 void GraphWorker::generateAllShortPaths()
 {
-    size_t size = graph->size();
+    size_t size = graph->nodeCount();
 
     QString title = QObject::tr("Create short path");
 
@@ -71,7 +71,7 @@ void GraphWorker::generateAllShortPaths()
 
 bool GraphWorker::writeEdges(const char *fileName, cuint options)
 {
-    size_t size = graph->size();
+    size_t size = graph->nodeCount();
 
     QString title = QObject::tr("Write edges of node");
     bool result = false;
@@ -87,7 +87,7 @@ bool GraphWorker::writeEdges(const char *fileName, cuint options)
 
 bool GraphWorker::writeBracketsFlat(const char *fileName, cuint options)
 {
-    size_t size = graph->size();
+    size_t size = graph->nodeCount();
 
     QString title = QObject::tr("Write adjacency table");
     bool result = false;

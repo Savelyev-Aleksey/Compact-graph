@@ -272,9 +272,16 @@ bool Graph::isGraphEmpty() const
 
 
 
-size_t Graph::graphSize() const
+size_t Graph::nodeCount() const
 {
-    return graph->size();
+    return graph->nodeCount();
+}
+
+
+
+size_t Graph::edgeCount() const
+{
+    return graph->edgeCount();
 }
 
 

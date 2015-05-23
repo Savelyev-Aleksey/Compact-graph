@@ -6,35 +6,16 @@
 
 
 
-/**
- * Edge counter
- */
-size_t Edge::count = 0;
-
-
-
-size_t Edge::getCount()
-{
-    return Edge::count;
-}
-
-
-
-
 Edge::Edge(Node* node1, Node* node2, float value) :
     node1(node1),
     node2(node2),
     value(value)
-{
-    count++;
-}
+{}
 
 
 
 Edge::~Edge()
-{
-    this->count--;
-}
+{}
 
 
 

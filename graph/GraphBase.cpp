@@ -132,7 +132,7 @@ UlongMap* GraphBase::getNodeDegreeStatistic() const
     for (auto it = nodeList->begin(), end = nodeList->end(); it != end; ++it)
     {
         degree = it->second->getEdgeCount();
-        auto result = map->insert(std::pair <size_t, size_t>(degree, 1));
+        auto result = map->insert({degree, 1});
         if (!result.second)
         {
             ++(result.first->second);
@@ -333,7 +333,7 @@ bool GraphBase::addNode(size_t nodeNum)
 {
     Node* node = new Node(nodeNum);
     bool result;
-    result = nodeList->insert( std::pair<size_t, Node*>(nodeNum, node) ).second;
+    result = nodeList->insert({nodeNum, node}).second;
     if (!result)
     {
         delete node;
@@ -351,7 +351,7 @@ bool GraphBase::addNode(size_t nodeNum)
 Node* GraphBase::newNode(size_t nodeNum)
 {
     Node* node = new Node(nodeNum);
-    auto result = nodeList->insert( std::pair<size_t, Node*>(nodeNum, node) );
+    auto result = nodeList->insert({nodeNum, node});
     if (!result.second)
     {
         delete node;
@@ -378,7 +378,7 @@ Node *GraphBase::getNodeOrCreate(size_t nodeNum)
     else
     {
         node = new Node(nodeNum);
-        nodeList->insert( std::pair<size_t, Node*>(nodeNum, node) );
+        nodeList->insert({nodeNum, node});
     }
     return node;
 }

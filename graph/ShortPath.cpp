@@ -70,8 +70,7 @@ ShortPathRootElem* ShortPath::initShortPath(size_t startNodeId)
 
     ShortPathRootElem *elem = new ShortPathRootElem(startNodeId);
 
-    shortPathNodes->insert( std::pair <size_t, ShortPathRootElem*>
-                            (startNodeId, elem) );
+    shortPathNodes->insert({startNodeId, elem});
     return elem;
 }
 
@@ -140,7 +139,7 @@ UlongMap* ShortPath::getEccentriciyStatistic() const
          it != end; ++it)
     {
         eccentr = it->second->getEccentricity();
-        auto result = map->insert(std::pair<size_t, size_t>(eccentr, 1));
+        auto result = map->insert({eccentr, 1});
         if (!result.second)
         {
             // Increase count of exist eccentricity

@@ -48,7 +48,7 @@ size_t Node::getId() const
 bool Node::addEdge(Edge* edge)
 {
     int nodeToNum = edge->nodeToNum(nodeId);
-    return edgeList->insert( std::pair<int, Edge*>(nodeToNum, edge) ).second;
+    return edgeList->insert( {nodeToNum, edge} ).second;
 }
 
 

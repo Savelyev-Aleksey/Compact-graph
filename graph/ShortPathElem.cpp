@@ -103,8 +103,7 @@ ShortPathElem* ShortPathElem::addNodeElem(size_t nodeNum, float weight,
     }
     ShortPathElem* elem = new ShortPathElem(nodeNum, weight, indent);
     elem->setParent(this);
-    bool result = list->insert( std::pair < size_t, ShortPathElem* >
-                                (nodeNum, elem) ).second;
+    bool result = list->insert({nodeNum, elem}).second;
     if (result)
     {
         return elem;
@@ -127,7 +126,7 @@ void ShortPathElem::addNodeElem(size_t nodeNum, ShortPathElem *pathElem)
     {
         list = new PathList;
     }
-    list->insert(std::pair <size_t, ShortPathElem*> (nodeNum, pathElem) );
+    list->insert({nodeNum, pathElem});
 }
 
 

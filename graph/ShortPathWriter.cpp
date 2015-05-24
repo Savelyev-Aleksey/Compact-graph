@@ -118,7 +118,7 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
     float weight;
     bool isFirst = true;
     std::deque <PathListItPair> pathStack;
-    size_t currentLimit = 1;
+    size_t currentIndent = 1;
 
     bool printIndents = options & Option::PRINT_INDENTS;
 
@@ -137,10 +137,10 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
         if (pathIt == pathEnd)
         {
             pathStack.pop_front();
-            --currentLimit;
+            --currentIndent;
             if (printIndents)
             {
-                for(unsigned i = 0; i < currentLimit; ++i)
+                for(unsigned i = 0; i < currentIndent; ++i)
                 {
                     fputc('\t', fp);
                 }
@@ -158,7 +158,7 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
 
         if (printIndents)
         {
-            for(unsigned i = 0; i < currentLimit; ++i)
+            for(unsigned i = 0; i < currentIndent; ++i)
             {
                 fputc('\t', fp);
             }
@@ -185,7 +185,7 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
             pathStack.push_front( PathListItPair(pathList->begin(),
                                                  pathList->end()) );
             isFirst = true;
-            ++currentLimit;
+            ++currentIndent;
         }
         if (printIndents)
         {

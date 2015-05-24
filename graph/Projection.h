@@ -23,6 +23,8 @@ public:
 
     size_t getId() const;
 
+    const ProjectionElem* getRootNode() const;
+
     void createProjection(GraphBase& graph);
 
 protected:

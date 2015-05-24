@@ -68,6 +68,13 @@ bool ProjectionElem::isLeaf() const
 
 
 
+bool ProjectionElem::isEmpty() const
+{
+    return isLeaf();
+}
+
+
+
 void ProjectionElem::addElem(ProjectionElem *child)
 {
     size_t id = child->getId();
@@ -84,13 +91,14 @@ void ProjectionElem::eraseElem(const ProjectionElemMap::const_iterator pos)
 
 
 /**
- * @brief ProjectionElem::isNodeParent - Check that searchId not yet inserted as
+ * @brief ProjectionElem::findInParents - Find searchId  node as
  * parent in tree lower projections.
  * @param elem - current elem there searchId node will be inserted
  * @param searchId - node id
  * @return node pointer if node already in lower projections
+ * else nullptr.
  */
-const ProjectionElem* ProjectionElem::isNodeParent(size_t searchId) const
+const ProjectionElem* ProjectionElem::findInParents(size_t searchId) const
 {
     const ProjectionElem* el = this->parent;
     while (el)

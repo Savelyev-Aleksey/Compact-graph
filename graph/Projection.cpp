@@ -58,6 +58,13 @@ size_t Projection::getId() const
 
 
 
+const ProjectionElem* Projection::getRootNode() const
+{
+    return rootNode;
+}
+
+
+
 void Projection::createProjection(GraphBase &graph)
 {
     if (levelList)
@@ -113,7 +120,7 @@ void Projection::createProjection(GraphBase &graph)
             {
                 size_t curId = edgeIt.first;
                 // skip node if already it's parent in path
-                if (parent->isNodeParent(curId))
+                if (parent->findInParents(curId))
                     continue;
 
                 elem = new ProjectionElem(curId);

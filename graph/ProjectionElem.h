@@ -7,6 +7,8 @@
 class ProjectionElem;
 
 typedef std::map <size_t, ProjectionElem*> ProjectionElemMap;
+typedef std::pair<ProjectionElemMap::const_iterator,
+                  ProjectionElemMap::const_iterator> ProjectionElemMapItPair;
 
 
 class ProjectionElem
@@ -19,12 +21,13 @@ public:
 
     bool isOriginal() const;
     bool isLeaf() const;
+    bool isEmpty() const;
 
     ProjectionElem* getParent() const;
     void setParent(ProjectionElem* newParent);
     void setOriginal(ProjectionElem* newOriginal);
 
-    const ProjectionElem* isNodeParent(size_t searchId) const;
+    const ProjectionElem* findInParents(size_t searchId) const;
 
     const ProjectionElemMap* getList() const;
 

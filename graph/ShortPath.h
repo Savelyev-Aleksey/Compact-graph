@@ -4,7 +4,6 @@
 #include <cstddef>
 #include <map>
 #include <deque>
-#include <forward_list>
 
 #include "types.h"
 #include "Worker.h"

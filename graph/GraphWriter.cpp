@@ -153,7 +153,7 @@ bool GraphWriter::writeBracketsFlat(const char* fileName,const unsigned options)
     float edgeValue;
     bool isFirst;
     NodeMap* nodeList = graph->getNodeMap();
-    startProcess(0, nodeList->size());
+    startProcess(0, nodeList->size() - 1);
 
     for (auto nodeIt = nodeList->begin(); nodeIt != nodeList->end();
          ++nodeIt, ++progress)

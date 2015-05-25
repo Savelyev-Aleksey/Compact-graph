@@ -36,6 +36,8 @@ void SaveGraphForm::prepareGraphWidgets()
             this, &SaveGraphForm::graphTypeChanged);
     connect(ui->bracketsNestedRadio, &QRadioButton::clicked,
             this, &SaveGraphForm::graphTypeChanged);
+    connect(ui->projectionRadio, &QRadioButton::clicked,
+            this, &SaveGraphForm::graphTypeChanged);
 
 
     // Set validators
@@ -45,15 +47,21 @@ void SaveGraphForm::prepareGraphWidgets()
 
     // each options change call validate slot
     connect(ui->printIndentsCheck, &QCheckBox::clicked,
-            this, &SaveGraphForm::validateGraphSave);
+            this, &SaveGraphForm::validateInputs);
     connect(ui->printInfoCheck,  &QCheckBox::clicked,
-            this, &SaveGraphForm::validateGraphSave);
+            this, &SaveGraphForm::validateInputs);
     connect(ui->printValueCheck, &QCheckBox::clicked,
-            this, &SaveGraphForm::validateGraphSave);
+            this, &SaveGraphForm::validateInputs);
+
+    connect(ui->printAllNodesCheck, &QCheckBox::clicked,
+            this, &SaveGraphForm::validateInputs);
+    connect(ui->printAllNodesCheck, &QCheckBox::clicked,
+            ui->startNodeLineEdit,  &QLineEdit::setDisabled);
+
     connect(ui->startNodeLineEdit, &QLineEdit::textEdited,
-            this, &SaveGraphForm::validateGraphSave);
+            this, &SaveGraphForm::validateInputs);
     connect(ui->pathLimitLineEdit, &QLineEdit::textEdited,
-            this, &SaveGraphForm::validateGraphSave);
+            this, &SaveGraphForm::validateInputs);
 
     connect(ui->graphSaveButton, &QPushButton::clicked,
             this, &SaveGraphForm::saveGraph);
@@ -86,6 +94,10 @@ FileTypes::Type SaveGraphForm::getFileType()
         else
             return FileTypes::Type::BRACKETS;
     }
+    else if (ui->projectionRadio->isChecked())
+    {
+        return FileTypes::Type::PROJECTIONS;
+    }
     return FileTypes::Type::UNDEFINED;
 }
 
@@ -95,55 +107,60 @@ void SaveGraphForm::graphTypeChanged()
 {
     if (ui->nodeNodeValueRadio->isChecked())
     {
+        ui->printValueCheck->setEnabled(true);
+        ui->printInfoCheck->setEnabled(true);
         ui->printIndentsCheck->setEnabled(false);
+        ui->printAllNodesCheck->setEnabled(false);
+
         ui->startNodeLineEdit->setEnabled(false);
         ui->pathLimitLineEdit->setEnabled(false);
     }
     else if (ui->bracketsFlatRadio->isChecked())
     {
+        ui->printValueCheck->setEnabled(true);
+        ui->printInfoCheck->setEnabled(true);
         ui->printIndentsCheck->setEnabled(false);
+        ui->printAllNodesCheck->setEnabled(false);
+
         ui->startNodeLineEdit->setEnabled(false);
-        ui->pathLimitLineEdit->setEnabled(true);
+        ui->pathLimitLineEdit->setEnabled(false);
     }
     else if (ui->bracketsNestedRadio->isChecked())
     {
+        ui->printValueCheck->setEnabled(true);
+        ui->printInfoCheck->setEnabled(true);
         ui->printIndentsCheck->setEnabled(true);
+        ui->printAllNodesCheck->setEnabled(false);
+
         ui->startNodeLineEdit->setEnabled(true);
         ui->pathLimitLineEdit->setEnabled(true);
     }
-    validateGraphSave();
+    else if (ui->projectionRadio->isChecked())
+    {
+        ui->printValueCheck->setEnabled(false);
+        ui->printInfoCheck->setEnabled(false);
+        ui->printIndentsCheck->setEnabled(true);
+        ui->printAllNodesCheck->setEnabled(true);
+
+        bool isAll = ui->printAllNodesCheck->isChecked();
+        ui->startNodeLineEdit->setEnabled(!isAll);
+        ui->pathLimitLineEdit->setEnabled(false);
+    }
+    validateInputs();
 }
 
 
 
 /**
- * @brief SaveToFileGraphForm::validateGraphSave - This big function used for
- * validate save graph params and show file part example how it will looks.
+ * @brief SaveGraphForm::validateNodeNodeValue - function is part of validation
+ * used valide type node node value (edges list)
+ * @param info - info string for add info about validation
+ * @return true if validation successful
  */
-void SaveGraphForm::validateGraphSave()
+bool SaveGraphForm::validateNodeNodeValue(QString& info)
 {
-    ui->graphSaveButton->setEnabled(false);
-
-    FileTypes::Type typeId = getFileType();
-    if (typeId == FileTypes::Type::UNDEFINED)
-    {
-        ui->infoLabel->setText(tr("File type is not recognised. "
-                                  "Please check save settings"));
-        return;
-    }
-    fileTypeId = typeId;
-
     bool printValue = ui->printValueCheck->isChecked();
     bool printInfo = ui->printInfoCheck->isChecked();
-
-    QString info;
-
-    if (mainWindow->getGraph().isGraphEmpty())
-    {
-        info += tr("Graph is empty. Nothing to save.");
-        ui->infoLabel->setText(info);
-        return;
-    }
 
     if (!printValue && !printInfo)
     {
@@ -152,19 +169,149 @@ void SaveGraphForm::validateGraphSave()
         info += '\n';
     }
 
-    bool printIndents  = ui->printIndentsCheck->isEnabled() &&
-                         ui->printIndentsCheck->isChecked();
+    FileTypes::Type typeId = getFileType();
+    QString example;
+    example += FileTypes::typeName(typeId);
+    example += '\n';
+
+    if (printInfo)
+    {
+        example += "{TYPE=HYPERCUBE}\n";
+        example += "{WEIGHT=1}\n";
+    }
+    if (printValue)
+    {
+        example += "1 2 1\n1 3 1\n2 4 8\n2 5 4\n";
+    }
+    else
+    {
+        example += "1 2\n1 3\n2 4\n2 5\n";
+    }
+
+    ui->exampleLabel->setText(example);
+
+    return true;
+}
+
+
+
+/**
+ * @brief SaveGraphForm::validateBracketsFlat - function is part of validation
+ * used valide type flat brackets format (adjacency list)
+ * @param info - info string for add info about validation
+ * @return true if validation successful
+ */
+bool SaveGraphForm::validateBracketsFlat(QString& info)
+{
+    bool printValue = ui->printValueCheck->isChecked();
+    bool printInfo = ui->printInfoCheck->isChecked();
+
+    if (!printValue && !printInfo)
+    {
+        info += tr("Print value and print info are turned off.\n"
+                   "Weight and other information will be lost.");
+        info += '\n';
+    }
+
+    FileTypes::Type typeId = getFileType();
+    QString example;
+    example += FileTypes::typeName(typeId);
+    example += '\n';
+
+    if (printInfo)
+    {
+        example += "{TYPE=HYPERCUBE}\n";
+        example += "{WEIGHT=1}\n";
+    }
+
+    if (printValue)
+    {
+        example += "1(2[5] 4[7] 5[9])\n";
+    }
+    else
+    {
+        example += "1(2 4 5)\n";
+    }
+
+    ui->exampleLabel->setText(example);
+
+    return true;
+}
+
+
+
+/**
+ * @brief SaveGraphForm::validateBracketsNested - function is part of validation
+ * used valide type flat brackets format (bracket style all nodes)
+ * @param info - info string for add info about validation
+ * @param isGraphEmpty - if graph empty skip node search
+ * @return true if validation successful
+ */
+bool SaveGraphForm::validateBracketsNested(QString& info, bool isGraphEmpty)
+{
+    bool printValue = ui->printValueCheck->isChecked();
+    bool printInfo  = ui->printInfoCheck->isChecked();
+    bool printIndents = ui->printIndentsCheck->isChecked();
+
+    bool isValid = true;
+
+    if (!printValue && !printInfo)
+    {
+        info += tr("Print value and print info are turned off.\n"
+                   "Weight and other information will be lost.");
+        info += '\n';
+    }
+
+    isValid = !isGraphEmpty && checkStartNodeEdit(info);
+
+    FileTypes::Type typeId = getFileType();
+    QString example;
+    example += FileTypes::typeName(typeId);
+    example += '\n';
+
+    if (printInfo)
+    {
+        example += "{TYPE=HYPERCUBE}\n";
+        example += "{WEIGHT=1}\n";
+    }
+
+    if (printValue)
+    {
+        if (printIndents)
+            example += "1(\n    2[5](\n        4[7]\n        5[9]\n"
+                       "    )\n)\n";
+        else
+            example += "1(2[5](4[7] 5[9]))\n";
+    }
+    else
+    {
+        if (printIndents)
+            example += "1(\n    2(\n        4\n        5\n    )\n)\n";
+        else
+            example += "1(2(4 5))\n";
+    }
+
+    ui->exampleLabel->setText(example);
+
+    return isValid;
+}
+
+
+
+bool SaveGraphForm::checkStartNodeEdit(QString &info)
+{
+    bool isValid = true;
 
     const Graph* graph = &mainWindow->getGraph();
 
-    if (ui->bracketsNestedRadio->isChecked())
+    if (!ui->startNodeLineEdit->hasAcceptableInput())
     {
-        if (!ui->startNodeLineEdit->hasAcceptableInput())
-        {
-            ui->infoLabel->setText(tr("Start node is not number."));
-            return;
-        }
-
+        info += tr("Start node is not number.");
+        info += '\n';
+        isValid = false;
+    }
+    else
+    {
         bool ok;
         ulong nodeId = ui->startNodeLineEdit->text().toULong(&ok);
         if (ok)
@@ -191,90 +338,65 @@ void SaveGraphForm::validateGraphSave()
                     }
                     delete nodes;
                 }
-                ui->infoLabel->setText(info);
-                return;
+                isValid = false;
             }
         }
         else
         {
-            info +=  tr("Start node is not number.");
-            ui->infoLabel->setText(info);
-            return;
+            info += tr("Start node is not number.");
+            info += '\n';
+            isValid = false;
         }
     }
+    return isValid;
+}
 
 
-    QString example;
-    example += FileTypes::typeName(typeId) ;
-    example += '\n';
 
-    if (printInfo)
+/**
+ * @brief SaveGraphForm::validateInputs - This function used for
+ * validate save graph params and show file part example how it will looks.
+ */
+void SaveGraphForm::validateInputs()
+{
+    FileTypes::Type typeId = getFileType();
+    if (typeId == FileTypes::Type::UNDEFINED)
     {
-        const InfoDeque* list = graph->getAllInfo();
-        if (!list->size())
-        {
-            info += tr("Graph info is empty.") + '\n';
-        }
-        else
-        for (auto it = list->begin(); it != list->end(); ++it)
-        {
-            example += '{';
-            example += it->first;
-            example += " = ";
-            example += it->second;
-            example += "}\n";
-        }
+        ui->infoLabel->setText(tr("File type is not recognised. "
+                                  "Please check save settings"));
+        return;
     }
+    fileTypeId = typeId;
+
+    bool isValid = true;
+
+    bool isEmpty = mainWindow->getGraph().isGraphEmpty();
+
+    QString info;
+
+    if (isEmpty)
+    {
+        info += tr("Graph is empty. Nothing to save.");
+        info += '\n';
+        isValid = false;
+    }
+
     if (ui->nodeNodeValueRadio->isChecked())
     {
-        if (printValue)
-        {
-            example += "1 2 1\n1 3 1\n2 4 8\n2 5 4\n";
-        }
-        else
-        {
-            example += "1 2\n1 3\n2 4\n2 5\n";
-        }
+        isValid = validateNodeNodeValue(info);
     }
     else if (ui->bracketsFlatRadio->isChecked())
     {
-        if (printValue)
-        {
-            if (printIndents)
-                example += "1(\n    2[5]\n    4[7]\n    5[9]\n)\n";
-            else
-                example += "1(2[5] 4[7] 5[9])\n";
-        }
-        else
-        {
-            if (printIndents)
-                example += "1(\n    2\n    4\n    5\n)\n";
-            else
-                example += "1(2 4 5)\n";
-        }
+        isValid = validateBracketsFlat(info);
     }
     else if (ui->bracketsNestedRadio->isChecked())
     {
-        if (printValue)
-        {
-            if (printIndents)
-                example += "1(\n    2[5](\n        4[7]\n        5[9]\n"
-                           "    )\n)\n";
-            else
-                example += "1(2[5](4[7] 5[9]))\n";
-        }
-        else
-        {
-            if (printIndents)
-                example += "1(\n    2(\n        4\n        5\n    )\n)\n";
-            else
-                example += "1(2(4 5))\n";
-        }
+        isValid = validateBracketsNested(info, isEmpty);
     }
 
     ui->infoLabel->setText(info);
-    ui->exampleLabel->setText(example);
-    ui->graphSaveButton->setEnabled(true);
+
+    ui->graphSaveButton->setEnabled(!isEmpty && isValid);
 }
 
 

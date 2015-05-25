@@ -35,7 +35,16 @@ private:
 
 private slots:
     void graphTypeChanged();
-    void validateGraphSave();
+
+    void validateInputs();
+
+    bool checkStartNodeEdit(QString &info);
+
+    bool validateNodeNodeValue(QString &info);
+    bool validateBracketsFlat(QString &info);
+    bool validateBracketsNested(QString &info, bool isGraphEmpty);
+
+
     void saveGraph();
 };
 

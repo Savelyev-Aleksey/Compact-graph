@@ -46,45 +46,51 @@ void SaveShortPathForm::validateShortPath()
 
     Graph* graph = & mainWindow->getGraph();
     bool isEmpty = graph->isGraphEmpty();
+    bool ok, isValid = true;
+    QString info;
+
     if (isEmpty)
     {
-        ui->infoLabel->setText(tr("Graph is empty. Nothing to save."));
-        return;
-    }
-
-    bool printIndents = ui->printIndentsCheck->isChecked();
-    bool ok, isValid = true;
-
-    if (!ui->startNodeEdit->hasAcceptableInput())
-    {
-        ui->infoLabel->setText(tr("Start node is not number."));
+        info += tr("Graph is empty. Nothing to save.");
+        info += '\n';
         isValid = false;
     }
 
-    QString info;
+    bool printIndents = ui->printIndentsCheck->isChecked();
 
-    ulong nodeId = ui->startNodeEdit->text().toUInt(&ok);
-    if (!ok)
+
+    ulong nodeId;
+    if (ui->startNodeEdit->hasAcceptableInput())
+    {
+        nodeId = ui->startNodeEdit->text().toUInt(&ok);
+    }
+    else
     {
         info += tr("Start node is not number.");
         info += '\n';
         isValid = false;
     }
 
-    ui->pathLimitEdit->text().toFloat(&ok);
-    if (!ok)
+    if (!ui->pathLimitEdit->hasAcceptableInput())
     {
         info += tr("Path limit is not number.");
         info += '\n';
         isValid = false;
     }
 
-    bool nodeExist = graph->findNode(nodeId) != nullptr;
-
 
     if (isValid)
     {
-        if (!nodeExist)
+        bool nodeExist = graph->findNode(nodeId) != nullptr;
+        if (nodeExist)
+        {
+            bool pathExist = graph->isPathExist(nodeId);
+            if (!pathExist)
+            {
+                info += tr("Path not created. It will be created before save.");
+            }
+        }
+        else
         {
             info += tr("Node %1 not found.").arg(nodeId);
             info += ' ';
@@ -101,14 +107,9 @@ void SaveShortPathForm::validateShortPath()
                 }
                 delete nodes;
             }
-            ui->infoLabel->setText(info);
-            return;
+            isValid = false;
         }
-        bool pathExist = graph->isPathExist(nodeId);
-        if (!pathExist)
-        {
-            info += tr("Path not created. It will be created before save.");
-        }
+
     }
 
     ui->infoLabel->setText(info);

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>571</width>
-    <height>408</height>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
         <item>
          <widget class="QRadioButton" name="nodeNodeValueRadio">
           <property name="text">
-           <string>Node Node Value</string>
+           <string>Edge list</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -41,14 +41,21 @@
         <item>
          <widget class="QRadioButton" name="bracketsFlatRadio">
           <property name="text">
-           <string>Brackets flat</string>
+           <string>Adjacency list</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="projectionRadio">
+          <property name="text">
+           <string>Projections</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QRadioButton" name="bracketsNestedRadio">
           <property name="text">
-           <string>Brackets with nesting</string>
+           <string>Brackets style, all paths</string>
           </property>
          </widget>
         </item>
@@ -160,6 +167,13 @@ Turned on:&lt;br&gt;
           </property>
           <property name="text">
            <string>Print indents</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="printAllNodesCheck">
+          <property name="text">
+           <string>Print all nodes</string>
           </property>
          </widget>
         </item>

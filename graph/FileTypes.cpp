@@ -14,7 +14,8 @@ const char* const FileTypes::types[] = {
     "{BRACKETS_FLAT_VALUE}",
     "{BRACKETS}",
     "{BRACKETS_VALUE}",
-    "{BRACKETS_SHORT_PATH_VALUE}"
+    "{BRACKETS_SHORT_PATH_VALUE}",
+    "{PROJECTIONS}"
 };
 
 

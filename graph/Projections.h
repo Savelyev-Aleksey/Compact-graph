@@ -18,6 +18,10 @@ public:
     Projections(GraphBase& graph);
     ~Projections();
 
+    bool isEmpty() const;
+
+    const ProjectionsList* getList() const;
+
     void createAllProjections();
     void createProjection(size_t nodeId);
 

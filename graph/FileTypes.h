@@ -15,6 +15,7 @@ public:
         BRACKETS,
         BRACKETS_VALUE,
         BRACKETS_SHORT_PATH_VALUE,
+        PROJECTIONS,
         // Always must be last - used in loop
         UNDEFINED
     };

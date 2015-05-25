@@ -48,7 +48,8 @@ SOURCES += gui/main.cpp\
     gui/GraphWorker.cpp \
     graph/ProjectionElem.cpp \
     graph/Projection.cpp \
-    graph/Projections.cpp
+    graph/Projections.cpp \
+    graph/ProjectionsWriter.cpp
 
 HEADERS  += \
     graph/Edge.h \
@@ -79,7 +80,8 @@ HEADERS  += \
     gui/GraphWorker.h \
     graph/ProjectionElem.h \
     graph/Projection.h \
-    graph/Projections.h
+    graph/Projections.h \
+    graph/ProjectionsWriter.h
 
 FORMS    += \
     gui/OpenFileForm.ui \

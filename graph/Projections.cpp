@@ -23,6 +23,20 @@ Projections::~Projections()
 
 
 
+bool Projections::isEmpty() const
+{
+    return projections->size() == 0;
+}
+
+
+
+const ProjectionsList* Projections::getList() const
+{
+    return projections;
+}
+
+
+
 void Projections::createAllProjections()
 {
     if (graph->isEmpty())

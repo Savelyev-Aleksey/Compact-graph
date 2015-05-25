@@ -30,18 +30,18 @@ bool ShortPathWriter::savePaths(const char* fileName, const NodeIdDeque* nodes,
         GraphBase* graph = &shortPath->getGraph();
         NodeMap* map = graph->getNodeMap();
         NodeIdDeque list;
-        for (auto it = map->begin(); it != map->end(); ++it)
+        for (const auto &pair : *map)
         {
-            list.push_back(it->first);
-            shortPath->generateShortPath(it->first, pathLimit);
+            list.push_back(pair.first);
+            shortPath->generateShortPath(pair.first, pathLimit);
         }
         return writeExistPaths(fileName, &list, options);
     }
     else
     {
-        for (size_t i = 0; i < nodes->size(); ++i)
+        for (const auto &i : *nodes)
         {
-            shortPath->generateShortPath(nodes->at(i), pathLimit);
+            shortPath->generateShortPath(i, pathLimit);
         }
         return writeExistPaths(fileName, nodes, options);
     }
@@ -82,9 +82,9 @@ bool ShortPathWriter::writeExistPaths(const char* fileName,
     fputs(fileType, f);
     fputc('\n', f);
 
-    for (auto it = nodes->begin(); it != nodes->end(); ++it)
+    for (const auto &node : *nodes)
     {
-        auto parentIt = shortPathNodes->find(*it);
+        auto parentIt = shortPathNodes->find(node);
         if (parentIt == shortPathNodes->end())
         {
             continue;

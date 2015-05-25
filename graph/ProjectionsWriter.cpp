@@ -100,14 +100,8 @@ bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
     fputs(fileType, f);
     fputc('\n', f);
 
-    bool result = true;
+    bool result = writeProjection(f, pr->second, options);;
 
-    for (const auto &pair : *list)
-    {
-        result = writeProjection(f, pair.second, options);
-        if (!result)
-            break;
-    }
     fclose(f);
     return result;
 }

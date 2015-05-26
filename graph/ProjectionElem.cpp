@@ -77,6 +77,8 @@ bool ProjectionElem::isEmpty() const
 
 void ProjectionElem::addElem(ProjectionElem *child)
 {
+    if (!listElem)
+        listElem = new ProjectionElemMap;
     size_t id = child->getId();
     listElem->insert({id, child});
 }
@@ -85,7 +87,8 @@ void ProjectionElem::addElem(ProjectionElem *child)
 
 void ProjectionElem::eraseElem(const ProjectionElemMap::const_iterator pos)
 {
-    listElem->erase(pos);
+    if (listElem)
+        listElem->erase(pos);
 }
 
 

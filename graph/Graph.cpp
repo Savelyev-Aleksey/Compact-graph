@@ -8,10 +8,14 @@
 #include "GraphReader.h"
 #include "GraphWriter.h"
 #include "GraphGenerator.h"
-#include "ShortPath.h"
+
 #include "ShortPathRootElem.h"
 #include "ShortPathReader.h"
 #include "ShortPathWriter.h"
+
+#include "Projection.h"
+#include "Projections.h"
+#include "ProjectionsWriter.h"
 
 
 
@@ -20,6 +24,7 @@ Graph::Graph() :
     Worker(),
     graph(new GraphBase()),
     shortPath(new ShortPath(*graph)),
+    projections(new Projections(*graph)),
     radius(0),
     diameter(0)
 { }
@@ -29,14 +34,15 @@ Graph::Graph() :
 Graph::~Graph()
 {
     delete shortPath;
+    delete projections;
     delete graph;
-
 }
 
 
 void Graph::clearGraph()
 {
-    shortPath->clearAllPaths();
+    shortPath->clear();
+    projections->clear();
     graph->clear();
     diameter = 0;
     radius = 0;
@@ -477,7 +483,7 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
  * @return true if save successful
  */
 bool Graph::saveShortPaths(const char* fileName, const NodeIdDeque* nodes,
-                      float pathLimit, cuint options) const
+                      float pathLimit, cuint options)
 {
     ShortPathWriter writer(*shortPath);
     return writer.savePaths(fileName, nodes, pathLimit, options);
@@ -494,9 +500,93 @@ bool Graph::saveShortPaths(const char* fileName, const NodeIdDeque* nodes,
  * @return true if write successful
  */
 bool Graph::writeExistShortPaths(const char* fileName, const NodeIdDeque* nodes,
-                                 cuint options) const
+                                 cuint options)
 {
     ShortPathWriter writer(*shortPath);
     return writer.writeExistPaths(fileName, nodes, options);
 }
 
+
+
+/**
+ * @brief Graph::createAllProjections creates projection
+ * for each node in graph.
+ */
+void Graph::createAllProjections()
+{
+    startProcess(projections);
+    projections->createAllProjections();
+    completeProcess();
+}
+
+
+
+/**
+ * @brief Graph::createProjection create one projection for nodeId node.
+ * @param nodeId - node for which will create projection
+ */
+void Graph::createProjection(size_t nodeId)
+{
+    projections->createProjection(nodeId);
+}
+
+
+
+bool Graph::isProjectionExist(size_t nodeId) const
+{
+    return projections->isProjectionExist(nodeId);
+}
+
+
+
+size_t Graph::projectionsCount() const
+{
+    return projections->size();
+}
+
+
+
+/**
+ * @brief Graph::saveProjections - save all created projections
+ * in fileName file.
+ * @param fileName - file to write projections
+ * @param options - some options (PRINT_INDENTS)
+ * @return true if writing was successful, false if write error file can't be
+ * open on write or projections are empty.
+ */
+bool Graph::saveProjections(const char* fileName, unsigned options)
+{
+    ProjectionsWriter writer(*projections);
+    startProcess(&writer);
+    bool result = writer.saveProjections(fileName, options);
+    completeProcess();
+    return result;
+}
+
+
+
+/**
+ * @brief Graph::saveProjection - save created projection for
+ * one node in fileName file.
+ * @param fileName - file to write projections
+ * @param rootNode - node id for create projection
+ * @param options - some options (PRINT_INDENTS)
+ * @return true if writing was successful, false if write error file can't be
+ * open on write or projections are empty.
+ */
+bool Graph::saveProjection(const char* fileName, size_t rootNode,
+                           unsigned options)
+{
+    ProjectionsWriter writer(*projections);
+    startProcess(&writer);
+    bool result = writer.saveProjection(fileName, rootNode, options);
+    completeProcess();
+    return result;
+}
+
+
+
+const Projection* Graph::getProjection(size_t nodeId) const
+{
+    return projections->getProjection(nodeId);
+}

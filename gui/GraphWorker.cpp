@@ -4,6 +4,7 @@
 
 #include "GraphWorker.h"
 #include "graph/Node.h"
+#include "graph/Projection.h"
 
 
 
@@ -58,7 +59,7 @@ void GraphWorker::generateAllShortPaths()
 {
     size_t size = graph->nodeCount();
 
-    QString title = QObject::tr("Create short path");
+    QString title = QObject::tr("Creating short path");
 
     std::function<void()> fn = [this]{
         ::Graph::generateAllShortPaths();
@@ -73,7 +74,7 @@ bool GraphWorker::writeEdges(const char *fileName, cuint options)
 {
     size_t size = graph->nodeCount();
 
-    QString title = QObject::tr("Write edges of node");
+    QString title = QObject::tr("Writing edges of node");
     bool result = false;
 
     std::function<void()> fn = [this, &fileName, &options, &result] {
@@ -89,7 +90,7 @@ bool GraphWorker::writeBracketsFlat(const char *fileName, cuint options)
 {
     size_t size = graph->nodeCount();
 
-    QString title = QObject::tr("Write adjacency table");
+    QString title = QObject::tr("Writing adjacency list");
     bool result = false;
 
     std::function<void()> fn = [this, &fileName, &options, &result] {
@@ -105,9 +106,12 @@ bool GraphWorker::writeBracketsFlat(const char *fileName, cuint options)
 bool GraphWorker::writeBrackets(const char *fileName, const size_t startNodeId,
                                 const size_t pathLimit, cuint options)
 {
-    size_t size = graph->getNode(startNodeId)->getEdgeCount() - 1;
+    size_t size = graph->getNode(startNodeId)->getEdgeCount();
+    if (!size)
+        return false;
+    --size;
 
-    QString title = QObject::tr("Write adjacency table");
+    QString title = QObject::tr("Writing adjacency list");
     bool result = false;
 
     std::function<void()> fn = [this, &fileName, &startNodeId, &pathLimit,
@@ -119,6 +123,55 @@ bool GraphWorker::writeBrackets(const char *fileName, const size_t startNodeId,
     progressDialog(size, title, fn);
     return result;
 }
+
+
+
+bool GraphWorker::saveProjections(const char *fileName, unsigned options)
+{
+    size_t size = projectionsCount();
+    if (!size)
+        return false;
+    --size;
+
+    QString title = QObject::tr("Writing projections");
+    bool result = false;
+
+    std::function<void()> fn = [this, &fileName, &options, &result] {
+        result = ::Graph::saveProjections(fileName, options);
+    };
+
+    progressDialog(size, title, fn);
+    return result;
+}
+
+
+
+bool GraphWorker::saveProjection(const char *fileName, size_t rootNode,
+                                 unsigned options)
+{
+    const Projection* pr = getProjection(rootNode);
+    if (!pr)
+    {
+        return false;
+    }
+    size_t size = pr->levelCount();
+    if (!size)
+        return false;
+    --size;
+
+    QString title = QObject::tr("Writing projection");
+    bool result = false;
+
+    std::function<void()> fn = [this, &fileName, &rootNode, &options, &result] {
+        result = ::Graph::saveProjection(fileName, rootNode, options);
+    };
+
+    progressDialog(size, title, fn);
+    return result;
+}
+
+
+
 
 
 

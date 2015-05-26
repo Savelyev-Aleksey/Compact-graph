@@ -20,10 +20,18 @@ public:
 
     bool isEmpty() const;
 
+    void clear();
+
+    size_t size() const;
+
     const ProjectionsList* getList() const;
+
+    const Projection* getProjection(size_t nodeId) const;
 
     void createAllProjections();
     void createProjection(size_t nodeId);
+
+    bool isProjectionExist(size_t nodeId) const;
 
 protected:
     GraphBase* graph;

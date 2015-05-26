@@ -14,11 +14,19 @@ Projections::Projections(GraphBase& graph) :
 
 Projections::~Projections()
 {
+    clear();
+    delete projections;
+}
+
+
+
+void Projections::clear()
+{
     for (auto it = projections->rbegin(); it != projections->rend(); ++it)
     {
         delete it->second;
     }
-    delete projections;
+    projections->clear();
 }
 
 
@@ -37,6 +45,18 @@ const ProjectionsList* Projections::getList() const
 
 
 
+const Projection* Projections::getProjection(size_t nodeId) const
+{
+    auto it = projections->find(nodeId);
+    return it == projections->end() ? nullptr : it->second;
+}
+
+
+
+/**
+ * @brief Projections::createAllProjections creates projection
+ * for each node in graph.
+ */
 void Projections::createAllProjections()
 {
     if (graph->isEmpty())
@@ -72,9 +92,15 @@ void Projections::createAllProjections()
         for (unsigned j = 0; j < end; ++j, ++it)
         {
             Projection* pr = new Projection(it->first);
-            projections->insert({it->first, pr});
-
-            threads[j] = new std::thread(func, pr, graph);
+            auto result = projections->insert({it->first, pr});
+            if (result.second)
+            {
+                threads[j] = new std::thread(func, pr, graph);
+            }
+            else
+            {
+                delete pr;
+            }
         }
         for (unsigned j = 0; j < end; ++j)
         {
@@ -88,6 +114,11 @@ void Projections::createAllProjections()
 
 
 
+/**
+ * @brief Projections::createProjection create projection for one node in
+ * graph.
+ * @param nodeId - node id wich will be respectived node.
+ */
 void Projections::createProjection(size_t nodeId)
 {
     auto it = projections->find(nodeId);
@@ -96,4 +127,19 @@ void Projections::createProjection(size_t nodeId)
     Projection* pr = new Projection(it->first);
     projections->insert({it->first, pr});
     pr->createProjection(*graph);
+}
+
+
+
+size_t Projections::size() const
+{
+    return projections->size();
+}
+
+
+
+bool Projections::isProjectionExist(size_t nodeId) const
+{
+    auto it = projections->find(nodeId);
+    return (it != projections->end()) ? true : false;
 }

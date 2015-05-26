@@ -58,6 +58,13 @@ size_t Projection::getId() const
 
 
 
+size_t Projection::levelCount() const
+{
+    return levelList->size();
+}
+
+
+
 const ProjectionElem* Projection::getRootNode() const
 {
     return rootNode;
@@ -65,24 +72,30 @@ const ProjectionElem* Projection::getRootNode() const
 
 
 
+/**
+ * @brief Projection::createProjection create projection for current
+ * projection element
+ * @param graph - graph used for generate projection
+ */
 void Projection::createProjection(GraphBase &graph)
 {
     if (levelList)
         return;
+    levelList = new ProjectionLevelList;
     // List of nodes to check, that all visited
     NodeIdSet* graphNodes = graph.getNodeIds();
     // init perspectived node, for projection it's a root node
     ProjectionElem* elem = new ProjectionElem(nodeId);
     rootNode = elem;
     // init zero level
-    ProjectionLevelElem* curLevel = new ProjectionLevelElem();
+    ProjectionLevelElem* curLevel = new ProjectionLevelElem;
     // add in zero level perspectived node
     curLevel->insert({nodeId, elem});
     // push level in level list
     levelList->push_back(curLevel);
 
     // Add map for original nodes - use for set link in replics to original node
-    ProjectionElemMap* origianlNodes = new ProjectionElemMap();
+    ProjectionElemMap* origianlNodes = new ProjectionElemMap;
     origianlNodes->insert({nodeId, elem});
     // Remove perspectived node - already in projection
     graphNodes->erase(nodeId);

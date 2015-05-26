@@ -5,14 +5,19 @@
 
 #include "types.h"
 #include "FileTypes.h"
+
 #include "ReaderBase.h"
 #include "WriterBase.h"
 #include "GraphBase.h"
-#include "ShortPath.h"
+
 #include "Worker.h"
 
+#include "ShortPath.h"
 
 class Node;
+class ShortPath;
+class Projections;
+class Projection;
 
 class Graph : public ReaderBase, public Worker
 {
@@ -78,15 +83,33 @@ public:
 
     // ShortPath writers
     bool saveShortPaths(const char* fileName, const NodeIdDeque* nodes =nullptr,
-                   float pathLimit = 0, cuint options = Option::NONE) const;
+                        float pathLimit = 0, cuint options = Option::NONE);
 
     bool writeExistShortPaths(const char* fileName, const NodeIdDeque* nodes,
-                         cuint options = Option::NONE) const;
+                              cuint options = Option::NONE);
+
+public:
+    // Projections methods
+
+    void createAllProjections();
+    void createProjection(size_t nodeId);
+
+    bool isProjectionExist(size_t nodeId) const;
+    size_t projectionsCount() const;
+
+    const Projection* getProjection(size_t nodeId) const;
+
+    // Projections writers
+    virtual bool saveProjections(const char* fileName,
+                                 unsigned options = Option::NONE);
+    virtual bool saveProjection(const char* fileName, size_t rootNode,
+                                unsigned options = Option::NONE);
 
 
 protected:
     GraphBase* graph;
     ShortPath* shortPath;
+    Projections* projections;
 
     size_t radius;
     size_t diameter;

@@ -73,17 +73,25 @@ bool ProjectionsWriter::saveProjections(const char *fileName, unsigned options)
 
 
 
+/**
+ * @brief ProjectionsWriter::saveProjection - save created projection for
+ * one node in fileName file.
+ * @param fileName - file to write projections
+ * @param rootNode - node id for create projection
+ * @param options - some options (PRINT_INDENTS)
+ * @return true if writing was successful, false if write error file can't be
+ * open on write or projections are empty.
+ */
 bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
                                        unsigned options)
 {
-    const ProjectionsList* list = projections->getList();
-    if (!list->size())
+    const Projection* pr = projections->getProjection(rootNode);
+    if (!pr)
     {
         return false;
     }
 
-    auto pr = list->find(rootNode);
-    if (pr == list->end())
+    if (!pr->levelCount())
     {
         return false;
     }
@@ -100,7 +108,9 @@ bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
     fputs(fileType, f);
     fputc('\n', f);
 
-    bool result = writeProjection(f, pr->second, options);;
+    startProcess(0, pr->levelCount() - 1);
+    bool result = writeProjection(f, pr, options);
+    completeProcess();
 
     fclose(f);
     return result;
@@ -126,7 +136,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
         return false;
     }
 
-    size_t nodeId;
+    size_t nodeId, count = 0;
     bool isFirst = true;
     std::deque <ProjectionElemMapItPair> pathStack;
     size_t currentIndent = 1;
@@ -152,6 +162,10 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
         {
             pathStack.pop_front();
             --currentIndent;
+            if (currentIndent == 1)
+            {
+                updateProgress(++count);
+            }
             if (printIndents)
             {
                 for(unsigned i = 0; i < currentIndent; ++i)
@@ -204,6 +218,11 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
             fputc('\n', f);
         }
     }
+    if (!printIndents)
+    {
+        fputc('\n', f);
+    }
+
     return true;
 }
 

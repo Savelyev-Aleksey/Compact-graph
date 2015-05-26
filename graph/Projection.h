@@ -22,6 +22,7 @@ public:
     ~Projection();
 
     size_t getId() const;
+    size_t levelCount() const;
 
     const ProjectionElem* getRootNode() const;
 

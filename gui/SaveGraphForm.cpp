@@ -298,11 +298,67 @@ bool SaveGraphForm::validateBracketsNested(QString& info, bool isGraphEmpty)
 
 
 
+bool SaveGraphForm::validateProjections(QString &info, bool isGraphEmpty)
+{
+    bool isValid = true;
+    bool printAll = ui->printAllNodesCheck->isChecked();
+    bool printIndents = ui->printIndentsCheck->isChecked();
+
+
+    if (!isGraphEmpty)
+    {
+        const GraphWorker& graph = mainWindow->getGraph();
+        if (printAll)
+        {
+            size_t gSize = graph.nodeCount();
+            size_t pSize = graph.projectionsCount();
+            if (gSize != pSize)
+            {
+                info += tr("Not all projections are created yet. "
+                           "Will be created on save. It's take a time.");
+                info += '\n';
+            }
+        }
+        else
+        {
+            isValid = checkStartNodeEdit(info);
+            if (isValid)
+            {
+                size_t nodeId = ui->startNodeLineEdit->text().toULong();
+                if (!graph.isProjectionExist(nodeId))
+                {
+                    info += tr("Projection not exist yet. "
+                               "Will be created on save.");
+                    info += '\n';
+                }
+            }
+        }
+    }
+
+    QString example;
+    FileTypes::Type typeId = getFileType();
+
+    example += FileTypes::typeName(typeId);
+    example += '\n';
+    example += "{WEIGHT=1}\n";
+
+    if (printIndents)
+        example += "1(\n    2(\n        4\n        5\n        6\n    )\n)\n";
+    else
+        example += "1(2(4 5 6))\n";
+
+    ui->exampleLabel->setText(example);
+
+    return isValid;
+}
+
+
+
 bool SaveGraphForm::checkStartNodeEdit(QString &info)
 {
     bool isValid = true;
 
-    const Graph* graph = &mainWindow->getGraph();
+    const GraphWorker& graph = mainWindow->getGraph();
 
     if (!ui->startNodeLineEdit->hasAcceptableInput())
     {
@@ -316,7 +372,7 @@ bool SaveGraphForm::checkStartNodeEdit(QString &info)
         ulong nodeId = ui->startNodeLineEdit->text().toULong(&ok);
         if (ok)
         {
-            const Node* node = graph->findNode(nodeId);
+            const Node* node = graph.findNode(nodeId);
             if (node)
             {
                 nodeId = node->getId();
@@ -325,7 +381,7 @@ bool SaveGraphForm::checkStartNodeEdit(QString &info)
             {
                 info += tr("Node %1 not found.").arg(nodeId);
                 info += ' ';
-                std::deque<size_t> *nodes = graph->findNearNode(nodeId);
+                std::deque<size_t> *nodes = graph.findNearNode(nodeId);
                 if (nodes)
                 {
                     info += tr("Nearest:");
@@ -393,6 +449,10 @@ void SaveGraphForm::validateInputs()
     {
         isValid = validateBracketsNested(info, isEmpty);
     }
+    else if (ui->projectionRadio->isChecked())
+    {
+        isValid = validateProjections(info, isEmpty);
+    }
 
     ui->infoLabel->setText(info);
 
@@ -416,20 +476,25 @@ void SaveGraphForm::saveGraph()
     }
     unsigned options = WriterBase::Option::NONE;
 
-    if (ui->printValueCheck->isChecked())
+    if (ui->printValueCheck->isEnabled() &&
+        ui->printValueCheck->isChecked() )
     {
         options = options | WriterBase::Option::PRINT_VALUE;
     }
-    if (ui->printInfoCheck->isChecked())
+    if (ui->printInfoCheck->isEnabled() &&
+        ui->printInfoCheck->isChecked() )
     {
         options = options | WriterBase::Option::PRINT_INFO;
     }
 
     if (ui->printIndentsCheck->isEnabled() &&
-            ui->printIndentsCheck->isChecked())
+        ui->printIndentsCheck->isChecked() )
     {
         options = options | WriterBase::Option::PRINT_INDENTS;
     }
+
+    bool printAllNodes = ui->printAllNodesCheck->isEnabled() &&
+                         ui->printAllNodesCheck->isChecked();
 
     GraphWorker& graph = mainWindow->getGraph();
     QByteArray file = fileName.toLatin1();
@@ -459,6 +524,22 @@ void SaveGraphForm::saveGraph()
             break;
         result = graph.writeBrackets(file.data(), startNodeId, pathLimit,
                                       options);
+        break;
+
+    case FileTypes::Type::PROJECTIONS:
+        if (printAllNodes)
+        {
+            graph.createAllProjections();
+            result = graph.saveProjections(file.data(), options);
+        }
+        else
+        {
+            startNodeId = ui->startNodeLineEdit->text().toUInt(&result);
+            if (!result)
+                break;
+            graph.createProjection(startNodeId);
+            result = graph.saveProjection(file.data(), startNodeId, options);
+        }
         break;
 
     default:

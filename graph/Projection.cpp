@@ -126,8 +126,8 @@ void Projection::createProjection(GraphBase &graph)
                 continue;
 
             isEmpty = false;
-            size_t curId = parentIt.first;
-            const Node* node = graph.getNode(curId);
+
+            const Node* node = graph.getNode(parentIt.first);
             const EdgeList* edgeList = node->getEdges();
             for (const auto &edgeIt : *edgeList)
             {
@@ -137,6 +137,12 @@ void Projection::createProjection(GraphBase &graph)
                     continue;
 
                 elem = new ProjectionElem(curId);
+                // insert elem as child in parent elem
+                parent->addElem(elem);
+                elem->setParent(parent);
+                // insert elem in current projection level list
+                curLevel->insert({curId, elem});
+
                 // insert original node in search list
                 // if not inserted - it's replica node
                 auto res = origianlNodes->insert({curId, elem});
@@ -150,10 +156,6 @@ void Projection::createProjection(GraphBase &graph)
                     // set node as replica - set original node address
                     elem->setOriginal(res.first->second);
                 }
-                // insert elem as child in parent elem
-                parent->addElem(elem);
-                // insert elem in current projection level list
-                curLevel->insert({curId, elem});
             }
 
         }

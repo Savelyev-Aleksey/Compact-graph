@@ -214,12 +214,12 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Экцентриситет</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="327"/>
+        <location filename="../../GraphInfoForm.ui" line="330"/>
         <source>Node info</source>
         <translation>Инормация о вершине</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="333"/>
+        <location filename="../../GraphInfoForm.ui" line="336"/>
         <source>Node number:</source>
         <translation>Номер вершины:</translation>
     </message>
@@ -367,6 +367,44 @@ By default file graph.log located in same program directory.</source>
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="31"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="62"/>
+        <source>Creating short path</source>
+        <translation>Создание кратчайшего пути</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="77"/>
+        <source>Writing edges of node</source>
+        <translation>Запись рёбер вершины</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="93"/>
+        <location filename="../../GraphWorker.cpp" line="114"/>
+        <source>Writing adjacency list</source>
+        <translation>Запись списка смежности</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="136"/>
+        <source>Writing projections</source>
+        <translation>Запись проекций</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="162"/>
+        <source>Writing projection</source>
+        <translation>Запись проекции</translation>
+    </message>
+    <message>
+        <source>Create short path</source>
+        <translation type="obsolete">Создать кратчайший путь</translation>
+    </message>
+</context>
+<context>
     <name>SaveForm</name>
     <message>
         <location filename="../../SaveForm.ui" line="14"/>
@@ -388,32 +426,49 @@ By default file graph.log located in same program directory.</source>
 <context>
     <name>SaveGraphForm</name>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="31"/>
+        <location filename="../../SaveGraphForm.ui" line="28"/>
         <source>File type</source>
         <translation>Тип файла</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="37"/>
         <source>Node Node Value</source>
-        <translation>Вершина Вершина Вес</translation>
+        <translation type="vanished">Вершина Вершина Вес</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="47"/>
         <source>Brackets flat</source>
-        <translation>Скобочная запись плоская</translation>
+        <translation type="vanished">Скобочная запись плоская</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="54"/>
         <source>Brackets with nesting</source>
-        <translation>Скобочная запись с вложениями</translation>
+        <translation type="vanished">Скобочная запись с вложениями</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="83"/>
+        <location filename="../../SaveGraphForm.ui" line="34"/>
+        <source>Edge list</source>
+        <translation>Список рёбер</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.ui" line="44"/>
+        <source>Adjacency list</source>
+        <translation>Список смежности</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.ui" line="51"/>
+        <source>Projections</source>
+        <translation>Проекции</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.ui" line="58"/>
+        <source>Brackets style, all paths</source>
+        <translation>Скобочная запись, все пути</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.ui" line="87"/>
         <source>Options</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="89"/>
+        <location filename="../../SaveGraphForm.ui" line="93"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
 
 Print value used to print value for each edge. &lt;br&gt;
@@ -464,22 +519,22 @@ or 1(2 3 4)&lt;br&gt;
 &lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="115"/>
+        <location filename="../../SaveGraphForm.ui" line="119"/>
         <source>Print value</source>
         <translation>Печать веса</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="125"/>
+        <location filename="../../SaveGraphForm.ui" line="129"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Prints graph additional information. &lt;/p&gt;&lt;p&gt;For example: &lt;br/&gt;name of generated type (hypercube torus); &lt;br/&gt;parameters, used by generator (dimention, big raidus, small radius);&lt;br/&gt;basic weight of all edges;&lt;/p&gt;&lt;p&gt;Example in file:&lt;/p&gt;&lt;p&gt;{TYPE=HYPERCUBE}&lt;br/&gt;{DIMENTION=6}&lt;br/&gt;{WEIGHT=1}&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Печать дополнительной информации о графе. &lt;/p&gt;&lt;p&gt;Например: &lt;br/&gt;название сгенерированного типа графа (гиперкуб тор); &lt;br/&gt;параметры, введенные в генератор (размерность, большой радиус, малый радиус);&lt;br/&gt;базовый вес всех рёбер;&lt;/p&gt;&lt;p&gt;Пример в файле:&lt;/p&gt;&lt;p&gt;{TYPE=HYPERCUBE}&lt;br/&gt;{DIMENTION=6}&lt;br/&gt;{WEIGHT=1}&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="128"/>
+        <location filename="../../SaveGraphForm.ui" line="132"/>
         <source>Print graph info</source>
         <translation>Печать информации о графе</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="138"/>
+        <location filename="../../SaveGraphForm.ui" line="142"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
 &lt;p&gt;Print indents for more readable data. Used in bracket style.&lt;br/&gt;
 Each new nesting increase indent lewel.&lt;/p&gt;
@@ -532,27 +587,32 @@ Turned on:&lt;br&gt;
 &lt;/table&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="165"/>
+        <location filename="../../SaveGraphForm.ui" line="169"/>
         <source>Print indents</source>
         <translation>Печать отступов</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="174"/>
+        <location filename="../../SaveGraphForm.ui" line="176"/>
+        <source>Print all nodes</source>
+        <translation>Печать всех вершин</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.ui" line="185"/>
         <source>Start node</source>
         <translation>Начальная вершина</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="187"/>
+        <location filename="../../SaveGraphForm.ui" line="198"/>
         <source>Node id for start writing bracket style paths.</source>
         <translation>Номер вершины для начала пути в скобочной записи.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="200"/>
+        <location filename="../../SaveGraphForm.ui" line="211"/>
         <source>Path Limit</source>
         <translation>Ограничение пути</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="213"/>
+        <location filename="../../SaveGraphForm.ui" line="224"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path limit. It&apos;s nesting level limiter. &lt;/p&gt;&lt;p&gt;Useful if need crop graph or give some graph part that accessible in not more than &amp;quot;path limit&amp;quot; edges.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ограничение пути - это граничение уровня вложения. &lt;/p&gt;&lt;p&gt;Ипользуется, если нужно обрезать граф или получить часть пути которая достижима не более чем в &amp;quot;ограничение пути&amp;quot; ребер.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -565,77 +625,88 @@ Turned on:&lt;br&gt;
         <translation type="vanished">Информация</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="259"/>
+        <location filename="../../SaveGraphForm.ui" line="270"/>
         <source>Example</source>
         <translation>Пример</translation>
     </message>
     <message>
         <location filename="../../SaveGraphForm.ui" line="14"/>
-        <location filename="../../SaveGraphForm.ui" line="311"/>
-        <location filename="../../SaveGraphForm.cpp" line="284"/>
+        <location filename="../../SaveGraphForm.ui" line="322"/>
+        <location filename="../../SaveGraphForm.cpp" line="466"/>
         <source>Save graph</source>
         <translation>Сохранить граф</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="130"/>
+        <location filename="../../SaveGraphForm.cpp" line="421"/>
         <source>File type is not recognised. Please check save settings</source>
         <translation>Тип файла не распознан. Пожалуйста проверьте настройки сохранения</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="143"/>
+        <location filename="../../SaveGraphForm.cpp" line="435"/>
         <source>Graph is empty. Nothing to save.</source>
         <translation>Граф пуст. Сохранять нечего.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="150"/>
+        <location filename="../../SaveGraphForm.cpp" line="167"/>
+        <location filename="../../SaveGraphForm.cpp" line="211"/>
+        <location filename="../../SaveGraphForm.cpp" line="260"/>
         <source>Print value and print info are turned off.
 Weight and other information will be lost.</source>
         <translation>Печать веса и печать информации отключены.
 Вес и другая информация будут потеряны.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="164"/>
-        <location filename="../../SaveGraphForm.cpp" line="200"/>
+        <location filename="../../SaveGraphForm.cpp" line="317"/>
+        <source>Not all projections are created yet. Will be created on save. It&apos;s take a time.</source>
+        <translation>Не все проекции ещё созданы. Будут созданы при сохранениию Это займёт время.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.cpp" line="330"/>
+        <source>Projection not exist yet. Will be created on save.</source>
+        <translation>Проекция ещё не создана. Будет создана при сохранении.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.cpp" line="365"/>
+        <location filename="../../SaveGraphForm.cpp" line="402"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="179"/>
+        <location filename="../../SaveGraphForm.cpp" line="382"/>
         <source>Node %1 not found.</source>
         <translation>Вершина %1 не найдена.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="184"/>
+        <location filename="../../SaveGraphForm.cpp" line="387"/>
         <source>Nearest:</source>
         <translation>Ближайшие:</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="216"/>
         <source>Graph info is empty.</source>
-        <translation>Информация о графе пуста.</translation>
+        <translation type="vanished">Информация о графе пуста.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="285"/>
+        <location filename="../../SaveGraphForm.cpp" line="467"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="343"/>
+        <location filename="../../SaveGraphForm.cpp" line="544"/>
         <source>File type is unknown. Check settings.</source>
         <translation>Тип файла неизвестен. Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="350"/>
+        <location filename="../../SaveGraphForm.cpp" line="551"/>
         <source>Graph saved in file %1</source>
         <translation>Граф сохранён в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="355"/>
+        <location filename="../../SaveGraphForm.cpp" line="556"/>
         <source>Graph not saved.File not accessed to write.</source>
         <translation>Граф не сохранён. Нет прав на запись в файл.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="357"/>
+        <location filename="../../SaveGraphForm.cpp" line="558"/>
         <source>Graph not saved.</source>
         <translation>Граф не сохранён.</translation>
     </message>
@@ -753,35 +824,34 @@ Turned on:&lt;br&gt;
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="52"/>
+        <location filename="../../SaveShortPathForm.cpp" line="54"/>
         <source>Graph is empty. Nothing to save.</source>
         <translation>Граф пуст. Сохранять нечего.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="61"/>
-        <location filename="../../SaveShortPathForm.cpp" line="70"/>
+        <location filename="../../SaveShortPathForm.cpp" line="69"/>
         <location filename="../../SaveShortPathForm.cpp" line="141"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="78"/>
+        <location filename="../../SaveShortPathForm.cpp" line="76"/>
         <location filename="../../SaveShortPathForm.cpp" line="148"/>
         <source>Path limit is not number.</source>
         <translation>Ограничение пути не является числом.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="90"/>
+        <location filename="../../SaveShortPathForm.cpp" line="95"/>
         <source>Node %1 not found.</source>
         <translation>Вершина %1 не найдена.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="95"/>
+        <location filename="../../SaveShortPathForm.cpp" line="100"/>
         <source>Nearest:</source>
         <translation>Ближайшие:</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="111"/>
+        <location filename="../../SaveShortPathForm.cpp" line="90"/>
         <source>Path not created. It will be created before save.</source>
         <translation>Путь не создан. Будет создан перед сохранением.</translation>
     </message>

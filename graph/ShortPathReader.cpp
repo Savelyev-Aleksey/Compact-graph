@@ -94,7 +94,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
         return false;
     }
     // Cleanup structures before read
-    shortPath->clearAllPaths();
+    shortPath->clear();
 
     size_t nodeFromNum, nodeToNum, startNode;
     float value = 0;

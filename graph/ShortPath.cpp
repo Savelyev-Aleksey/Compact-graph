@@ -96,7 +96,7 @@ void ShortPath::clearPath(size_t nodeId)
 /**
  * @brief ShortPath::clearAllPaths - Clean all exists path
  */
-void ShortPath::clearAllPaths()
+void ShortPath::clear()
 {
     for (auto it = shortPathNodes->begin(); it != shortPathNodes->end(); ++it)
     {

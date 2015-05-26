@@ -39,7 +39,7 @@ public:
     UlongMap* getEccentriciyStatistic() const;
 
     void clearPath(size_t nodeId);
-    void clearAllPaths();
+    void clear();
 
     bool isEmpty() const;
 

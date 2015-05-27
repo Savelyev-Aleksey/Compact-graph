@@ -143,3 +143,32 @@ bool Projections::isProjectionExist(size_t nodeId) const
     auto it = projections->find(nodeId);
     return (it != projections->end()) ? true : false;
 }
+
+
+
+/**
+ * @brief Projections::getEccentriciyStatistic - create eccentricity statistic.
+ * Show eccentricity and mathed count in graph.
+ * @return map with eccentricity and matched count.
+ */
+UlongMap* Projections::getEccentriciyStatistic() const
+{
+    if (!projections->size())
+    {
+        return nullptr;
+    }
+    size_t eccentr;
+    UlongMap* map = new UlongMap();
+
+    for (const auto &it : *projections)
+    {
+        eccentr = it.second->getEccentricity();
+        auto result = map->insert({eccentr, 1});
+        if (!result.second)
+        {
+            // Increase count of exist eccentricity
+            ++(result.first->second);
+        }
+    }
+    return map;
+}

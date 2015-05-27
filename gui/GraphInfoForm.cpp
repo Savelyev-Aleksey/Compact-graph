@@ -10,17 +10,27 @@
 GraphInfoForm::GraphInfoForm(MainWindow *parent) :
     QWidget(parent),
     ui(new Ui::GraphInfoForm),
-    mainWindow(parent)
+    mainWindow(parent),
+    eccentrType(0)
 {
     ui->setupUi(this);
 
-    connect(ui->findParamsButton, &QPushButton::clicked,
-            this, &GraphInfoForm::findParameters);
+    connect(ui->createShorPathButton, &QPushButton::clicked,
+            this, &GraphInfoForm::createShortPaths);
+    connect(ui->createProjectionsButton, &QPushButton::clicked,
+            this, &GraphInfoForm::createProjections);
+
+    connect(ui->nodesDetailCheck, &QCheckBox::toggled,
+            this, &GraphInfoForm::printGraphStatistic);
+    connect(ui->eccentrDetailCheck, &QCheckBox::toggled,
+            this, &GraphInfoForm::printEccentriciyStatistic);
+
+    ui->degreeStatTable->resizeColumnsToContents();
+    ui->EccentrStatTable->resizeColumnsToContents();
 
     printGraphInfo();
     printGraphStatistic();
-    printShortPathInfo();
-    printShortPathStatistic();
+    printGraphParameters();
 }
 
 
@@ -32,17 +42,35 @@ GraphInfoForm::~GraphInfoForm()
 
 
 
-void GraphInfoForm::findParameters()
+void GraphInfoForm::createShortPaths()
 {
-    ui->findParamsButton->setEnabled(false);
+    ui->createShorPathButton->setEnabled(false);
 
     GraphWorker& graph = mainWindow->getGraph();
 
     graph.generateAllShortPaths();
-    graph.updateParameters();
+    graph.updateParametersByShortPaths();
 
-    printShortPathInfo();
-    printShortPathStatistic();
+    printGraphParameters();
+    eccentrType = 0;
+    printEccentriciyStatistic();
+}
+
+
+
+
+void GraphInfoForm::createProjections()
+{
+    ui->createProjectionsButton->setEnabled(false);
+
+    GraphWorker& graph = mainWindow->getGraph();
+
+    graph.createAllProjections();
+    graph.updateParametersByProjections();
+
+    printGraphParameters();
+    eccentrType = 1;
+    printEccentriciyStatistic();
 }
 
 
@@ -73,11 +101,15 @@ void GraphInfoForm::printGraphInfo()
 
 
 
-void GraphInfoForm::printShortPathInfo()
+void GraphInfoForm::printGraphParameters()
 {
     const GraphWorker& graph = mainWindow->getGraph();
-    size_t value = graph.getShortPathCount();
-    ui->pathCountLabel->setText( QString::number(value) );
+
+    size_t value = graph.shortPathsCount();
+    ui->shortPathsLabel->setText( QString::number(value) );
+
+    value = graph.projectionsCount();
+    ui->projectionsLabel->setText( QString::number(value) );
 
     value = graph.getDiameter();
     ui->diameterLabel->setText( QString::number(value) );
@@ -98,24 +130,29 @@ void GraphInfoForm::printTableStat(const UlongMap* map, QTableWidget* table,
     QTableWidgetItem *item;
 
     size_t rowCount = map->size();
+    table->clearContents();
     table->setRowCount(rowCount);
 
     unsigned row = 0;
-    for (auto it = map->begin(), end = map->end(); it != end;
-         ++it, ++row)
+    for (auto it = map->begin(), end = map->end(); it != end; ++it, ++row)
     {
         if (shrink && row > 0 && row < rowCount - 1)
-            item = new QTableWidgetItem( QString("<= %1").arg(it->first) );
-        else
-            item = new QTableWidgetItem( QString::number(it->first) );
+        {
+            item = new QTableWidgetItem("<=");
+            table->setItem(row, 0, item);
+        }
 
-        table->setItem(row, 0, item);
-        item = new QTableWidgetItem( QString::number(it->second) );
+
+
+
+        item = new QTableWidgetItem( QString::number(it->first) );
         table->setItem(row, 1, item);
+        item = new QTableWidgetItem( QString::number(it->second) );
+        table->setItem(row, 2, item);
 
         percent = (double) it->second / count * 100;
         item = new QTableWidgetItem( QString::number(percent, 'g', 4) );
-        table->setItem(row, 2, item);
+        table->setItem(row, 3, item);
     }
     table->resizeColumnsToContents();
 }
@@ -132,13 +169,15 @@ void GraphInfoForm::printGraphStatistic()
     {
         return;
     }
-    bool shrink = map->size() > 10 ? true : false;
+    bool detail = ui->nodesDetailCheck->isChecked();
+    unsigned short limit = 6;
+    bool shrink = !detail && map->size() > limit ? true : false;
 
-    if (map->size() < 3)
+    if (map->size() < 3 || detail)
         compact = map;
     else
     {
-        compact = graph.compactStatistic(map, 10);
+        compact = graph.compactStatistic(map, limit);
         delete map;
     }
 
@@ -148,23 +187,30 @@ void GraphInfoForm::printGraphStatistic()
 
 
 
-void GraphInfoForm::printShortPathStatistic()
+void GraphInfoForm::printEccentriciyStatistic()
 {
     const GraphWorker& graph = mainWindow->getGraph();
 
     UlongMap* compact = nullptr;
-    UlongMap* map = graph.getEccentriciyStatistic();
+    UlongMap* map = nullptr;
+    if (eccentrType == 0)
+        map = graph.getEccentriciyStatisticByShortPaths();
+    else if (eccentrType == 1)
+        map = graph.getEccentriciyStatisticByProjections();
+
     if (!map)
     {
         return;
     }
-    bool shrink = map->size() > 10 ? true : false;
+    bool detail = ui->eccentrDetailCheck->isChecked();
+    unsigned short limit = 6;
+    bool shrink = !detail && map->size() > limit ? true : false;
 
-    if (map->size() < 3)
+    if (map->size() < 3 || detail)
         compact = map;
     else
     {
-        compact = graph.compactStatistic(map, 10);
+        compact = graph.compactStatistic(map, limit);
         delete map;
     }
     printTableStat(compact, ui->EccentrStatTable, shrink);

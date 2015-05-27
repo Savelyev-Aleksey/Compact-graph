@@ -23,6 +23,7 @@ public:
 
     size_t getId() const;
     size_t levelCount() const;
+    size_t getEccentricity() const;
 
     const ProjectionElem* getRootNode() const;
 

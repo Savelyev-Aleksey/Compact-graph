@@ -135,10 +135,9 @@ UlongMap* ShortPath::getEccentriciyStatistic() const
     size_t eccentr;
     UlongMap* map = new UlongMap();
 
-    for (auto it = shortPathNodes->begin(), end = shortPathNodes->end();
-         it != end; ++it)
+    for (const auto &it : *shortPathNodes)
     {
-        eccentr = it->second->getEccentricity();
+        eccentr = it.second->getEccentricity();
         auto result = map->insert({eccentr, 1});
         if (!result.second)
         {
@@ -160,9 +159,9 @@ UlongMap* ShortPath::getEccentriciyStatistic() const
 bool ShortPath::isNodeForVisit(const NodeDeque& list, size_t nodeId)
 const
 {
-    for (auto it = list.begin(); it != list.end(); ++it)
+    for (const auto &it : list)
     {
-        if ((*it)->getId() == nodeId)
+        if (it->getId() == nodeId)
         {
             return true;
         }
@@ -214,9 +213,9 @@ void ShortPath::updateSubpath(PathPair* pair, float difference,
             }
             continue;
         }
-        for (auto it = list->begin(); it != list->end(); ++it)
+        for (auto &it : *list)
         {
-            ShortPathElem* elem = it->second;
+            ShortPathElem* elem = it.second;
             old = elem->getWeight();
             elem->setWeight(old - difference);
             oldIndent = elem->getIndent();
@@ -224,8 +223,8 @@ void ShortPath::updateSubpath(PathPair* pair, float difference,
                 elem->setIndent(oldIndent - indentDiff);
             else
                 elem->setIndent(oldIndent + indentDiff);
-            pair = &(*it);
-            elemList.push_front(pair);
+
+            elemList.push_front(&it);
         }
     }
 }

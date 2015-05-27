@@ -30,11 +30,10 @@ public:
     size_t getRadius() const;
     size_t getDiameter() const;
 
-    void updateParameters();
-
     // Statistics
     UlongMap* getNodeDegreeStatistic() const;
-    UlongMap* getEccentriciyStatistic() const;
+    UlongMap* getEccentriciyStatisticByShortPaths() const;
+    UlongMap* getEccentriciyStatisticByProjections() const;
     UlongMap* compactStatistic(UlongMap* map, unsigned short limit) const;
     size_t statisticParamSum(const UlongMap* map) const;
 
@@ -75,9 +74,11 @@ public:
 public:
     // ShortPath methods
 
+    void updateParametersByShortPaths();
+
     bool isShortPathEmpty() const;
     bool isPathExist(size_t nodeId) const;
-    size_t getShortPathCount() const;
+    size_t shortPathsCount() const;
 
     virtual void generateAllShortPaths(float pathLimit = 0);
 
@@ -90,6 +91,8 @@ public:
 
 public:
     // Projections methods
+
+    void updateParametersByProjections();
 
     void createAllProjections();
     void createProjection(size_t nodeId);

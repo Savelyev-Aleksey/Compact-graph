@@ -72,6 +72,13 @@ const ProjectionElem* Projection::getRootNode() const
 
 
 
+size_t Projection::getEccentricity() const
+{
+    return eccesntricity;
+}
+
+
+
 /**
  * @brief Projection::createProjection create projection for current
  * projection element

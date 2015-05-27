@@ -130,96 +130,107 @@
         <translation>Статистика степеней вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="63"/>
+        <location filename="../../GraphInfoForm.ui" line="75"/>
         <source>Degree</source>
         <translation>Степень</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="68"/>
-        <location filename="../../GraphInfoForm.ui" line="305"/>
+        <location filename="../../GraphInfoForm.ui" line="80"/>
+        <location filename="../../GraphInfoForm.ui" line="361"/>
         <source>Count</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="84"/>
+        <location filename="../../GraphInfoForm.ui" line="96"/>
         <source>Graph parameters</source>
         <translation>Параметры графа</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="100"/>
+        <location filename="../../GraphInfoForm.ui" line="102"/>
         <source>Radius:</source>
         <translation>Радиус:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="107"/>
+        <location filename="../../GraphInfoForm.ui" line="166"/>
         <source>Diameter:</source>
         <translation>Диаметр:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="121"/>
-        <source>Short paths geterated count.</source>
-        <translation>Количество сгенерированный кратчайших путей.</translation>
-    </message>
-    <message>
-        <location filename="../../GraphInfoForm.ui" line="124"/>
-        <source>Path count:</source>
-        <translation>Количество путей:</translation>
-    </message>
-    <message>
-        <location filename="../../GraphInfoForm.ui" line="162"/>
+        <location filename="../../GraphInfoForm.ui" line="127"/>
         <source>Before search parameters will be created short paths for each node.
 After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Перед поиском параметров будут созданы кратчайшие пути для каждой вершины.
 После будут найдены: диаметр, радиус и статистика эксцентриситетов.</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="166"/>
-        <source>Find parameters</source>
-        <translation>Найти параметры</translation>
-    </message>
-    <message>
         <location filename="../../GraphInfoForm.ui" line="20"/>
-        <location filename="../../GraphInfoForm.ui" line="191"/>
+        <location filename="../../GraphInfoForm.ui" line="235"/>
         <source>Graph info</source>
         <translation>Инормация о графе</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="210"/>
+        <location filename="../../GraphInfoForm.ui" line="131"/>
+        <source>Create short paths</source>
+        <translation>Создать кратчайшие пути</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="187"/>
+        <source>Short paths:</source>
+        <translation>Кратчайшие пути:</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="203"/>
+        <source>Create projections</source>
+        <translation>Создать проекции</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="225"/>
+        <source>Projections:</source>
+        <translation>Проекции:</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="254"/>
         <source>File name:</source>
         <translation>Имя файла:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="217"/>
+        <location filename="../../GraphInfoForm.ui" line="261"/>
         <source>Parameters:</source>
         <translation>Параметры:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="238"/>
+        <location filename="../../GraphInfoForm.ui" line="282"/>
         <source>Node conut:</source>
         <translation>Количество вершин:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="255"/>
+        <location filename="../../GraphInfoForm.ui" line="299"/>
         <source>Edge Count:</source>
         <translation>Количество рёбер:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="278"/>
+        <location filename="../../GraphInfoForm.ui" line="322"/>
         <source>Nodes eccentricity statistic</source>
         <translation>Статистика экцентриситетов вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="300"/>
+        <location filename="../../GraphInfoForm.ui" line="44"/>
+        <location filename="../../GraphInfoForm.ui" line="340"/>
+        <source>Detail info</source>
+        <translation>Подробная информация</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="356"/>
         <source>Eccentricity</source>
         <translation>Экцентриситет</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="330"/>
+        <location filename="../../GraphInfoForm.ui" line="386"/>
         <source>Node info</source>
         <translation>Инормация о вершине</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="336"/>
+        <location filename="../../GraphInfoForm.ui" line="392"/>
         <source>Node number:</source>
         <translation>Номер вершины:</translation>
     </message>
@@ -275,14 +286,6 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <location filename="../../OpenFileForm.ui" line="57"/>
         <source>File info</source>
         <translation>Информация о файле</translation>
-    </message>
-    <message>
-        <source>No info</source>
-        <translation type="vanished">нет информации</translation>
-    </message>
-    <message>
-        <source>info</source>
-        <translation type="vanished">Информация</translation>
     </message>
     <message>
         <location filename="../../OpenFileForm.ui" line="14"/>
@@ -374,34 +377,30 @@ By default file graph.log located in same program directory.</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="62"/>
+        <location filename="../../GraphWorker.cpp" line="65"/>
         <source>Creating short path</source>
         <translation>Создание кратчайшего пути</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="77"/>
+        <location filename="../../GraphWorker.cpp" line="80"/>
         <source>Writing edges of node</source>
         <translation>Запись рёбер вершины</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="93"/>
-        <location filename="../../GraphWorker.cpp" line="114"/>
+        <location filename="../../GraphWorker.cpp" line="96"/>
+        <location filename="../../GraphWorker.cpp" line="117"/>
         <source>Writing adjacency list</source>
         <translation>Запись списка смежности</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="136"/>
+        <location filename="../../GraphWorker.cpp" line="139"/>
         <source>Writing projections</source>
         <translation>Запись проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="162"/>
+        <location filename="../../GraphWorker.cpp" line="165"/>
         <source>Writing projection</source>
         <translation>Запись проекции</translation>
-    </message>
-    <message>
-        <source>Create short path</source>
-        <translation type="obsolete">Создать кратчайший путь</translation>
     </message>
 </context>
 <context>
@@ -429,18 +428,6 @@ By default file graph.log located in same program directory.</source>
         <location filename="../../SaveGraphForm.ui" line="28"/>
         <source>File type</source>
         <translation>Тип файла</translation>
-    </message>
-    <message>
-        <source>Node Node Value</source>
-        <translation type="vanished">Вершина Вершина Вес</translation>
-    </message>
-    <message>
-        <source>Brackets flat</source>
-        <translation type="vanished">Скобочная запись плоская</translation>
-    </message>
-    <message>
-        <source>Brackets with nesting</source>
-        <translation type="vanished">Скобочная запись с вложениями</translation>
     </message>
     <message>
         <location filename="../../SaveGraphForm.ui" line="34"/>
@@ -617,14 +604,6 @@ Turned on:&lt;br&gt;
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ограничение пути - это граничение уровня вложения. &lt;/p&gt;&lt;p&gt;Ипользуется, если нужно обрезать граф или получить часть пути которая достижима не более чем в &amp;quot;ограничение пути&amp;quot; ребер.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>0</source>
-        <translation type="vanished">0</translation>
-    </message>
-    <message>
-        <source>info</source>
-        <translation type="vanished">Информация</translation>
-    </message>
-    <message>
         <location filename="../../SaveGraphForm.ui" line="270"/>
         <source>Example</source>
         <translation>Пример</translation>
@@ -682,31 +661,27 @@ Weight and other information will be lost.</source>
         <translation>Ближайшие:</translation>
     </message>
     <message>
-        <source>Graph info is empty.</source>
-        <translation type="vanished">Информация о графе пуста.</translation>
-    </message>
-    <message>
         <location filename="../../SaveGraphForm.cpp" line="467"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="544"/>
+        <location filename="../../SaveGraphForm.cpp" line="546"/>
         <source>File type is unknown. Check settings.</source>
         <translation>Тип файла неизвестен. Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="551"/>
+        <location filename="../../SaveGraphForm.cpp" line="553"/>
         <source>Graph saved in file %1</source>
         <translation>Граф сохранён в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="556"/>
+        <location filename="../../SaveGraphForm.cpp" line="558"/>
         <source>Graph not saved.File not accessed to write.</source>
         <translation>Граф не сохранён. Нет прав на запись в файл.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="558"/>
+        <location filename="../../SaveGraphForm.cpp" line="560"/>
         <source>Graph not saved.</source>
         <translation>Граф не сохранён.</translation>
     </message>
@@ -742,10 +717,6 @@ Weight and other information will be lost.</source>
         <location filename="../../SaveShortPathForm.ui" line="54"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path weight limit. It&apos;s nesting weight limiter. &lt;/p&gt;&lt;p&gt;Useful if need crop graph or give some graph part that &lt;br/&gt;accessible in not larger than &amp;quot;path weight limit&amp;quot; edges weight sum.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ограничение веса пути - это граничение уровня вложения. &lt;/p&gt;&lt;p&gt;Ипользуется, если нужно обрезать граф или получить часть пути которая по весу не более чем в &amp;quot;ограничение веса пути&amp;quot; суммы весов ребер.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="vanished">0</translation>
     </message>
     <message>
         <location filename="../../SaveShortPathForm.ui" line="66"/>
@@ -809,14 +780,6 @@ Turned on:&lt;br&gt;
         <location filename="../../SaveShortPathForm.ui" line="116"/>
         <source>Example</source>
         <translation>Пример</translation>
-    </message>
-    <message>
-        <source>example</source>
-        <translation type="vanished">пример</translation>
-    </message>
-    <message>
-        <source>info</source>
-        <translation type="vanished">Информация</translation>
     </message>
     <message>
         <location filename="../../SaveShortPathForm.ui" line="165"/>

@@ -80,9 +80,15 @@ UlongMap* Graph::getNodeDegreeStatistic() const
  * Show eccentricity and mathed count in graph.
  * @return map with eccentricity and matched count.
  */
-UlongMap* Graph::getEccentriciyStatistic() const
+UlongMap* Graph::getEccentriciyStatisticByShortPaths() const
 {
     return shortPath->getEccentriciyStatistic();
+}
+
+
+UlongMap* Graph::getEccentriciyStatisticByProjections() const
+{
+    return projections->getEccentriciyStatistic();
 }
 
 
@@ -113,10 +119,8 @@ UlongMap* Graph::compactStatistic(UlongMap *map, unsigned short limit) const
     unsigned short lines = limit - 2;
     size_t i = mapSize - 1;
     size_t pos, current = i;
-    UlongMap::const_reverse_iterator it = map->rend(), end = map->rbegin();
+    UlongMap::const_reverse_iterator it = map->rbegin(), end = map->rend();
     UlongMap::iterator compactIt;
-    // Go on last element
-    ++it;
     compact->insert(*it);
 
     for (++it, --i; it != end; ++it, --i)
@@ -135,7 +139,6 @@ UlongMap* Graph::compactStatistic(UlongMap *map, unsigned short limit) const
         }
     }
     // Insert first element
-    compact->insert(*end);
     return compact;
 }
 
@@ -157,12 +160,44 @@ size_t Graph::statisticParamSum(const UlongMap *map) const
 
 
 /**
- * @brief Graph::updateParameters - update calculating graph parameters.
+ * @brief Graph::updateParametersByShortPaths - update calculating graph
+ * parameters by short paths info.
  * There are radius and diameter.
  */
-void Graph::updateParameters()
+void Graph::updateParametersByShortPaths()
 {
     RootPathList *nodes = shortPath->getShortPathNodes();
+    if (!nodes->size())
+    {
+        return;
+    }
+    auto it = nodes->begin(), end = nodes->end();
+    size_t min, max, eccentr;
+    min = max = it->second->getEccentricity();
+    for (++it; it != end; ++it)
+    {
+        eccentr = it->second->getEccentricity();
+        if (eccentr > max)
+            max = eccentr;
+        else if (eccentr < min)
+        {
+            min = eccentr;
+        }
+    }
+    radius = min;
+    diameter = max;
+}
+
+
+
+/**
+ * @brief Graph::updateParametersByProjections - update calculating graph
+ * parameters by projections info.
+ * There are radius and diameter.
+ */
+void Graph::updateParametersByProjections()
+{
+    const ProjectionsList *nodes = projections->getList();
     if (!nodes->size())
     {
         return;
@@ -313,7 +348,7 @@ const Node* Graph::findNode(size_t nodeId) const
 
 
 
-size_t Graph::getShortPathCount() const
+size_t Graph::shortPathsCount() const
 {
     return shortPath->getShortPathCount();
 }

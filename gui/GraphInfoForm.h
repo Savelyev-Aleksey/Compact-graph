@@ -25,15 +25,18 @@ private:
     Ui::GraphInfoForm *ui;
     MainWindow* mainWindow;
 
+    unsigned short eccentrType;
+
     void printTableStat(const UlongMap* map, QTableWidget* table, bool shrink);
 
     void printGraphInfo();
-    void printShortPathInfo();
+    void printGraphParameters();
 
     void printGraphStatistic();
-    void printShortPathStatistic();
+    void printEccentriciyStatistic();
 
-    void findParameters();
+    void createShortPaths();
+    void createProjections();
 };
 
 #endif // GRAPHINFOFORM_H

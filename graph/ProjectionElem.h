@@ -31,7 +31,7 @@ public:
 
     const ProjectionElemMap* getList() const;
 
-    void addElem(ProjectionElem* child);
+    ProjectionElem* addElem(size_t nodeId);
     void eraseElem(const ProjectionElemMap::const_iterator pos);
 
 protected:

@@ -35,6 +35,8 @@ protected:
 
     size_t eccesntricity;
 
+    void createLastLevelProjection(const GraphBase& graph);
+
 };
 
 #endif // PROJECTION_H

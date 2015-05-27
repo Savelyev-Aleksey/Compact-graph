@@ -58,6 +58,9 @@ void GraphWorker::progressDialog(size_t size, const QString& title,
 void GraphWorker::generateAllShortPaths()
 {
     size_t size = graph->nodeCount();
+    if (!size)
+        return;
+    --size;
 
     QString title = QObject::tr("Creating short path");
 

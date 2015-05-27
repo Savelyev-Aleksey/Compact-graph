@@ -75,12 +75,15 @@ bool ProjectionElem::isEmpty() const
 
 
 
-void ProjectionElem::addElem(ProjectionElem *child)
+ProjectionElem* ProjectionElem::addElem(size_t nodeId)
 {
     if (!listElem)
         listElem = new ProjectionElemMap;
-    size_t id = child->getId();
-    listElem->insert({id, child});
+
+    ProjectionElem* el = new ProjectionElem(nodeId);
+    el->setParent(this);
+    listElem->insert({nodeId, el});
+    return el;
 }
 
 

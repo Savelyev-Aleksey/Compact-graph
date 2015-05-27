@@ -95,8 +95,8 @@ void Projection::createProjection(GraphBase &graph)
     levelList->push_back(curLevel);
 
     // Add map for original nodes - use for set link in replics to original node
-    ProjectionElemMap* origianlNodes = new ProjectionElemMap;
-    origianlNodes->insert({nodeId, elem});
+    ProjectionElemMap origianlNodes;
+    origianlNodes.insert({nodeId, elem});
     // Remove perspectived node - already in projection
     graphNodes->erase(nodeId);
 
@@ -106,15 +106,6 @@ void Projection::createProjection(GraphBase &graph)
 
     while (!isComlpete)
     {
-        if (!graphNodes->size())
-        {
-            // All nodes in projection - createing complete
-            // but continue last loop - if last level have edges between
-            // nodes on last projection level
-            isComlpete = true;
-            // set eccesntricity - all nodes are visited (added in projection)
-            eccesntricity = projectionLevel - 1;
-        }
         parentLevel = levelList->at(projectionLevel);
         curLevel = new ProjectionLevelElem();
         bool isEmpty = true;
@@ -136,16 +127,14 @@ void Projection::createProjection(GraphBase &graph)
                 if (parent->findInParents(curId))
                     continue;
 
-                elem = new ProjectionElem(curId);
                 // insert elem as child in parent elem
-                parent->addElem(elem);
-                elem->setParent(parent);
+                elem = parent->addElem(curId);
                 // insert elem in current projection level list
                 curLevel->insert({curId, elem});
 
                 // insert original node in search list
                 // if not inserted - it's replica node
-                auto res = origianlNodes->insert({curId, elem});
+                auto res = origianlNodes.insert({curId, elem});
                 if (res.second)
                 {
                     // new original node visited, shrink unvisited nodes
@@ -168,8 +157,79 @@ void Projection::createProjection(GraphBase &graph)
         {
             // add new level in projection list
             levelList->push_back(curLevel);
+            ++projectionLevel;
         }
-        ++projectionLevel;
+
+        if (isEmpty || !graphNodes->size())
+        {
+            // All nodes in projection - creating complete.
+            // If empty - so graph have to separate components.
+            // One of components was full visited
+            isComlpete = true;
+            // set eccesntricity - all nodes are visited (added in projection)
+            eccesntricity = projectionLevel;
+        }
+    }
+    delete graphNodes;
+
+    createLastLevelProjection(graph);
+}
+
+
+
+void Projection::createLastLevelProjection(const GraphBase& graph)
+{
+    // Last level find original elements on last level
+    // which have edges between together
+    std::deque <ProjectionElem*> nodes;
+    ProjectionLevelElem* parentLevel = levelList->back();
+    for (const auto &parentIt : *parentLevel)
+    {
+        if (parentIt.second->isOriginal())
+        {
+            nodes.push_back(parentIt.second);
+        }
+    }
+    // If more one original nodes in last level
+    // need to add new level for add edge info between together
+    if (nodes.size() > 1)
+    {
+        size_t size = nodes.size();
+        ProjectionLevelElem* curLevel = new ProjectionLevelElem;
+        for(size_t i = 0; i < size - 1; ++i)
+        {
+            ProjectionElem* elem = nodes.at(i);
+            for (size_t j = i + 1; j < size; ++j)
+            {
+               ProjectionElem* elem2 = nodes.at(j);
+               if ( graph.getEdge(elem->getId(), elem2->getId()) )
+               {
+                   // Add second elem in first
+                   size_t curId = elem2->getId();
+                   // insert elem as child in parent elem
+                   ProjectionElem* el = elem->addElem(curId);
+                   el->setOriginal(elem2);
+                   // insert elem in current projection level list
+                   curLevel->insert({curId, el});
+
+                   // Add first elem in second
+                   curId = elem->getId();
+                   // insert elem as child in parent elem
+                   el = elem2->addElem(curId);
+                   el->setOriginal(elem);
+                   // insert elem in current projection level list
+                   curLevel->insert({curId, el});
+               }
+            }
+        }
+        if (curLevel->size())
+        {
+            levelList->push_back(curLevel);
+        }
+        else
+        {
+            delete curLevel;
+        }
     }
 }
 

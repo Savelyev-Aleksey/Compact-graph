@@ -7,6 +7,7 @@
 #include "ShortPathRootElem.h"
 #include "ShortPath.h"
 #include "FileTypes.h"
+#include "GraphBase.h"
 
 
 
@@ -95,6 +96,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
     }
     // Cleanup structures before read
     shortPath->clear();
+    GraphBase& graph = shortPath->getGraph();
 
     size_t nodeFromNum, nodeToNum, startNode;
     float value = 0;
@@ -159,6 +161,9 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
             elem = parent->addNodeElem(nodeToNum, value, indent);
             // add node in search map
             search->addNodeElem(nodeToNum, elem);
+
+            float weight = value - parent->getWeight();
+            graph.addEdge(nodeFromNum, nodeToNum, weight);
         }
         else
         {

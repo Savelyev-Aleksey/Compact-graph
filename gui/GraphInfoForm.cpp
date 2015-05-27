@@ -28,6 +28,7 @@ GraphInfoForm::GraphInfoForm(MainWindow *parent) :
     ui->degreeStatTable->resizeColumnsToContents();
     ui->EccentrStatTable->resizeColumnsToContents();
 
+    updateButtonsStatus();
     printGraphInfo();
     printGraphStatistic();
     printGraphParameters();
@@ -38,6 +39,26 @@ GraphInfoForm::GraphInfoForm(MainWindow *parent) :
 GraphInfoForm::~GraphInfoForm()
 {
     delete ui;
+}
+
+
+
+void GraphInfoForm::updateButtonsStatus()
+{
+    GraphWorker& graph = mainWindow->getGraph();
+
+    size_t size = graph.nodeCount();
+    bool isProj = false;
+    bool isShort = false;
+    if (size)
+    {
+        size_t proj = graph.projectionsCount();
+        size_t shortp = graph.shortPathsCount();
+        isProj = proj ? proj != size : true;
+        isShort = shortp ? shortp != size : true;
+    }
+    ui->createProjectionsButton->setEnabled(isProj);
+    ui->createShorPathButton->setEnabled(isShort);
 }
 
 
@@ -116,6 +137,20 @@ void GraphInfoForm::printGraphParameters()
 
     value = graph.getRadius();
     ui->radiusLabel->setText( QString::number(value) );
+
+    size_t proj = graph.projectionsCount();
+    size_t shortp = graph.shortPathsCount();
+
+    if (proj)
+    {
+        eccentrType = 1;
+        printEccentriciyStatistic();
+    }
+    else if (shortp)
+    {
+        eccentrType = 0;
+        printEccentriciyStatistic();
+    }
 }
 
 

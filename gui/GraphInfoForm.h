@@ -37,6 +37,8 @@ private:
 
     void createShortPaths();
     void createProjections();
+
+    void updateButtonsStatus();
 };
 
 #endif // GRAPHINFOFORM_H

@@ -1,24 +1,25 @@
-
+#include <cstddef>
 #include <iostream>
-#include <deque>
 
-#include "ShortPathReader.h"
-#include "ShortPathElem.h"
-#include "ShortPathRootElem.h"
-#include "ShortPath.h"
-#include "FileTypes.h"
+
+
+#include "ProjectionsReader.h"
+
+#include "Projection.h"
+#include "ProjectionElem.h"
 #include "GraphBase.h"
 
 
 
-ShortPathReader::ShortPathReader(ShortPath& shortPath) : ReaderBase(),
-    shortPath(&shortPath)
-{ }
+ProjectionsReader::ProjectionsReader(GraphBase& graph) :
+    ReaderBase(),
+    Projections(graph)
+{}
 
 
 
 /**
- * @brief ShortPathReader::readFile - read file contain short paths nodes.
+ * @brief ProjectionsReader::readFile - read file contain nodes projections.
  * If file not recognised error will logged.
  * This function used if class used standalone.
  * It can read not all file types. For other types used another classes.
@@ -26,7 +27,7 @@ ShortPathReader::ShortPathReader(ShortPath& shortPath) : ReaderBase(),
  * @param fileName - string contain file name
  * @return true if read successful
  */
-bool ShortPathReader::readFile(const char* fileName)
+bool ProjectionsReader::readFile(const char *fileName)
 {
     FILE* f = fopen(fileName, "r");
     if (f == nullptr)
@@ -52,9 +53,9 @@ bool ShortPathReader::readFile(const char* fileName)
     bool outWarnings = options & Option::OUT_WARNINGS;
     bool result;
 
-    if (typeId == FileTypes::Type::BRACKETS_SHORT_PATH_VALUE)
+    if (typeId == FileTypes::Type::PROJECTIONS)
     {
-        result = readShortPath(f, typeId);
+        result = readProjections(f, typeId);
     }
     else if (outWarnings)
     {
@@ -77,30 +78,36 @@ bool ShortPathReader::readFile(const char* fileName)
 
 
 /**
- * @brief ShortPathReader::readShortPath - Read file contain graph
- * nodes short pahts.
+ * @brief ProjectionsReader::readProjections - Read file contain graph nodes
+ * projections.
  * @param fp - file pointer for read
  * @param options - some optinons (OUT_WARNINGS)
  * @return true if readed successful
  */
-bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
+bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
 {
     if (!fp)
     {
         lastError = Error::READ;
         return false;
     }
-    if (typeId != FileTypes::Type::BRACKETS_SHORT_PATH_VALUE)
+    if (typeId != FileTypes::Type::PROJECTIONS)
     {
         lastError = Error::TYPE;
         return false;
     }
     // Cleanup structures before read
-    shortPath->clear();
-    GraphBase& graph = shortPath->getGraph();
+    projections->clear();
 
-    size_t nodeFromNum, nodeToNum, startNode;
-    float value = 0;
+    float weight = 0;
+    const char* weightStr = graph->getInfo("WEIGHT");
+    if (!weightStr || sscanf(weightStr, "%f", &weight) != 1)
+    {
+        weight = 0;
+    }
+
+    size_t nodeFromNum, nodeToNum;
+
     int count;
     fpos_t position;
     unsigned outWarnings = options & Option::OUT_WARNINGS;
@@ -108,9 +115,14 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
     bool readError = false;
     size_t indent;
 
-    ShortPathElem* search, *parent, *elem;
+    Projection* projection = nullptr;
+    ProjectionElem *parent, *elem;
+    ProjectionLevelList* levelList;
+    ProjectionLevelElem* level;
     std::deque <size_t> nodesStack;
-    std::deque <ShortPathElem*> nodesElemStack;
+    std::deque <ProjectionElem*> nodesElemStack;
+
+//    ProjectionElemMap origianlNodes;
 
     while (!feof(fp))
     {
@@ -123,17 +135,32 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
                 readError = true;
                 break;
             }
-            startNode = nodeFromNum;
             indent = 1;
 
-            ShortPathRootElem* rootElem = shortPath->initShortPath(nodeFromNum);
-            parent = rootElem->getNodes();
-            search = rootElem->getSearch();
+            // if on last loop will be readed
+            if (projection)
+            {
+                projection->updateOriginalInfo();
+                projection->updateEccesntricity();
+            }
+
+            parent = new ProjectionElem(nodeFromNum);
+            levelList = new ProjectionLevelList;
+            projection = new Projection(nodeFromNum);
+            projection->setProjection(parent, levelList);
+
+            // This is root level with respectived node
+            level = new ProjectionLevelElem;
+            level->insert({nodeFromNum, parent});
+            levelList->push_back(level);
+            // This is current level for add child elements
+            level = new ProjectionLevelElem;
+            levelList->push_back(level);
 
             nodesStack.push_front(nodeFromNum);
             nodesElemStack.push_front(parent);
         }
-        count = fscanf(fp, "%zu[%g]", &nodeToNum, &value);
+        count = fscanf(fp, "%zu", &nodeToNum);
 
         // If readed add new node.
         if (count)
@@ -145,26 +172,17 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
                 {
                     std::clog << "[!] Warning: Loop found "
                               << nodeFromNum << ' ' << nodeToNum
-                              << ' ' << value << std::endl;
+                              << ' ' << weight << std::endl;
                 }
                 continue;
             }
-            elem = search->findElem(nodeToNum);
 
-            if (elem != nullptr)
-            {
-                std::clog << "[!] Warning: node " << startNode << "(... "
-                          << nodeFromNum << "( " << nodeToNum
-                          << " ) already in path. Check path" << std::endl;
-                continue;
-            }
-            // Add node hierarchy
-            elem = parent->addNodeElem(nodeToNum, value, indent);
-            // add node in search map
-            search->addNodeElem(nodeToNum, elem);
+            // Add node
+            elem = parent->addElem(nodeToNum);
+            // Add node in current projection level
+            levelList->at(indent)->insert({nodeToNum, elem});
 
-            float weight = value - parent->getWeight();
-            graph.addEdge(nodeFromNum, nodeToNum, weight);
+            graph->addEdge(nodeFromNum, nodeToNum, weight);
         }
         else
         {
@@ -182,6 +200,8 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
                 nodeFromNum = nodeToNum;
                 parent = elem;
                 ++indent;
+
+                levelList->push_back(new ProjectionLevelElem);
             }
             else if (bracket == ')')
             {
@@ -213,7 +233,12 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
         lastError = Error::SYNTAX;
         return false;
     }
+
+    if (projection && !projection->getEccentricity())
+    {
+        projection->updateOriginalInfo();
+        projection->updateEccesntricity();
+    }
     return true;
 }
-
 

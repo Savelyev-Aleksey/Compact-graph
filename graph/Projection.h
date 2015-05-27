@@ -21,6 +21,8 @@ public:
     Projection(size_t nodeId);
     ~Projection();
 
+    void clear();
+
     size_t getId() const;
     size_t levelCount() const;
     size_t getEccentricity() const;
@@ -28,6 +30,10 @@ public:
     const ProjectionElem* getRootNode() const;
 
     void createProjection(GraphBase& graph);
+
+    void setProjection(ProjectionElem* rootNode,ProjectionLevelList* levelList);
+    void updateOriginalInfo();
+    void updateEccesntricity();
 
 protected:
     size_t nodeId;

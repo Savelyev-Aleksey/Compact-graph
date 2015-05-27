@@ -19,6 +19,13 @@ Projection::Projection(size_t nodeId) :
 
 Projection::~Projection()
 {
+    clear();
+}
+
+
+
+void Projection::clear()
+{
     if (!levelList)
         return;
     for(size_t i = levelList->size(); i > 0 ; --i)
@@ -26,6 +33,8 @@ Projection::~Projection()
         delete levelList->at(i - 1);
     }
     delete levelList;
+    levelList = nullptr;
+
     ProjectionElem* parent = rootNode;
     ProjectionElem* elem = rootNode;
     const ProjectionElemMap* list;
@@ -47,6 +56,8 @@ Projection::~Projection()
         }
     }
     delete elem;
+    rootNode = nullptr;
+    eccesntricity = 0;
 }
 
 
@@ -75,6 +86,19 @@ const ProjectionElem* Projection::getRootNode() const
 size_t Projection::getEccentricity() const
 {
     return eccesntricity;
+}
+
+
+
+void Projection::setProjection(ProjectionElem *rootNode,
+                               ProjectionLevelList *levelList)
+{
+    if (!rootNode || !levelList)
+        return;
+
+    clear();
+    this->rootNode = rootNode;
+    this->levelList = levelList;
 }
 
 
@@ -240,3 +264,53 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
     }
 }
 
+
+
+/**
+ * @brief Projection::updateOriginalInfo updates info about original nodes.
+ * Usual used after read projections from file. Where difficult store original
+ * info about nodes. After reading start this function for update this info
+ */
+void Projection::updateOriginalInfo()
+{
+    if (!levelList)
+        return;
+    ProjectionElemMap origianlNodes;
+
+    for(const auto &level : *levelList)
+    {
+        for (const auto &it : *level)
+        {
+            auto res = origianlNodes.insert({it.first, it.second});
+            if (!res.second)
+            {
+                // set node as replica - set original node address
+                it.second->setOriginal(res.first->second);
+            }
+        }
+    }
+}
+
+
+
+void Projection::updateEccesntricity()
+{
+    if (!levelList)
+        return;
+
+    ProjectionLevelElem* level = levelList->back();
+    for (const auto &it : *level)
+    {
+        // If one node is original so all original nodes on this level
+        // have no edges between together
+        if (it.second->isOriginal())
+        {
+            eccesntricity = levelList->size() - 1;
+            return;
+        }
+    }
+    // If no one original node on last level - all replicas
+    // So last level only for add info about edges between original nodes
+    // from penultimate level
+    eccesntricity = levelList->size() - 2;
+}

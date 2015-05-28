@@ -166,7 +166,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
         count = fscanf(fp, "%zu", &nodeToNum);
 
         // If readed add new node.
-        if (count)
+        if (count == 1)
         {
             // Exclude edge-loops
             if (nodeFromNum == nodeToNum)
@@ -187,7 +187,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
 
             graph->addEdge(nodeFromNum, nodeToNum, weight);
         }
-        else
+        else if (count == 0)
         {
             // If can't read node value here is bracket
             // If this is not bracket save pos to back one char
@@ -199,7 +199,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             {
                 // So current node become parent
                 nodesStack.push_front(nodeToNum);
-                nodesElemStack.push_front(parent);
+                nodesElemStack.push_front(elem);
                 nodeFromNum = nodeToNum;
                 parent = elem;
                 ++indent;

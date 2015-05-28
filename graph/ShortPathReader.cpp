@@ -136,7 +136,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
         count = fscanf(fp, "%zu[%g]", &nodeToNum, &value);
 
         // If readed add new node.
-        if (count)
+        if (count == 2)
         {
             // Exclude edge-loops
             if (nodeFromNum == nodeToNum)
@@ -166,7 +166,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
             float weight = value - parent->getWeight();
             graph.addEdge(nodeFromNum, nodeToNum, weight);
         }
-        else
+        else if (count == 0)
         {
             // If can't read node value here is bracket
             // If this is not bracket save pos to back one char
@@ -205,11 +205,26 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
     }
     if (readError)
     {
-        char buf[20] = "";
-        buf[19] = '\0';
-        fread(buf, sizeof(char), 19, fp);
-        std::clog << "[!!!] Critical: Error while reading from file near: "
-                  << buf << std::endl;
+        if (feof(fp))
+        {
+            std::clog << "[!!!] Critical: Error while reading "
+                         "at the end of file" << std::endl;
+        }
+        else
+        {
+            char buf[20] = "";
+            buf[19] = '\0';
+            fread(buf, sizeof(char), 19, fp);
+            std::clog << "[!!!] Critical: Error while reading from file near: "
+                      << buf << std::endl;
+        }
+        lastError = Error::SYNTAX;
+        return false;
+    }
+    if (nodesStack.size())
+    {
+        std::clog << "[!!!] Critical: Error while reading at the end of file. "
+                     "File not full, nesting are wrong." << std::endl;
         lastError = Error::SYNTAX;
         return false;
     }

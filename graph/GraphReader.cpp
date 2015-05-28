@@ -154,7 +154,7 @@ bool GraphReader::readEdges(FILE* f, bool readValue)
             value = defaultWeight;
         }
 
-        if (!count)
+        if (count == 0)
         {
             char buf[20];
             buf[19] = '\0';
@@ -163,6 +163,10 @@ bool GraphReader::readEdges(FILE* f, bool readValue)
                       << buf << std::endl;
             lastError = Error::SYNTAX;
             return false;
+        }
+        else if (count == -1)
+        {
+            continue;
         }
 
         // Exclude edge-loops
@@ -227,7 +231,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
         if (!nodesStack.size())
         {
             count = fscanf(f, "%zu(", &nodeFromNum);
-            if (!count)
+            if (count != 1)
             {
                 readError = true;
                 break;
@@ -245,7 +249,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
         }
 
         // If readed add new node.
-        if (count)
+        if (count > 0)
         {
             // Exclude edge-loops
             if (nodeFromNum == nodeToNum)
@@ -260,7 +264,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
             }
             graph->addEdge(nodeFromNum, nodeToNum, value);
         }
-        else
+        else if (count == 0)
         {
             // If can't read node value here is bracket
             fgetpos(f, &position);
@@ -291,11 +295,26 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
     }
     if (readError)
     {
-        char buf[20] = "";
-        buf[19] = '\0';
-        fread(buf, sizeof(char), 19, f);
-        std::clog << "[!!!] Critical: Error while reading from file near: "
-                  << buf << std::endl;
+        if (feof(f))
+        {
+            std::clog << "[!!!] Critical: Error while reading "
+                         "at the end of file" << std::endl;
+        }
+        else
+        {
+            char buf[20] = "";
+            buf[19] = '\0';
+            fread(buf, sizeof(char), 19, f);
+            std::clog << "[!!!] Critical: Error while reading from file near: "
+                      << buf << std::endl;
+        }
+        lastError = Error::SYNTAX;
+        return false;
+    }
+    if (nodesStack.size())
+    {
+        std::clog << "[!!!] Critical: Error while reading at the end of file. "
+                     "File not full, nesting are wrong." << std::endl;
         lastError = Error::SYNTAX;
         return false;
     }

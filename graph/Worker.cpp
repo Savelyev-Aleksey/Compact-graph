@@ -55,6 +55,7 @@ void Worker::startProcess(Worker *newWorker)
 {
     interrupted = false;
     processed = true;
+    progress = 0;
     worker = newWorker;
 }
 

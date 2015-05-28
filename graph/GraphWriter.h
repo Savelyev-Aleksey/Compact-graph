@@ -2,6 +2,7 @@
 #define GRAPHWRITER_H
 
 #include <cstdio>
+#include "types.h"
 #include "FileTypes.h"
 #include "WriterBase.h"
 
@@ -15,12 +16,12 @@ public:
     ~GraphWriter();
 
     bool writeEdges(const char* fileName,
-                    const unsigned options = Option::PRINT_VALUE);
+                    cuint options = (cuint) Option::PRINT_VALUE);
     bool writeBracketsFlat(const char* fileName,
-                           const unsigned options = Option::PRINT_VALUE);
+                           cuint options = (cuint) Option::PRINT_VALUE);
     bool writeBrackets(const char* fileName, const size_t startNodeId,
                        const size_t pathLimit = 0,
-                       const unsigned options = Option::PRINT_VALUE);
+                       cuint options = (cuint) Option::PRINT_VALUE);
 
 protected:
     const GraphBase* graph;

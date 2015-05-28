@@ -4,7 +4,7 @@
 
 
 ReaderBase::ReaderBase() :
-    options(Option::OUT_WARNINGS),
+    options((unsigned)Option::OUT_WARNINGS),
     lastError(Error::NONE)
 { }
 

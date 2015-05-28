@@ -1,6 +1,7 @@
 #ifndef SHORTPATHWRITER_H
 #define SHORTPATHWRITER_H
 
+#include "types.h"
 #include "WriterBase.h"
 #include "ShortPath.h"
 
@@ -15,16 +16,16 @@ public:
     ShortPathWriter(ShortPath &shortPath);
 
     bool savePaths(const char* fileName, const NodeIdDeque* nodes = nullptr,
-                   float pathLimit = 0, unsigned options = Option::NONE);
+                   float pathLimit = 0, cuint options = (cuint) Option::NONE);
 
     bool writeExistPaths(const char* fileName, const NodeIdDeque* nodes,
-                         unsigned options = Option::NONE);
+                         cuint options = (cuint) Option::NONE);
 
 protected:
     ShortPath* shortPath;
 
     void writeShortPath(FILE* fp, RootPathList::iterator pathIt,
-                        unsigned options = Option::NONE);
+                        cuint options = (cuint) Option::NONE);
 };
 
 #endif // SHORTPATHWRITER_H

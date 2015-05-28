@@ -55,7 +55,7 @@ FILE* GraphWriter::openFile(const char *fileName)
  * @param opttions - options to format out
  * @return true if file opened and graph writed
  */
-bool GraphWriter::writeEdges(const char *fileName, const unsigned options)
+bool GraphWriter::writeEdges(const char *fileName, cuint options)
 {
     FILE* f = openFile(fileName);
     if (f == nullptr)
@@ -63,11 +63,11 @@ bool GraphWriter::writeEdges(const char *fileName, const unsigned options)
         return false;
     }
 
-    bool outInfo    = options & Option::PRINT_INFO;
-    bool printValue = options & Option::PRINT_VALUE;
+    bool outInfo    = options & (unsigned) Option::PRINT_INFO;
+    bool printValue = options & (unsigned) Option::PRINT_VALUE;
 
-    FileTypes::Type typeId = printValue ? FileTypes::NODE_NODE_VALUE :
-                                          FileTypes::NODE_NODE;
+    FileTypes::Type typeId = printValue ? FileTypes::Type::NODE_NODE_VALUE :
+                                          FileTypes::Type::NODE_NODE;
 
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);
@@ -125,18 +125,18 @@ bool GraphWriter::writeEdges(const char *fileName, const unsigned options)
  * @param fileName - file name to write
  * @param opttions - options to format out
  */
-bool GraphWriter::writeBracketsFlat(const char* fileName,const unsigned options)
+bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
 {
     FILE* f = openFile(fileName);
     if (f == nullptr)
     {
         return false;
     }
-    bool printInfo  = options & Option::PRINT_INFO;
-    bool printValue = options & Option::PRINT_VALUE;
+    bool printInfo  = options & (unsigned) Option::PRINT_INFO;
+    bool printValue = options & (unsigned) Option::PRINT_VALUE;
 
-    FileTypes::Type typeId = printValue ? FileTypes::BRACKETS_FLAT_VALUE :
-                                          FileTypes::BRACKETS_FLAT;
+    FileTypes::Type typeId = printValue ? FileTypes::Type::BRACKETS_FLAT_VALUE :
+                                          FileTypes::Type::BRACKETS_FLAT;
 
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);
@@ -232,7 +232,7 @@ const
  * @return true if save, false if node not fonud or file can't to write.
  */
 bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
-                                const size_t pathLimit, const unsigned options)
+                                const size_t pathLimit, cuint options)
 {
     const Node* nodeStart = graph->getNode(startNodeId);
     if (!nodeStart)
@@ -245,12 +245,12 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
     {
         return false;
     }
-    bool printInfo    = options & Option::PRINT_INFO;
-    bool printValue   = options & Option::PRINT_VALUE;
-    bool printIndents = options & Option::PRINT_INDENTS;
+    bool printInfo    = options & (unsigned) Option::PRINT_INFO;
+    bool printValue   = options & (unsigned) Option::PRINT_VALUE;
+    bool printIndents = options & (unsigned) Option::PRINT_INDENTS;
 
-    FileTypes::Type typeId = printValue ? FileTypes::BRACKETS_VALUE :
-                                          FileTypes::BRACKETS;
+    FileTypes::Type typeId = printValue ? FileTypes::Type::BRACKETS_VALUE :
+                                          FileTypes::Type::BRACKETS;
 
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);

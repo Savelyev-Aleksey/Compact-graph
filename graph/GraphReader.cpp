@@ -79,7 +79,7 @@ bool GraphReader::readFile(FILE *f, FileTypes::Type typeId)
 {
     bool result;
 
-    bool outWarning = options & Option::OUT_WARNINGS;
+    bool outWarning = options & (unsigned) Option::OUT_WARNINGS;
 
     switch (typeId)
     {
@@ -128,7 +128,7 @@ bool GraphReader::readEdges(FILE* f, bool readValue)
     float value;
     int count;
     bool isEdgeAdded;
-    unsigned outWarning = options & Option::OUT_WARNINGS;
+    unsigned outWarning = options & (unsigned) Option::OUT_WARNINGS;
 
     float defaultWeight = 0;
 
@@ -215,7 +215,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
     float value = 0;
     int count;
     fpos_t position;
-    unsigned outWarning = options & Option::OUT_WARNINGS;
+    unsigned outWarning = options & (unsigned) Option::OUT_WARNINGS;
     unsigned char bracket;
     bool readError = false;
 

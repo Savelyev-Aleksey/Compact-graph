@@ -73,6 +73,24 @@ void GraphWorker::generateAllShortPaths()
 
 
 
+void GraphWorker::createAllProjections()
+{
+    size_t size = graph->nodeCount();
+    if (!size)
+        return;
+    --size;
+
+    QString title = QObject::tr("Creating projections");
+
+    std::function<void()> fn = [this]{
+        ::Graph::createAllProjections();
+    };
+
+    progressDialog(size, title, fn);
+}
+
+
+
 bool GraphWorker::writeEdges(const char *fileName, cuint options)
 {
     size_t size = graph->nodeCount();
@@ -129,7 +147,7 @@ bool GraphWorker::writeBrackets(const char *fileName, const size_t startNodeId,
 
 
 
-bool GraphWorker::saveProjections(const char *fileName, unsigned options)
+bool GraphWorker::saveProjections(const char *fileName, cuint options)
 {
     size_t size = projectionsCount();
     if (!size)
@@ -150,7 +168,7 @@ bool GraphWorker::saveProjections(const char *fileName, unsigned options)
 
 
 bool GraphWorker::saveProjection(const char *fileName, size_t rootNode,
-                                 unsigned options)
+                                 cuint options)
 {
     const Projection* pr = getProjection(rootNode);
     if (!pr)

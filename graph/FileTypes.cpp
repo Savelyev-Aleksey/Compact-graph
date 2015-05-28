@@ -37,11 +37,12 @@ FileTypes::~FileTypes()
  */
 FileTypes::Type FileTypes::typeId(const char* typeStr)
 {
-    for (unsigned i = 0; i < UNDEFINED; ++i)
+    unsigned end = (unsigned) Type::UNDEFINED;
+    for (unsigned i = 0; i < end; ++i)
     {
         if (!strncmp(typeStr, types[i], strlen(types[i])))
         {
-            return static_cast <Type>(i);
+            return (Type) i;
         }
     }
     return Type::UNDEFINED;
@@ -55,10 +56,10 @@ FileTypes::Type FileTypes::typeId(const char* typeStr)
  */
 const char* FileTypes::typeName(Type typeId)
 {
-    if (typeId < 0 || typeId >= Type::UNDEFINED)
+    if (typeId >= Type::UNDEFINED)
     {
         return nullptr;
     }
-    return types[typeId];
+    return types[ (unsigned) typeId ];
 }
 

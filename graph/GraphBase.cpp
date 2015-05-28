@@ -21,12 +21,10 @@ GraphBase::GraphBase() :
 GraphBase::~GraphBase()
 {
     clear();
+    std::clog << "GraphBase was cleaned from destructor" << std::endl;
+    logStatus();
     delete nodeList;
     delete info;
-
-    std::clog << "GraphBase was cleaned from destructor" << std::endl;
-
-    logStatus();
 }
 
 

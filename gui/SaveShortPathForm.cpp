@@ -163,10 +163,10 @@ void SaveShortPathForm::saveShortPath()
 
     QByteArray fileNameLatin = fileName.toLatin1();
 
-    unsigned options = WriterBase::Option::NONE;
+    unsigned options = (unsigned) WriterBase::Option::NONE;
     if (ui->printIndentsCheck->isChecked())
     {
-        options = options | WriterBase::Option::PRINT_INDENTS;
+        options = options | (unsigned) WriterBase::Option::PRINT_INDENTS;
     }
     NodeIdDeque nodes;
     nodes.push_back(nodeId);

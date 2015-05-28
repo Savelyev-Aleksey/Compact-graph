@@ -6,7 +6,7 @@
 class WriterBase : public Worker
 {
 public:
-    enum Option
+    enum class Option : unsigned
     {
         NONE            = 0x00,
         PRINT_INFO      = 0x01,

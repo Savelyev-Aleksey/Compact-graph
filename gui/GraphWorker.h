@@ -22,26 +22,29 @@ public:
 
 
     // Graph writers
-    virtual bool writeEdges(const char* fileName, cuint options =
-                    WriterBase::PRINT_VALUE );
+    virtual bool writeEdges(const char* fileName, cuint options = (cuint)
+                    WriterBase::Option::PRINT_VALUE );
 
-    virtual bool writeBracketsFlat(const char* fileName, cuint options =
-                            WriterBase::PRINT_VALUE );
+    virtual bool writeBracketsFlat(const char* fileName, cuint options = (cuint)
+                            WriterBase::Option::PRINT_VALUE );
 
     virtual bool writeBrackets(const char* fileName, const size_t startNodeId,
                        const size_t pathLimit = 0,
-                       cuint options = WriterBase::PRINT_VALUE);
+                       cuint options = (cuint) WriterBase::Option::PRINT_VALUE);
 
 
     // Projections writers
     virtual bool saveProjections(const char* fileName,
-                                 unsigned options = Option::NONE);
+                                 cuint options = (cuint) Option::NONE);
     virtual bool saveProjection(const char* fileName, size_t rootNode,
-                                unsigned options = Option::NONE);
+                                cuint options = (cuint) Option::NONE);
+
+    virtual void createAllProjections();
 
 public:
     // Short path
     virtual void generateAllShortPaths();
+
 
 protected:
 

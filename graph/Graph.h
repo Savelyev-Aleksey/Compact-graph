@@ -25,10 +25,14 @@ public:
     Graph();
     virtual ~Graph();
 
+    typedef const WriterBase::Option WOption;
+
     // Common methods
 
     size_t getRadius() const;
     size_t getDiameter() const;
+
+    void clearGraph();
 
     // Statistics
     UlongMap* getNodeDegreeStatistic() const;
@@ -62,14 +66,14 @@ public:
 
     // Graph writers
     virtual bool writeEdges(const char* fileName, cuint options =
-                    WriterBase::PRINT_VALUE );
+                            (cuint) WOption::PRINT_VALUE );
 
     virtual bool writeBracketsFlat(const char* fileName, cuint options =
-                            WriterBase::PRINT_VALUE );
+                                   (cuint) WOption::PRINT_VALUE );
 
     virtual bool writeBrackets(const char* fileName, const size_t startNodeId,
-                       const size_t pathLimit = 0,
-                       cuint options = WriterBase::PRINT_VALUE);
+                               const size_t pathLimit = 0,
+                               cuint options = (cuint) WOption::PRINT_VALUE);
 
 public:
     // ShortPath methods
@@ -84,17 +88,16 @@ public:
 
     // ShortPath writers
     bool saveShortPaths(const char* fileName, const NodeIdDeque* nodes =nullptr,
-                        float pathLimit = 0, cuint options = Option::NONE);
+         float pathLimit = 0, cuint options = (cuint) WOption::NONE);
 
     bool writeExistShortPaths(const char* fileName, const NodeIdDeque* nodes,
-                              cuint options = Option::NONE);
+                              cuint options = (cuint) WOption::NONE);
 
 public:
     // Projections methods
 
     void updateParametersByProjections();
 
-    void createAllProjections();
     void createProjection(size_t nodeId);
 
     bool isProjectionExist(size_t nodeId) const;
@@ -102,11 +105,13 @@ public:
 
     const Projection* getProjection(size_t nodeId) const;
 
+    virtual void createAllProjections();
+
     // Projections writers
     virtual bool saveProjections(const char* fileName,
-                                 unsigned options = Option::NONE);
+                                 cuint options = (cuint) WOption::NONE);
     virtual bool saveProjection(const char* fileName, size_t rootNode,
-                                unsigned options = Option::NONE);
+                                cuint options = (cuint) WOption::NONE);
 
 
 protected:
@@ -116,8 +121,6 @@ protected:
 
     size_t radius;
     size_t diameter;
-
-    void clearGraph();
 
 };
 

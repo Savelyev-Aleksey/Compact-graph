@@ -91,11 +91,18 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
 
     size_t lines = 1;
     QByteArray text;
+    QByteArray example;
 
     while (!file.atEnd())
     {
         ++lines;
         text = file.readLine();
+        if (example.length() < 600)
+        {
+            int end = 600 - example.length();
+            end = qMin(text.length(), end);
+            example.append(QByteArray::fromRawData(text, end));
+        }
         if (text.at(0) == '{')
         {
             QByteArray str(text);
@@ -106,9 +113,15 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
             info += name + " = " + value + "\n";
         }
     }
-    info += "\n" + tr("Lines in file: %1\n").arg(lines);
+
+    info += '\n';
+    info += tr("Lines in file: %1\n").arg(lines);
     info += tr("File size: %1 bytes").arg(file.size());
+    info += "\n\n";
+    info += example;
+
     file.close();
+
     ui->openFileInfo->setText(info);
     return true;
 }

@@ -474,23 +474,23 @@ void SaveGraphForm::saveGraph()
     {
         fileName += ".txt";
     }
-    unsigned options = WriterBase::Option::NONE;
+    unsigned options = (unsigned) WriterBase::Option::NONE;
 
     if (ui->printValueCheck->isEnabled() &&
         ui->printValueCheck->isChecked() )
     {
-        options = options | WriterBase::Option::PRINT_VALUE;
+        options = options | (unsigned) WriterBase::Option::PRINT_VALUE;
     }
     if (ui->printInfoCheck->isEnabled() &&
         ui->printInfoCheck->isChecked() )
     {
-        options = options | WriterBase::Option::PRINT_INFO;
+        options = options | (unsigned) WriterBase::Option::PRINT_INFO;
     }
 
     if (ui->printIndentsCheck->isEnabled() &&
         ui->printIndentsCheck->isChecked() )
     {
-        options = options | WriterBase::Option::PRINT_INDENTS;
+        options = options | (unsigned) WriterBase::Option::PRINT_INDENTS;
     }
 
     bool printAllNodes = ui->printAllNodesCheck->isEnabled() &&
@@ -530,7 +530,10 @@ void SaveGraphForm::saveGraph()
         if (printAllNodes)
         {
             graph.createAllProjections();
-            result = graph.saveProjections(file.data(), options);
+            if (graph.isInterrupted())
+                result = false;
+            else
+                result = graph.saveProjections(file.data(), options);
         }
         else
         {
@@ -538,7 +541,7 @@ void SaveGraphForm::saveGraph()
             if (!result)
                 break;
             graph.createProjection(startNodeId);
-            result = graph.saveProjection(file.data(), startNodeId, options);
+            result = graph.saveProjection(file.data(), startNodeId,options);
         }
         break;
 

@@ -5,7 +5,7 @@
 class FileTypes
 {
 public:
-    enum Type
+    enum class Type : unsigned
     {
         // Type id must be in same order with types[]
         NODE_NODE,

@@ -49,7 +49,7 @@ bool ShortPathReader::readFile(const char* fileName)
         return false;
     }
 
-    bool outWarnings = options & Option::OUT_WARNINGS;
+    bool outWarnings = options & (unsigned) Option::OUT_WARNINGS;
     bool result;
 
     if (typeId == FileTypes::Type::BRACKETS_SHORT_PATH_VALUE)
@@ -103,7 +103,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
     float value = 0;
     int count;
     fpos_t position;
-    unsigned outWarnings = options & Option::OUT_WARNINGS;
+    unsigned outWarnings = options & (unsigned) Option::OUT_WARNINGS;
     unsigned char bracket;
     bool readError = false;
     size_t indent;

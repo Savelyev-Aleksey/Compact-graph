@@ -16,6 +16,7 @@
 #include "Projection.h"
 #include "Projections.h"
 #include "ProjectionsWriter.h"
+#include "ProjectionsReader.h"
 
 
 
@@ -465,7 +466,7 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
 {
     bool result;
 
-    bool outWarning = options & Option::OUT_WARNINGS;
+    bool outWarning = options & (unsigned) Option::OUT_WARNINGS;
 
     switch (typeId)
     {
@@ -488,6 +489,14 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
             ShortPathReader shortPathReader(*shortPath);
             result = shortPathReader.readShortPath(f, typeId);
             lastError = shortPathReader.getLastError();
+        }
+        break;
+
+    case FileTypes::Type::PROJECTIONS:
+        {
+            auto *reader = (ProjectionsReader*) projections;
+            result = reader->readProjections(f, typeId);
+            lastError = reader->getLastError();
         }
         break;
 
@@ -589,7 +598,7 @@ size_t Graph::projectionsCount() const
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
-bool Graph::saveProjections(const char* fileName, unsigned options)
+bool Graph::saveProjections(const char* fileName, cuint options)
 {
     ProjectionsWriter writer(*projections);
     startProcess(&writer);
@@ -610,7 +619,7 @@ bool Graph::saveProjections(const char* fileName, unsigned options)
  * open on write or projections are empty.
  */
 bool Graph::saveProjection(const char* fileName, size_t rootNode,
-                           unsigned options)
+                           cuint options)
 {
     ProjectionsWriter writer(*projections);
     startProcess(&writer);

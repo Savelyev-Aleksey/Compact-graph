@@ -77,7 +77,10 @@ void GraphGeneratorForm::generateHypercube()
         mainWindow->showStatusMessage(tr("Hypercube edge weight not a number"));
         return;
     }
+    ui->generateHypercubeButton->setEnabled(false);
     GraphWorker *graph = &mainWindow->getGraph();
+    mainWindow->showStatusMessage(tr("Clearing graph..."), 5000);
+    graph->clearGraph();
     graph->generateHypercube(dimention, weight);
     mainWindow->showStatusMessage(tr("Hypercube created"), 5000);
 }
@@ -103,7 +106,10 @@ void GraphGeneratorForm::generateTorus()
         mainWindow->showStatusMessage(tr("Torus edge weight not a number"));
         return;
     }
+    ui->generateTorusButton->setEnabled(false);
     GraphWorker *graph = &mainWindow->getGraph();
+    mainWindow->showStatusMessage(tr("Clearing graph..."), 5000);
+    graph->clearGraph();
     graph->generateTorus(bigRadius, smallRadius, weight);
     mainWindow->showStatusMessage(tr("Torus created"), 5000);
 }

@@ -23,7 +23,7 @@ ShortPathWriter::ShortPathWriter(ShortPath& shortPath) :
  * @return true if save successful
  */
 bool ShortPathWriter::savePaths(const char* fileName, const NodeIdDeque* nodes,
-                                float pathLimit, unsigned options)
+                                float pathLimit, cuint options)
 {
     if (!nodes)
     {
@@ -58,7 +58,7 @@ bool ShortPathWriter::savePaths(const char* fileName, const NodeIdDeque* nodes,
  * @return true if write successful
  */
 bool ShortPathWriter::writeExistPaths(const char* fileName,
-                                     const NodeIdDeque* nodes, unsigned options)
+                                     const NodeIdDeque* nodes, cuint options)
 {
     if (!nodes)
     {
@@ -76,7 +76,7 @@ bool ShortPathWriter::writeExistPaths(const char* fileName,
         return false;
     }
 
-    FileTypes::Type typeId = FileTypes::BRACKETS_SHORT_PATH_VALUE;
+    FileTypes::Type typeId = FileTypes::Type::BRACKETS_SHORT_PATH_VALUE;
 
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);
@@ -104,7 +104,7 @@ bool ShortPathWriter::writeExistPaths(const char* fileName,
  * @param options - some options (PRINT_INDENTS)
  */
 void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
-                                     unsigned options)
+                                     cuint options)
 {
     size_t parentId = pathIt->first;
     ShortPathElem* pathElem = pathIt->second->getNodes();
@@ -120,7 +120,7 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
     std::deque <PathListItPair> pathStack;
     size_t currentIndent = 1;
 
-    bool printIndents = options & Option::PRINT_INDENTS;
+    bool printIndents = options & (unsigned) Option::PRINT_INDENTS;
 
 
     pathStack.push_front( PathListItPair(pathList->begin(), pathList->end()) );

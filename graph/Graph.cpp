@@ -494,7 +494,7 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
 
     case FileTypes::Type::PROJECTIONS:
         {
-            auto *reader = (ProjectionsReader*) projections;
+            auto *reader = reinterpret_cast <ProjectionsReader*> (projections);
             result = reader->readProjections(f, typeId);
             lastError = reader->getLastError();
         }

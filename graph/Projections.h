@@ -26,6 +26,7 @@ public:
     size_t size() const;
 
     const ProjectionsList* getList() const;
+    GraphBase& getGraph() const;
 
     const Projection* getProjection(size_t nodeId) const;
     UlongMap* getEccentriciyStatistic() const;

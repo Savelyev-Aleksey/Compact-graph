@@ -45,6 +45,13 @@ const ProjectionsList* Projections::getList() const
 
 
 
+GraphBase& Projections::getGraph() const
+{
+    return *graph;
+}
+
+
+
 const Projection* Projections::getProjection(size_t nodeId) const
 {
     auto it = projections->find(nodeId);

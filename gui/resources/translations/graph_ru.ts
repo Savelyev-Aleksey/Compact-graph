@@ -710,17 +710,23 @@ Weight and other information will be lost.</source>
         <translation>Тип файла неизвестен. Проверьте настройки.</translation>
     </message>
     <message>
+        <location filename="../../SaveGraphForm.cpp" line="555"/>
         <location filename="../../SaveGraphForm.cpp" line="556"/>
+        <source>Saving interrupted.</source>
+        <translation>Сохранение прервано.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveGraphForm.cpp" line="562"/>
         <source>Graph saved in file %1</source>
         <translation>Граф сохранён в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="561"/>
+        <location filename="../../SaveGraphForm.cpp" line="567"/>
         <source>Graph not saved.File not accessed to write.</source>
         <translation>Граф не сохранён. Нет прав на запись в файл.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="563"/>
+        <location filename="../../SaveGraphForm.cpp" line="569"/>
         <source>Graph not saved.</source>
         <translation>Граф не сохранён.</translation>
     </message>

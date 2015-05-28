@@ -138,7 +138,7 @@ void SaveGraphForm::graphTypeChanged()
     else if (ui->projectionRadio->isChecked())
     {
         ui->printValueCheck->setEnabled(false);
-        ui->printInfoCheck->setEnabled(false);
+        ui->printInfoCheck->setEnabled(true);
         ui->printIndentsCheck->setEnabled(true);
         ui->printAllNodesCheck->setEnabled(true);
 
@@ -549,12 +549,18 @@ void SaveGraphForm::saveGraph()
         ui->infoLabel->setText(tr("File type is unknown. Check settings."));
         break;
     }
-    if (result)
+
+    if (graph.isInterrupted())
+    {
+        ui->infoLabel->setText(tr("Saving interrupted."));
+        mainWindow->showStatusMessage(tr("Saving interrupted."), 5000);
+    }
+    else if (result)
     {
         int p = fileName.lastIndexOf(QDir::separator());
         QString shortName = fileName.mid(++p);
         mainWindow->showStatusMessage(tr("Graph saved in file %1").
-                                    arg(shortName));
+                                    arg(shortName), 5000);
     }
     else
     {

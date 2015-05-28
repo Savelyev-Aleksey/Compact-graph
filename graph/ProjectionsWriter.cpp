@@ -6,6 +6,7 @@
 #include "Projection.h"
 #include "ProjectionElem.h"
 #include "FileTypes.h"
+#include "GraphBase.h"
 
 
 
@@ -25,7 +26,7 @@ ProjectionsWriter::~ProjectionsWriter()
  * @brief ProjectionsWriter::saveProjections - save all created projections
  * in fileName file.
  * @param fileName - file to write projections
- * @param options - some options (PRINT_INDENTS)
+ * @param options - some options (PRINT_INDENTS PRINT_INFO)
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
@@ -48,6 +49,13 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);
     fputc('\n', f);
+
+    bool printInfo = options & (unsigned) Option::PRINT_INFO;
+
+    if (printInfo)
+    {
+        projections->getGraph().printInfo(f);
+    }
 
     bool result = true;
     size_t pos = 0;
@@ -79,7 +87,7 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
  * one node in fileName file.
  * @param fileName - file to write projections
  * @param rootNode - node id for create projection
- * @param options - some options (PRINT_INDENTS)
+ * @param options - some options (PRINT_INDENTS PRINT_INFO)
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
@@ -108,6 +116,13 @@ bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);
     fputc('\n', f);
+
+    bool printInfo = options & (unsigned) Option::PRINT_INFO;
+
+    if (printInfo)
+    {
+        projections->getGraph().printInfo(f);
+    }
 
     size_t size = pr->getRootNode()->listCount();
     if (size)

@@ -38,45 +38,15 @@ size_t ShortPathRootElem::size() const
 void ShortPathRootElem::clear()
 {
     PathList *list = search->getPathList();
-    list->clear();
-    list = nodes->getPathList();
-
-    if (list == nullptr || !list->size())
-    {
+    if (!list || !list->size())
         return;
-    }
 
-    std::deque <PathList *> stack;
-    ShortPathElem* elem;
-    PathList::const_iterator it;
-
-    stack.push_front(list);
-
-    while (stack.size())
+    for (auto &it : *list)
     {
-        // List exists and non empty
-        if (stack.front() && stack.front()->size())
-        {
-            // Take first elem in list
-            it = stack.front()->begin();
-            elem = it->second;
-            list = elem->getPathList();
-            if (list && list->size())
-            {
-                // Save elem map in stack and continue -> enter in this map
-                stack.push_front(list);
-            }
-            else
-            {
-                // Remove elem refence from structure
-                stack.front()->erase(it);
-                // Destroy elem
-                delete elem;
-            }
-            continue;
-        }
-        stack.pop_front();
+        delete it.second;
     }
+    list->clear();
+    nodes->getPathList()->clear();
 }
 
 

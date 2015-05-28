@@ -5,34 +5,19 @@
 
 
 
-size_t ShortPathElem::count = 0;
-
-
-
-size_t ShortPathElem::getCount()
-{
-    return ShortPathElem::count;
-}
-
-
-
 ShortPathElem::ShortPathElem(size_t nodeId, float weight, size_t indent) :
     parent(nullptr),
     list(nullptr),
     nodeId(nodeId),
     weight(weight),
     indent(indent)
-{
-    // list lazy init
-    ++count;
-}
+{}
 
 
 
 ShortPathElem::~ShortPathElem()
 {
     delete list;
-    --count;
 }
 
 

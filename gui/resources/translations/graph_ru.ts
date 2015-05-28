@@ -39,7 +39,30 @@
 &lt;/ul&gt;
 &lt;/p&gt;
 &lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p&gt;Данная программа может делать следующее:
+&lt;ul&gt;
+&lt;li&gt;Читать текстовые файлы, содержащие граф в следующих форматах:
+&lt;ul&gt;
+&lt;li&gt;{NODE_NODE[_VALUE]} с базовым весом или с разным весом каждой вершины&lt;/li&gt;
+&lt;li&gt;{BRACKETS_FLAT[_VALUE]} граф в скобочной записи без вложений с базовым веом или с разным весом рёбер&lt;/li&gt;
+&lt;li&gt;{BRACKETS[_VALUE]} граф в скобочной записи с вложениями с базовым веом или с разным весом рёбер&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Сохарнять в файлы граф в такие же форматы как форматы чтения&lt;/li&gt;
+&lt;li&gt;Сохранять в файле созданные кратчайшие пути графа с весом пути&lt;/li&gt;
+&lt;li&gt;Генерация периодических графовых структур: на данный момент только гиперкуб и тор&lt;/li&gt;
+&lt;li&gt;Вывод статистики по графу:
+&lt;ul&gt;
+&lt;li&gt;Вершины графа, рёбра,количество созданных кратчайших путей&lt;/li&gt;
+&lt;li&gt;Диаметр и радиус графа&lt;/li&gt;
+&lt;li&gt;Статистика степеней вершин&lt;/li&gt;
+&lt;li&gt;Стастистика эксцентриситетов вершин&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -97,27 +120,33 @@
         <translation>Вес ребра гиперкуба не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="82"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="83"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="114"/>
+        <source>Clearing graph...</source>
+        <translation>Очистка графа...</translation>
+    </message>
+    <message>
+        <location filename="../../GraphGeneratorForm.cpp" line="87"/>
         <source>Hypercube created</source>
         <translation>Гиперкуб создан</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="91"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="96"/>
         <source>Torus big radius not a number</source>
         <translation>Тор большой радус не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="97"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="102"/>
         <source>Torus small radius not a number</source>
         <translation>Тор малый радус не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="103"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="108"/>
         <source>Torus edge weight not a number</source>
         <translation>Вес ребра тора не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="108"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="118"/>
         <source>Torus created</source>
         <translation>Тор создан</translation>
     </message>
@@ -322,45 +351,50 @@ After will be found diameter, radius and eccentricity statistic.</source>
 </translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="109"/>
+        <location filename="../../OpenFileForm.cpp" line="118"/>
         <source>Lines in file: %1
 </source>
         <translation>Строк в файле: %1
 </translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="110"/>
+        <location filename="../../OpenFileForm.cpp" line="119"/>
         <source>File size: %1 bytes</source>
         <translation>Размер файла: %1 байт</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="129"/>
-        <location filename="../../OpenFileForm.cpp" line="130"/>
+        <location filename="../../OpenFileForm.cpp" line="137"/>
+        <source>Clearing graph...</source>
+        <translation>Очистка графа...</translation>
+    </message>
+    <message>
+        <location filename="../../OpenFileForm.cpp" line="146"/>
+        <location filename="../../OpenFileForm.cpp" line="147"/>
         <source>File &quot;%1&quot; readed</source>
         <translation>Файл %1 прочитан</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="139"/>
+        <location filename="../../OpenFileForm.cpp" line="156"/>
         <source>Can&apos;t read file.</source>
         <translation>Невозможно прочитать файл.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="142"/>
+        <location filename="../../OpenFileForm.cpp" line="159"/>
         <source>File have unknown type.</source>
         <translation>Тип файла неизвестен.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="145"/>
+        <location filename="../../OpenFileForm.cpp" line="162"/>
         <source>File have syntax error.</source>
         <translation>В файле синтаксическая ошибка.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="148"/>
+        <location filename="../../OpenFileForm.cpp" line="165"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="152"/>
+        <location filename="../../OpenFileForm.cpp" line="169"/>
         <source>
 Check log file to get more information about error.
 By default file graph.log located in same program directory.</source>
@@ -382,23 +416,28 @@ By default file graph.log located in same program directory.</source>
         <translation>Создание кратчайшего пути</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="80"/>
+        <location filename="../../GraphWorker.cpp" line="83"/>
+        <source>Creating projections</source>
+        <translation>Создание проекций</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="98"/>
         <source>Writing edges of node</source>
         <translation>Запись рёбер вершины</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="96"/>
-        <location filename="../../GraphWorker.cpp" line="117"/>
+        <location filename="../../GraphWorker.cpp" line="114"/>
+        <location filename="../../GraphWorker.cpp" line="135"/>
         <source>Writing adjacency list</source>
         <translation>Запись списка смежности</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="139"/>
+        <location filename="../../GraphWorker.cpp" line="157"/>
         <source>Writing projections</source>
         <translation>Запись проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="165"/>
+        <location filename="../../GraphWorker.cpp" line="183"/>
         <source>Writing projection</source>
         <translation>Запись проекции</translation>
     </message>
@@ -666,22 +705,22 @@ Weight and other information will be lost.</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="546"/>
+        <location filename="../../SaveGraphForm.cpp" line="549"/>
         <source>File type is unknown. Check settings.</source>
         <translation>Тип файла неизвестен. Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="553"/>
+        <location filename="../../SaveGraphForm.cpp" line="556"/>
         <source>Graph saved in file %1</source>
         <translation>Граф сохранён в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="558"/>
+        <location filename="../../SaveGraphForm.cpp" line="561"/>
         <source>Graph not saved.File not accessed to write.</source>
         <translation>Граф не сохранён. Нет прав на запись в файл.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="560"/>
+        <location filename="../../SaveGraphForm.cpp" line="563"/>
         <source>Graph not saved.</source>
         <translation>Граф не сохранён.</translation>
     </message>

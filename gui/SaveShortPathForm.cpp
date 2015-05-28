@@ -161,7 +161,7 @@ void SaveShortPathForm::saveShortPath()
         fileName += ".txt";
     }
 
-    QByteArray fileNameLatin = fileName.toLatin1();
+    QByteArray fileNameLatin = fileName.toLocal8Bit();
 
     unsigned options = (unsigned) WriterBase::Option::NONE;
     if (ui->printIndentsCheck->isChecked())

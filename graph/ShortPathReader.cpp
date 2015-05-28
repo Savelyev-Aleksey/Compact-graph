@@ -118,11 +118,16 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
         if (!nodesStack.size())
         {
             count = fscanf(fp, "%zu(", &nodeFromNum);
-            if (!count)
+            if (count == 0)
             {
                 readError = true;
                 break;
             }
+            else if (count == -1)
+            {
+                break;
+            }
+
             startNode = nodeFromNum;
             indent = 1;
 
@@ -178,7 +183,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
             {
                 // So current node become parent
                 nodesStack.push_front(nodeToNum);
-                nodesElemStack.push_front(parent);
+                nodesElemStack.push_front(elem);
                 nodeFromNum = nodeToNum;
                 parent = elem;
                 ++indent;

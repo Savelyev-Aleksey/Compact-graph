@@ -74,7 +74,7 @@ void Projections::createAllProjections()
     if (!threadsCount)
         threadsCount = 2;
 
-    std::thread* threads[threadsCount];
+    std::thread* threads[threadsCount] {nullptr} ;
 
     startProcess(0, count - 1);
 
@@ -104,8 +104,12 @@ void Projections::createAllProjections()
         }
         for (unsigned j = 0; j < end; ++j)
         {
-            threads[j]->join();
-            delete threads[j];
+            if (threads[j])
+            {
+                threads[j]->join();
+                delete threads[j];
+            }
+            threads[j] = nullptr;
         }
         updateProgress(i + end);
     }

@@ -30,32 +30,15 @@ void Projection::clear()
         return;
     for(size_t i = levelList->size(); i > 0 ; --i)
     {
-        delete levelList->at(i - 1);
+        auto *level = levelList->at(i - 1);
+        for (auto &it : *level)
+        {
+            delete it.second;
+        }
+        delete level;
     }
     delete levelList;
     levelList = nullptr;
-
-    ProjectionElem* parent = rootNode;
-    ProjectionElem* elem = rootNode;
-    const ProjectionElemMap* list;
-    // if reach root elem do unil it became leaf
-    while(parent || !elem->isLeaf())
-    {
-        if (elem->isLeaf())
-        {
-            delete elem;
-            elem = parent;
-            list = elem->getList();
-            elem->eraseElem(list->begin());
-            parent = elem->getParent();
-        }
-        else
-        {
-            parent = elem;
-            elem = elem->getList()->begin()->second;
-        }
-    }
-    delete elem;
     rootNode = nullptr;
     eccesntricity = 0;
 }
@@ -86,19 +69,6 @@ const ProjectionElem* Projection::getRootNode() const
 size_t Projection::getEccentricity() const
 {
     return eccesntricity;
-}
-
-
-
-void Projection::setProjection(ProjectionElem *rootNode,
-                               ProjectionLevelList *levelList)
-{
-    if (!rootNode || !levelList)
-        return;
-
-    clear();
-    this->rootNode = rootNode;
-    this->levelList = levelList;
 }
 
 

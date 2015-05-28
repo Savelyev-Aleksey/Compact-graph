@@ -50,7 +50,7 @@ bool ProjectionsReader::readFile(const char *fileName)
         return false;
     }
 
-    bool outWarnings = options & Option::OUT_WARNINGS;
+    bool outWarnings = options & (unsigned) Option::OUT_WARNINGS;
     bool result;
 
     if (typeId == FileTypes::Type::PROJECTIONS)
@@ -110,7 +110,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
 
     int count;
     fpos_t position;
-    unsigned outWarnings = options & Option::OUT_WARNINGS;
+    unsigned outWarnings = options & (unsigned) Option::OUT_WARNINGS;
     unsigned char bracket;
     bool readError = false;
     size_t indent;
@@ -147,7 +147,10 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             parent = new ProjectionElem(nodeFromNum);
             levelList = new ProjectionLevelList;
             projection = new Projection(nodeFromNum);
-            projection->setProjection(parent, levelList);
+            //projection->setProjection(parent, levelList);
+            projection->rootNode = parent;
+            projection->levelList = levelList;
+            projections->insert({nodeFromNum, projection});
 
             // This is root level with respectived node
             level = new ProjectionLevelElem;
@@ -201,7 +204,8 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
                 parent = elem;
                 ++indent;
 
-                levelList->push_back(new ProjectionLevelElem);
+                if (indent > levelList->size() - 1)
+                    levelList->push_back(new ProjectionLevelElem);
             }
             else if (bracket == ')')
             {

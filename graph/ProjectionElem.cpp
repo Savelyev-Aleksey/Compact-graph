@@ -26,6 +26,15 @@ size_t ProjectionElem::getId() const
 
 
 
+size_t ProjectionElem::listCount() const
+{
+    if (!listElem)
+        return 0;
+    return listElem->size();
+}
+
+
+
 ProjectionElem* ProjectionElem::getParent() const
 {
     return parent;

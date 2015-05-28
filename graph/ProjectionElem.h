@@ -18,6 +18,7 @@ public:
     ~ProjectionElem();
 
     size_t getId() const;
+    size_t listCount() const;
 
     bool isOriginal() const;
     bool isLeaf() const;

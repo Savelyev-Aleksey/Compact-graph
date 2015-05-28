@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdio>
 
+#include "types.h"
 #include "WriterBase.h"
 
 
@@ -19,15 +20,16 @@ public:
     ProjectionsWriter(Projections& projections);
     ~ProjectionsWriter();
 
-    bool saveProjections(const char* fileName, unsigned options = Option::NONE);
+    bool saveProjections(const char* fileName,
+                         cuint options = (cuint) Option::NONE);
     bool saveProjection(const char* fileName, size_t rootNode,
-                        unsigned options = Option::NONE);
+                        cuint options = (cuint) Option::NONE);
 
 protected:
     Projections* projections;
 
     bool writeProjection(FILE* f, const Projection* projection,
-                         unsigned options = Option::NONE);
+         cuint options = (cuint) Option::NONE, bool isProgress = true);
 };
 
 #endif // PROJECTIONSWRITER_H

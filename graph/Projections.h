@@ -17,7 +17,7 @@ class Projections : public Worker
 {
 public:
     Projections(GraphBase& graph);
-    ~Projections();
+    virtual ~Projections();
 
     bool isEmpty() const;
 

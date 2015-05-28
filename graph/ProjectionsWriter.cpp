@@ -29,7 +29,7 @@ ProjectionsWriter::~ProjectionsWriter()
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
-bool ProjectionsWriter::saveProjections(const char *fileName, unsigned options)
+bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
 {
     const ProjectionsList* list = projections->getList();
     if (!list->size())
@@ -43,15 +43,16 @@ bool ProjectionsWriter::saveProjections(const char *fileName, unsigned options)
         return false;
     }
 
-    FileTypes::Type typeId = FileTypes::PROJECTIONS;
+    FileTypes::Type typeId = FileTypes::Type::PROJECTIONS;
 
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);
     fputc('\n', f);
 
     bool result = true;
-    size_t progress = 0;
-    startProcess(0, list->size() - 1);
+    size_t pos = 0;
+
+    startProcess(pos, list->size() - 1);
 
     for (const auto &pair : *list)
     {
@@ -60,9 +61,9 @@ bool ProjectionsWriter::saveProjections(const char *fileName, unsigned options)
             result = false;
             break;
         }
-        updateProgress(++progress);
+        updateProgress(++pos);
 
-        result = writeProjection(f, pair.second, options);
+        result = writeProjection(f, pair.second, options, false);
         if (!result)
             break;
     }
@@ -83,7 +84,7 @@ bool ProjectionsWriter::saveProjections(const char *fileName, unsigned options)
  * open on write or projections are empty.
  */
 bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
-                                       unsigned options)
+                                       cuint options)
 {
     const Projection* pr = projections->getProjection(rootNode);
     if (!pr)
@@ -102,14 +103,18 @@ bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
         return false;
     }
 
-    FileTypes::Type typeId = FileTypes::PROJECTIONS;
+    FileTypes::Type typeId = FileTypes::Type::PROJECTIONS;
 
     const char* fileType = FileTypes::typeName(typeId);
     fputs(fileType, f);
     fputc('\n', f);
 
-    startProcess(0, pr->levelCount() - 1);
-    bool result = writeProjection(f, pr, options);
+    size_t size = pr->getRootNode()->listCount();
+    if (size)
+        --size;
+
+    startProcess(0, size);
+    bool result = writeProjection(f, pr, options, true);
     completeProcess();
 
     fclose(f);
@@ -128,7 +133,7 @@ bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
  * @return true - if projection not empty and writing was successful
  */
 bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
-                                        unsigned options)
+                                        cuint options, bool isProgress)
 {
     const auto rootNode = projection->getRootNode();
     if (rootNode->isEmpty())
@@ -141,7 +146,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
     std::deque <ProjectionElemMapItPair> pathStack;
     size_t currentIndent = 1;
 
-    bool printIndents = options & Option::PRINT_INDENTS;
+    bool printIndents = options & (unsigned) Option::PRINT_INDENTS;
 
     const ProjectionElemMap* pathList = rootNode->getList();
     const ProjectionElem* pathElem;
@@ -162,7 +167,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
         {
             pathStack.pop_front();
             --currentIndent;
-            if (currentIndent == 1)
+            if (isProgress && currentIndent == 1)
             {
                 updateProgress(++count);
             }

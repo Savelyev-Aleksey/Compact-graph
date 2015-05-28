@@ -6,9 +6,11 @@
 #include <map>
 #include <deque>
 
+#include "ProjectionsReader.h"
 
 class GraphBase;
 class ProjectionElem;
+
 
 
 typedef std::multimap <size_t, ProjectionElem*> ProjectionLevelElem;
@@ -21,6 +23,9 @@ public:
     Projection(size_t nodeId);
     ~Projection();
 
+    friend bool ProjectionsReader::readProjections(FILE* fp,
+                                                   FileTypes::Type typeId);
+
     void clear();
 
     size_t getId() const;
@@ -31,7 +36,6 @@ public:
 
     void createProjection(GraphBase& graph);
 
-    void setProjection(ProjectionElem* rootNode,ProjectionLevelList* levelList);
     void updateOriginalInfo();
     void updateEccesntricity();
 

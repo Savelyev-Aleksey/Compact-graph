@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QTranslator>
+#include <QSettings>
 
 #include "MainWindow.h"
 
@@ -35,13 +36,18 @@ const std::string currentDateTime() {
 
 void loadTranslations(QApplication& app)
 {
-    Translation::program.load(QString(":/translations/graph_ru.qm"));
+    // load current locale
+    QSettings settings("Compact Graph");
+    QString loc = QLocale::system().name();
+    QString c = settings.value("locale", loc).toString();
+
+    Translation::program.load(QString(":/translations/graph_%1.qm").arg(c));
     app.installTranslator(&Translation::program);
 
-    Translation::qtBase.load(QString(":/translations/qtbase_ru.qm"));
+    Translation::qtBase.load(QString(":/translations/qtbase_%1.qm").arg(c));
     app.installTranslator(&Translation::qtBase);
 
-    Translation::qtHelp.load(QString(":/translations/qthelp_ru.qm"));
+    Translation::qtHelp.load(QString(":/translations/qthelp_%1.qm").arg(c));
     app.installTranslator(&Translation::qtHelp);
 }
 

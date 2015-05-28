@@ -18,6 +18,9 @@ public:
 private:
     Ui::AboutForm *ui;
 
+private slots:
+    void changeLanguage(int index);
+
 };
 
 #endif // ABOUTFORM_H

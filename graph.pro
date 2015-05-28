@@ -50,7 +50,8 @@ SOURCES += gui/main.cpp\
     graph/Projection.cpp \
     graph/Projections.cpp \
     graph/ProjectionsWriter.cpp \
-    graph/ProjectionsReader.cpp
+    graph/ProjectionsReader.cpp \
+    gui/NodeInfoForm.cpp
 
 HEADERS  += \
     graph/Edge.h \
@@ -83,7 +84,8 @@ HEADERS  += \
     graph/Projection.h \
     graph/Projections.h \
     graph/ProjectionsWriter.h \
-    graph/ProjectionsReader.h
+    graph/ProjectionsReader.h \
+    gui/NodeInfoForm.h
 
 FORMS    += \
     gui/OpenFileForm.ui \
@@ -93,7 +95,8 @@ FORMS    += \
     gui/SaveGraphForm.ui \
     gui/SaveShortPathForm.ui \
     gui/GraphInfoForm.ui \
-    gui/AboutForm.ui
+    gui/AboutForm.ui \
+    gui/NodeInfoForm.ui
 
 DISTFILES += \
     gui/resources/translations/graph_ru.ts

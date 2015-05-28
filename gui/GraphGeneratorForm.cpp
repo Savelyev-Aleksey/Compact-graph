@@ -78,10 +78,12 @@ void GraphGeneratorForm::generateHypercube()
         return;
     }
     ui->generateHypercubeButton->setEnabled(false);
-    GraphWorker *graph = &mainWindow->getGraph();
-    mainWindow->showStatusMessage(tr("Clearing graph..."), 5000);
-    graph->clearGraph();
-    graph->generateHypercube(dimention, weight);
+    GraphWorker& graph = mainWindow->getGraph();
+
+    mainWindow->showStatusMessage(tr("Clearing graph..."));
+    graph.clearGraph();
+
+    graph.generateHypercube(dimention, weight);
     mainWindow->showStatusMessage(tr("Hypercube created"), 5000);
 }
 
@@ -107,9 +109,11 @@ void GraphGeneratorForm::generateTorus()
         return;
     }
     ui->generateTorusButton->setEnabled(false);
-    GraphWorker *graph = &mainWindow->getGraph();
-    mainWindow->showStatusMessage(tr("Clearing graph..."), 5000);
-    graph->clearGraph();
-    graph->generateTorus(bigRadius, smallRadius, weight);
+    GraphWorker& graph = mainWindow->getGraph();
+
+    mainWindow->showStatusMessage(tr("Clearing graph..."));
+    graph.clearGraph();
+
+    graph.generateTorus(bigRadius, smallRadius, weight);
     mainWindow->showStatusMessage(tr("Torus created"), 5000);
 }

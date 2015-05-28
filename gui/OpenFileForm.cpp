@@ -133,6 +133,10 @@ void OpenFileForm::readFile()
     ui->openFileButton->setEnabled(false);
     GraphWorker& graph = mainWindow->getGraph();
     const char* name = fileName.toLocal8Bit().data();
+
+    mainWindow->showStatusMessage(tr("Clearing graph..."));
+    graph.clearGraph();
+
     bool isReaded = graph.readFile(name);
     if (isReaded)
     {

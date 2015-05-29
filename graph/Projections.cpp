@@ -7,7 +7,7 @@
 Projections::Projections(GraphBase& graph) :
     Worker(),
     graph(&graph),
-    projections(new ProjectionsList)
+    projectionsList(new ProjectionsList)
 {}
 
 
@@ -15,32 +15,33 @@ Projections::Projections(GraphBase& graph) :
 Projections::~Projections()
 {
     clear();
-    delete projections;
+    delete projectionsList;
 }
 
 
 
 void Projections::clear()
 {
-    for (auto it = projections->rbegin(); it != projections->rend(); ++it)
+    for (auto it = projectionsList->rbegin();
+         it != projectionsList->rend(); ++it)
     {
         delete it->second;
     }
-    projections->clear();
+    projectionsList->clear();
 }
 
 
 
 bool Projections::isEmpty() const
 {
-    return projections->size() == 0;
+    return projectionsList->size() == 0;
 }
 
 
 
 const ProjectionsList* Projections::getList() const
 {
-    return projections;
+    return projectionsList;
 }
 
 
@@ -54,8 +55,8 @@ GraphBase& Projections::getGraph() const
 
 const Projection* Projections::getProjection(size_t nodeId) const
 {
-    auto it = projections->find(nodeId);
-    return it == projections->end() ? nullptr : it->second;
+    auto it = projectionsList->find(nodeId);
+    return it == projectionsList->end() ? nullptr : it->second;
 }
 
 
@@ -99,7 +100,7 @@ void Projections::createAllProjections()
         for (unsigned j = 0; j < end; ++j, ++it)
         {
             Projection* pr = new Projection(it->first);
-            auto result = projections->insert({it->first, pr});
+            auto result = projectionsList->insert({it->first, pr});
             if (result.second)
             {
                 threads[j] = new std::thread(func, pr, graph);
@@ -132,11 +133,11 @@ void Projections::createAllProjections()
  */
 void Projections::createProjection(size_t nodeId)
 {
-    auto it = projections->find(nodeId);
-    if (it != projections->end())
+    auto it = projectionsList->find(nodeId);
+    if (it != projectionsList->end())
         return;
     Projection* pr = new Projection(it->first);
-    projections->insert({it->first, pr});
+    projectionsList->insert({it->first, pr});
     pr->createProjection(*graph);
 }
 
@@ -144,15 +145,15 @@ void Projections::createProjection(size_t nodeId)
 
 size_t Projections::size() const
 {
-    return projections->size();
+    return projectionsList->size();
 }
 
 
 
 bool Projections::isProjectionExist(size_t nodeId) const
 {
-    auto it = projections->find(nodeId);
-    return (it != projections->end()) ? true : false;
+    auto it = projectionsList->find(nodeId);
+    return (it != projectionsList->end()) ? true : false;
 }
 
 
@@ -164,14 +165,14 @@ bool Projections::isProjectionExist(size_t nodeId) const
  */
 UlongMap* Projections::getEccentriciyStatistic() const
 {
-    if (!projections->size())
+    if (!projectionsList->size())
     {
         return nullptr;
     }
     size_t eccentr;
     UlongMap* map = new UlongMap();
 
-    for (const auto &it : *projections)
+    for (const auto &it : *projectionsList)
     {
         eccentr = it.second->getEccentricity();
         auto result = map->insert({eccentr, 1});

@@ -5,15 +5,16 @@
 
 #include "ProjectionsReader.h"
 
-#include "Projection.h"
 #include "ProjectionElem.h"
+#include "Projection.h"
+#include "Projections.h"
 #include "GraphBase.h"
 
 
 
-ProjectionsReader::ProjectionsReader(GraphBase& graph) :
+ProjectionsReader::ProjectionsReader(Projections& projections) :
     ReaderBase(),
-    Projections(graph)
+    projections(&projections)
 {}
 
 
@@ -99,8 +100,10 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
     // Cleanup structures before read
     projections->clear();
 
+    GraphBase& graph = projections->getGraph();
+
     float weight = 0;
-    const char* weightStr = graph->getInfo("WEIGHT");
+    const char* weightStr = graph.getInfo("WEIGHT");
     if (!weightStr || sscanf(weightStr, "%f", &weight) != 1)
     {
         weight = 0;
@@ -121,6 +124,8 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
     ProjectionLevelElem* level;
     std::deque <size_t> nodesStack;
     std::deque <ProjectionElem*> nodesElemStack;
+
+    ProjectionsList* projectionsList = projections->projectionsList;
 
 //    ProjectionElemMap origianlNodes;
 
@@ -150,7 +155,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             //projection->setProjection(parent, levelList);
             projection->rootNode = parent;
             projection->levelList = levelList;
-            projections->insert({nodeFromNum, projection});
+            projectionsList->insert({nodeFromNum, projection});
 
             // This is root level with respectived node
             level = new ProjectionLevelElem;
@@ -185,7 +190,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             // Add node in current projection level
             levelList->at(indent)->insert({nodeToNum, elem});
 
-            graph->addEdge(nodeFromNum, nodeToNum, weight);
+            graph.addEdge(nodeFromNum, nodeToNum, weight);
         }
         else if (count == 0)
         {

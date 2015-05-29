@@ -7,6 +7,8 @@
 #include "types.h"
 #include "Worker.h"
 
+#include "ProjectionsReader.h"
+
 class Projection;
 class GraphBase;
 
@@ -18,6 +20,9 @@ class Projections : public Worker
 public:
     Projections(GraphBase& graph);
     virtual ~Projections();
+
+    friend bool ProjectionsReader::readProjections(FILE *fp,
+                                                   FileTypes::Type typeId);
 
     bool isEmpty() const;
 
@@ -38,7 +43,7 @@ public:
 
 protected:
     GraphBase* graph;
-    ProjectionsList* projections;
+    ProjectionsList* projectionsList;
 };
 
 #endif // PROJECTIONS_H

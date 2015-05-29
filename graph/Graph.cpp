@@ -487,6 +487,7 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
     case FileTypes::Type::BRACKETS_SHORT_PATH_VALUE:
         {
             ShortPathReader shortPathReader(*shortPath);
+            shortPathReader.setOptions(options);
             result = shortPathReader.readShortPath(f, typeId);
             lastError = shortPathReader.getLastError();
         }
@@ -494,9 +495,10 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
 
     case FileTypes::Type::PROJECTIONS:
         {
-            auto *reader = reinterpret_cast <ProjectionsReader*> (projections);
-            result = reader->readProjections(f, typeId);
-            lastError = reader->getLastError();
+            ProjectionsReader projectionsReader(*projections);
+            projectionsReader.setOptions(options);
+            result = projectionsReader.readProjections(f, typeId);
+            lastError = projectionsReader.getLastError();
         }
         break;
 
@@ -505,8 +507,15 @@ bool Graph::readFile(FILE *f, FileTypes::Type typeId)
     default:
         if (outWarning)
         {
-            std::clog << "[!] Warning: GraphReader can't read this file type, "
-                      << "use other class implementations" << std::endl;
+            const char* s;
+            if (typeId == FileTypes::Type::UNDEFINED)
+                s = "UNDEFINED";
+            else
+                s = FileTypes::typeName(typeId);
+
+            std::clog << "[!] Warning: Graph can't read this file type ("
+                      << s << "), " << "use other class implementations."
+                      << std::endl;
         }
         lastError = Error::TYPE;
         result = false;

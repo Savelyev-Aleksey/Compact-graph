@@ -300,7 +300,7 @@ size_vec* Projection::getProjectionNodeStat() const
             if (it.second->isOriginal())
                 ++((*list)[i]);
             else
-                ++((*list)[i]);
+                ++((*list)[i + 1]);
         }
         i += 2;
     }

@@ -321,37 +321,42 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Кратчайший цикл:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="106"/>
+        <location filename="../../NodeInfoForm.ui" line="125"/>
         <source>Projection</source>
         <translation>Проекция</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="117"/>
+        <location filename="../../NodeInfoForm.ui" line="136"/>
         <source>Create projection</source>
         <translation>Создать проекцию</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="140"/>
+        <location filename="../../NodeInfoForm.ui" line="159"/>
         <source>level</source>
         <translation>уровень</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="145"/>
+        <location filename="../../NodeInfoForm.ui" line="164"/>
         <source>original</source>
         <translation>оригинал</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="150"/>
+        <location filename="../../NodeInfoForm.ui" line="169"/>
         <source>replica</source>
         <translation>реплика</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="161"/>
+        <location filename="../../NodeInfoForm.ui" line="106"/>
         <source>Adjacent nodes</source>
         <translation>Смежные вершины</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.cpp" line="83"/>
+        <location filename="../../NodeInfoForm.cpp" line="30"/>
+        <source>Graph is empty.</source>
+        <translation>Граф пуст.</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.cpp" line="92"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>
@@ -935,6 +940,24 @@ Turned on:&lt;br&gt;
         <location filename="../../SaveShortPathForm.cpp" line="176"/>
         <source>Short path not saved.</source>
         <translation>Кратчайший путь не сохранён.</translation>
+    </message>
+</context>
+<context>
+    <name>StatisticMenuForm</name>
+    <message>
+        <location filename="../../StatisticMenuForm.ui" line="14"/>
+        <source>Statistic</source>
+        <translation>Статистика</translation>
+    </message>
+    <message>
+        <location filename="../../StatisticMenuForm.ui" line="102"/>
+        <source>Graph</source>
+        <translation>Граф</translation>
+    </message>
+    <message>
+        <location filename="../../StatisticMenuForm.ui" line="139"/>
+        <source>Node</source>
+        <translation>Вершина</translation>
     </message>
 </context>
 </TS>

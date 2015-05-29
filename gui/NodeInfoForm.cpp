@@ -23,6 +23,15 @@ NodeInfoForm::NodeInfoForm(MainWindow *parent) :
     connect(ui->createProjectionButton, &QPushButton::clicked,
             this, &NodeInfoForm::createProjection);
 
+    const GraphWorker& graph = mainWindow->getGraph();
+
+    if (graph.isGraphEmpty())
+    {
+        ui->infoLabel->setText(tr("Graph is empty."));
+        ui->nodeNumEdit->setEnabled(false);
+        return;
+    }
+
     clearInfo();
 }
 
@@ -75,6 +84,7 @@ void NodeInfoForm::findNode()
             {
                 ui->adjacentNodesList->addItem(QString::number(it.first));
             }
+            ui->degreeLabel->setText(QString::number(list.size()));
             projectionInfo();
         }
     }
@@ -96,15 +106,22 @@ void NodeInfoForm::projectionInfo()
         ui->createProjectionButton->setEnabled(true);
         return;
     }
+    size_t eccentr = pr->getEccentricity();
+    ui->eccentricityLabel->setText(QString::number(eccentr));
+
     size_vec* list = pr->getProjectionNodeStat();
     QTableWidget* t = ui->levelTable;
-    for (size_t i = 0, end = list->size(); i < end; i += 2)
+    size_t size = list->size();
+    t->clearContents();
+    t->setRowCount(size >> 1);
+    for (size_t i = 0; i < size; i += 2)
     {
         size_t orig = (*list)[i];
         size_t replica = (*list)[i + 1];
-        t->setItem(0, 0, new QTableWidgetItem(QString::number(i >> 1)) );
-        t->setItem(0, 1, new QTableWidgetItem(QString::number(orig)) );
-        t->setItem(0, 2, new QTableWidgetItem(QString::number(replica)) );
+        size_t pos = i >> 1;
+        t->setItem(pos, 0, new QTableWidgetItem(QString::number(pos)) );
+        t->setItem(pos, 1, new QTableWidgetItem(QString::number(orig)) );
+        t->setItem(pos, 2, new QTableWidgetItem(QString::number(replica)) );
     }
     delete list;
 }

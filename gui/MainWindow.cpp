@@ -8,7 +8,7 @@
 #include "SaveForm.h"
 #include "OpenFileForm.h"
 #include "GraphGeneratorForm.h"
-#include "GraphInfoForm.h"
+#include "StatisticMenuForm.h"
 #include "AboutForm.h"
 
 
@@ -128,7 +128,7 @@ void MainWindow::showStatistic()
     if (!ui->mainHorizontalLayout->isEmpty())
     {
         QWidget* w = ui->mainHorizontalLayout->itemAt(0)->widget();
-        GraphInfoForm* open = dynamic_cast<GraphInfoForm *>(w);
+        StatisticMenuForm* open = dynamic_cast<StatisticMenuForm *>(w);
         // If this is same object - do nothing
         if (open)
         {
@@ -137,7 +137,7 @@ void MainWindow::showStatistic()
         ui->mainHorizontalLayout->removeWidget(w);
         delete w;
     }
-    ui->mainHorizontalLayout->addWidget(new GraphInfoForm(this));
+    ui->mainHorizontalLayout->addWidget(new StatisticMenuForm(this));
 }
 
 

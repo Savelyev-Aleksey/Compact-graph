@@ -136,8 +136,8 @@ void Projections::createProjection(size_t nodeId)
     auto it = projectionsList->find(nodeId);
     if (it != projectionsList->end())
         return;
-    Projection* pr = new Projection(it->first);
-    projectionsList->insert({it->first, pr});
+    Projection* pr = new Projection(nodeId);
+    projectionsList->insert({nodeId, pr});
     pr->createProjection(*graph);
 }
 

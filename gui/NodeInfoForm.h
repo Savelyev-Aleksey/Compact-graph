@@ -15,7 +15,7 @@ class NodeInfoForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit NodeInfoForm(MainWindow *parent = 0);
+    explicit NodeInfoForm(MainWindow *parent);
     ~NodeInfoForm();
 
 private:

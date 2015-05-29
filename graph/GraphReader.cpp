@@ -48,7 +48,7 @@ bool GraphReader::readFile(const char* fileName)
     {
         lastError = Error::TYPE;
         std::clog << "[!!!] Critical: File type is unknown " << typeStr
-                  << std::endl;
+                  << "in file (" << fileName << ")" << std::endl;
         fclose(f);
         return false;
     }
@@ -60,6 +60,10 @@ bool GraphReader::readFile(const char* fileName)
     {
         lastError = Error::NONE;
         std::clog << "File (" << fileName << ") readed" << std::endl;
+    }
+    else
+    {
+        std::clog << "Error in file (" << fileName << ")" << std::endl;
     }
 
     graph->logStatus();

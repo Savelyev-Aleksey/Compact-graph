@@ -235,7 +235,11 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
         if (!nodesStack.size())
         {
             count = fscanf(f, "%zu(", &nodeFromNum);
-            if (count != 1)
+            if (count == -1)
+            {
+                continue;
+            }
+            else if (count == 0)
             {
                 readError = true;
                 break;

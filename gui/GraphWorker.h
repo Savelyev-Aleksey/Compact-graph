@@ -8,6 +8,7 @@
 
 
 class QWidget;
+class QString;
 
 
 /**
@@ -19,6 +20,8 @@ class GraphWorker : public Graph
 public:
     GraphWorker(QWidget* parent);
     virtual ~GraphWorker();
+
+    const Node* findNode(size_t nodeId, QString& info) const;
 
 
     // Graph writers

@@ -55,7 +55,6 @@ void loadTranslations(QApplication& app)
 
 int main(int argc, char *argv[])
 {
-
     std::clog.rdbuf(FileLog::logStream.rdbuf());
     std::clog << "Program started " << currentDateTime() << std::endl
               << std::endl;

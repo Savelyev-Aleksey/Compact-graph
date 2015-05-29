@@ -6,6 +6,8 @@
 #include <map>
 #include <deque>
 
+#include "types.h"
+
 #include "ProjectionsReader.h"
 
 class GraphBase;
@@ -33,6 +35,7 @@ public:
     size_t getEccentricity() const;
 
     const ProjectionElem* getRootNode() const;
+    size_vec* getProjectionNodeStat() const;
 
     void createProjection(GraphBase& graph);
 

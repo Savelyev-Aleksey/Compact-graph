@@ -7,16 +7,27 @@ namespace Ui {
 class NodeInfoForm;
 }
 
+class MainWindow;
+
+
 class NodeInfoForm : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit NodeInfoForm(QWidget *parent = 0);
+    explicit NodeInfoForm(MainWindow *parent = 0);
     ~NodeInfoForm();
 
 private:
     Ui::NodeInfoForm *ui;
+    MainWindow* mainWindow;
+    size_t currentNodeId;
+
+    void findNode();
+    void projectionInfo();
+    void clearInfo();
+
+    void createProjection();
 };
 
 #endif // NODEINFOFORM_H

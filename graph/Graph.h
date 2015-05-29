@@ -61,7 +61,7 @@ public:
 
     // Node finders
     const Node* findNode(size_t nodeId) const;
-    std::deque<size_t>* findNearNode(size_t nodeId) const;
+    size_vec* findNearNode(size_t nodeId) const;
 
 
     // Graph writers

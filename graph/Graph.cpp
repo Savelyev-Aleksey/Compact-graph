@@ -374,7 +374,7 @@ void Graph::generateAllShortPaths(float pathLimit)
  * first no greater nodeId - 5
  * last no less nodeId + 5
  */
-std::deque<size_t>* Graph::findNearNode(size_t nodeId) const
+size_vec* Graph::findNearNode(size_t nodeId) const
 {
     NodeMap* list = graph->getNodeMap();
     if (!list->size())
@@ -389,7 +389,7 @@ std::deque<size_t>* Graph::findNearNode(size_t nodeId) const
         --itLess;
     auto itMore = list->upper_bound(end);
 
-    std::deque<size_t>* nodes = new std::deque<size_t>;
+    size_vec* nodes = new size_vec;
     for (; itLess != itMore; ++itLess)
     {
         nodes->push_back(itLess->first);

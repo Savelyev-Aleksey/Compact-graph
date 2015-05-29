@@ -284,3 +284,25 @@ void Projection::updateEccesntricity()
     // from penultimate level
     eccesntricity = levelList->size() - 2;
 }
+
+
+size_vec* Projection::getProjectionNodeStat() const
+{
+    if (!levelList->size())
+        return nullptr;
+
+    size_t i = 0;
+    size_vec* list = new size_vec(levelList->size() * 2, 0);
+    for (const auto &level : *levelList)
+    {
+        for (const auto &it : *level)
+        {
+            if (it.second->isOriginal())
+                ++((*list)[i]);
+            else
+                ++((*list)[i]);
+        }
+        i += 2;
+    }
+    return list;
+}

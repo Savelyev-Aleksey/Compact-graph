@@ -14,14 +14,6 @@
         <translation>Язык:</translation>
     </message>
     <message>
-        <source>russian</source>
-        <translation type="vanished">русский</translation>
-    </message>
-    <message>
-        <source>english</source>
-        <translation type="vanished">английский</translation>
-    </message>
-    <message>
         <location filename="../../AboutForm.ui" line="63"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
@@ -266,14 +258,6 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <source>Eccentricity</source>
         <translation>Экцентриситет</translation>
     </message>
-    <message>
-        <source>Node info</source>
-        <translation type="vanished">Инормация о вершине</translation>
-    </message>
-    <message>
-        <source>Node number:</source>
-        <translation type="vanished">Номер вершины:</translation>
-    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -317,24 +301,59 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Инормация о вершине</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="42"/>
+        <location filename="../../NodeInfoForm.ui" line="22"/>
         <source>Node number:</source>
         <translation>Номер вершины:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="90"/>
+        <location filename="../../NodeInfoForm.ui" line="62"/>
         <source>Eccentricity:</source>
         <translation>Экцентриситет:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="104"/>
+        <location filename="../../NodeInfoForm.ui" line="76"/>
         <source>Degree:</source>
         <translation>Степень:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="118"/>
+        <location filename="../../NodeInfoForm.ui" line="90"/>
         <source>Shortest loop:</source>
         <translation>Кратчайший цикл:</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.ui" line="106"/>
+        <source>Projection</source>
+        <translation>Проекция</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.ui" line="117"/>
+        <source>Create projection</source>
+        <translation>Создать проекцию</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.ui" line="140"/>
+        <source>level</source>
+        <translation>уровень</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.ui" line="145"/>
+        <source>original</source>
+        <translation>оригинал</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.ui" line="150"/>
+        <source>replica</source>
+        <translation>реплика</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.ui" line="161"/>
+        <source>Adjacent nodes</source>
+        <translation>Смежные вершины</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.cpp" line="83"/>
+        <source>Start node is not number.</source>
+        <translation>Начальная вершина не является числом.</translation>
     </message>
 </context>
 <context>
@@ -445,40 +464,50 @@ By default file graph.log located in same program directory.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../GraphWorker.cpp" line="31"/>
+        <location filename="../../GraphWorker.cpp" line="32"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="65"/>
+        <location filename="../../GraphWorker.cpp" line="66"/>
         <source>Creating short path</source>
         <translation>Создание кратчайшего пути</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="83"/>
+        <location filename="../../GraphWorker.cpp" line="84"/>
         <source>Creating projections</source>
         <translation>Создание проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="98"/>
+        <location filename="../../GraphWorker.cpp" line="99"/>
         <source>Writing edges of node</source>
         <translation>Запись рёбер вершины</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="114"/>
-        <location filename="../../GraphWorker.cpp" line="135"/>
+        <location filename="../../GraphWorker.cpp" line="115"/>
+        <location filename="../../GraphWorker.cpp" line="136"/>
         <source>Writing adjacency list</source>
         <translation>Запись списка смежности</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="157"/>
+        <location filename="../../GraphWorker.cpp" line="158"/>
         <source>Writing projections</source>
         <translation>Запись проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="183"/>
+        <location filename="../../GraphWorker.cpp" line="184"/>
         <source>Writing projection</source>
         <translation>Запись проекции</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="209"/>
+        <source>Node %1 not found.</source>
+        <translation>Вершина %1 не найдена.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="214"/>
+        <source>Nearest:</source>
+        <translation>Ближайшие:</translation>
     </message>
 </context>
 <context>
@@ -689,83 +718,73 @@ Turned on:&lt;br&gt;
     <message>
         <location filename="../../SaveGraphForm.ui" line="14"/>
         <location filename="../../SaveGraphForm.ui" line="322"/>
-        <location filename="../../SaveGraphForm.cpp" line="466"/>
+        <location filename="../../SaveGraphForm.cpp" line="454"/>
         <source>Save graph</source>
         <translation>Сохранить граф</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="421"/>
+        <location filename="../../SaveGraphForm.cpp" line="409"/>
         <source>File type is not recognised. Please check save settings</source>
         <translation>Тип файла не распознан. Пожалуйста проверьте настройки сохранения</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="435"/>
+        <location filename="../../SaveGraphForm.cpp" line="423"/>
         <source>Graph is empty. Nothing to save.</source>
         <translation>Граф пуст. Сохранять нечего.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="167"/>
-        <location filename="../../SaveGraphForm.cpp" line="211"/>
-        <location filename="../../SaveGraphForm.cpp" line="260"/>
+        <location filename="../../SaveGraphForm.cpp" line="168"/>
+        <location filename="../../SaveGraphForm.cpp" line="212"/>
+        <location filename="../../SaveGraphForm.cpp" line="261"/>
         <source>Print value and print info are turned off.
 Weight and other information will be lost.</source>
         <translation>Печать веса и печать информации отключены.
 Вес и другая информация будут потеряны.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="317"/>
+        <location filename="../../SaveGraphForm.cpp" line="318"/>
         <source>Not all projections are created yet. Will be created on save. It&apos;s take a time.</source>
         <translation>Не все проекции ещё созданы. Будут созданы при сохранениию Это займёт время.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="330"/>
+        <location filename="../../SaveGraphForm.cpp" line="331"/>
         <source>Projection not exist yet. Will be created on save.</source>
         <translation>Проекция ещё не создана. Будет создана при сохранении.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="365"/>
-        <location filename="../../SaveGraphForm.cpp" line="402"/>
+        <location filename="../../SaveGraphForm.cpp" line="372"/>
+        <location filename="../../SaveGraphForm.cpp" line="390"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="382"/>
-        <source>Node %1 not found.</source>
-        <translation>Вершина %1 не найдена.</translation>
-    </message>
-    <message>
-        <location filename="../../SaveGraphForm.cpp" line="387"/>
-        <source>Nearest:</source>
-        <translation>Ближайшие:</translation>
-    </message>
-    <message>
-        <location filename="../../SaveGraphForm.cpp" line="467"/>
+        <location filename="../../SaveGraphForm.cpp" line="455"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="549"/>
+        <location filename="../../SaveGraphForm.cpp" line="537"/>
         <source>File type is unknown. Check settings.</source>
         <translation>Тип файла неизвестен. Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="555"/>
-        <location filename="../../SaveGraphForm.cpp" line="556"/>
+        <location filename="../../SaveGraphForm.cpp" line="543"/>
+        <location filename="../../SaveGraphForm.cpp" line="544"/>
         <source>Saving interrupted.</source>
         <translation>Сохранение прервано.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="562"/>
+        <location filename="../../SaveGraphForm.cpp" line="550"/>
         <source>Graph saved in file %1</source>
         <translation>Граф сохранён в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="567"/>
+        <location filename="../../SaveGraphForm.cpp" line="555"/>
         <source>Graph not saved.File not accessed to write.</source>
         <translation>Граф не сохранён. Нет прав на запись в файл.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="569"/>
+        <location filename="../../SaveGraphForm.cpp" line="557"/>
         <source>Graph not saved.</source>
         <translation>Граф не сохранён.</translation>
     </message>
@@ -871,59 +890,49 @@ Turned on:&lt;br&gt;
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="54"/>
+        <location filename="../../SaveShortPathForm.cpp" line="56"/>
         <source>Graph is empty. Nothing to save.</source>
         <translation>Граф пуст. Сохранять нечего.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="69"/>
-        <location filename="../../SaveShortPathForm.cpp" line="141"/>
+        <location filename="../../SaveShortPathForm.cpp" line="71"/>
+        <location filename="../../SaveShortPathForm.cpp" line="128"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="76"/>
-        <location filename="../../SaveShortPathForm.cpp" line="148"/>
+        <location filename="../../SaveShortPathForm.cpp" line="78"/>
+        <location filename="../../SaveShortPathForm.cpp" line="135"/>
         <source>Path limit is not number.</source>
         <translation>Ограничение пути не является числом.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="95"/>
-        <source>Node %1 not found.</source>
-        <translation>Вершина %1 не найдена.</translation>
-    </message>
-    <message>
-        <location filename="../../SaveShortPathForm.cpp" line="100"/>
-        <source>Nearest:</source>
-        <translation>Ближайшие:</translation>
-    </message>
-    <message>
-        <location filename="../../SaveShortPathForm.cpp" line="90"/>
+        <location filename="../../SaveShortPathForm.cpp" line="92"/>
         <source>Path not created. It will be created before save.</source>
         <translation>Путь не создан. Будет создан перед сохранением.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="152"/>
+        <location filename="../../SaveShortPathForm.cpp" line="139"/>
         <source>Save graph</source>
         <translation>Сохранить граф</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="153"/>
+        <location filename="../../SaveShortPathForm.cpp" line="140"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="182"/>
+        <location filename="../../SaveShortPathForm.cpp" line="169"/>
         <source>Short path saved in file %1</source>
         <translation>Кратчайший путь сохранён в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="187"/>
+        <location filename="../../SaveShortPathForm.cpp" line="174"/>
         <source>Short path not saved.File not accessed to write.</source>
         <translation>Кратчайший путь не сохранён. Нет прав на запись в файл.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="189"/>
+        <location filename="../../SaveShortPathForm.cpp" line="176"/>
         <source>Short path not saved.</source>
         <translation>Кратчайший путь не сохранён.</translation>
     </message>

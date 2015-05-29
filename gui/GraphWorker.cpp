@@ -1,4 +1,5 @@
 #include <QWidget>
+#include <QString>
 #include <QProgressDialog>
 #include <thread>
 
@@ -193,6 +194,35 @@ bool GraphWorker::saveProjection(const char *fileName, size_t rootNode,
 
 
 
+/**
+ * @brief GraphWorker::findNode - find node in graph. if node does not exist
+ * in info printing nearest nodes for this id.
+ * @param nodeId - node id for search
+ * @param info - info string to add info if node not found.
+ * @return node pointer if found else nullptr
+ */
+const Node* GraphWorker::findNode(size_t nodeId, QString& info) const
+{
+    const Node* node = ::Graph::findNode(nodeId);
+    if (node)
+        return node;
+    info += QObject::tr("Node %1 not found.").arg(nodeId);
+    info += ' ';
+    size_vec *nodes = findNearNode(nodeId);
+    if (nodes)
+    {
+        info += QObject::tr("Nearest:");
+        info += ' ';
+        for(size_t i = 0; i < nodes->size(); ++i)
+        {
+            if (i > 0)
+                info += ", ";
+            info += QString::number(nodes->at(i));
+        }
+        delete nodes;
+    }
+    return nullptr;
+}
 
 
 

@@ -1,5 +1,7 @@
 #include <QFileDialog>
 
+#include "graph/types.h"
+
 #include "SaveShortPathForm.h"
 #include "ui_SaveShortPathForm.h"
 
@@ -44,8 +46,8 @@ void SaveShortPathForm::validateShortPath()
 {
     ui->saveButton->setEnabled(false);
 
-    Graph* graph = & mainWindow->getGraph();
-    bool isEmpty = graph->isGraphEmpty();
+    GraphWorker& graph = mainWindow->getGraph();
+    bool isEmpty = graph.isGraphEmpty();
     bool ok, isValid = true;
     QString info;
 
@@ -81,10 +83,10 @@ void SaveShortPathForm::validateShortPath()
 
     if (isValid)
     {
-        bool nodeExist = graph->findNode(nodeId) != nullptr;
+        bool nodeExist = graph.findNode(nodeId, info) != nullptr;
         if (nodeExist)
         {
-            bool pathExist = graph->isPathExist(nodeId);
+            bool pathExist = graph.isPathExist(nodeId);
             if (!pathExist)
             {
                 info += tr("Path not created. It will be created before save.");
@@ -92,21 +94,6 @@ void SaveShortPathForm::validateShortPath()
         }
         else
         {
-            info += tr("Node %1 not found.").arg(nodeId);
-            info += ' ';
-            std::deque<size_t> *nodes = graph->findNearNode(nodeId);
-            if (nodes)
-            {
-                info += tr("Nearest:");
-                info += ' ';
-                for(size_t i = 0; i < nodes->size(); ++i)
-                {
-                    if (i > 0)
-                        info += ", ";
-                    info += QString::number(nodes->at(i));
-                }
-                delete nodes;
-            }
             isValid = false;
         }
 

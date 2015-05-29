@@ -1,3 +1,4 @@
+#include <vector>
 #include <QFileDialog>
 
 #include "SaveGraphForm.h"
@@ -354,6 +355,12 @@ bool SaveGraphForm::validateProjections(QString &info, bool isGraphEmpty)
 
 
 
+/**
+ * @brief SaveGraphForm::checkStartNodeEdit - check on exist node in graph.
+ * If node not fonud print nearest this id other nodes.
+ * @param info - pointer on info string for get info
+ * @return true if node id correct and node exist
+ */
 bool SaveGraphForm::checkStartNodeEdit(QString &info)
 {
     bool isValid = true;
@@ -372,28 +379,9 @@ bool SaveGraphForm::checkStartNodeEdit(QString &info)
         ulong nodeId = ui->startNodeLineEdit->text().toULong(&ok);
         if (ok)
         {
-            const Node* node = graph.findNode(nodeId);
-            if (node)
+            const Node* node = graph.findNode(nodeId, info);
+            if (!node)
             {
-                nodeId = node->getId();
-            }
-            else
-            {
-                info += tr("Node %1 not found.").arg(nodeId);
-                info += ' ';
-                std::deque<size_t> *nodes = graph.findNearNode(nodeId);
-                if (nodes)
-                {
-                    info += tr("Nearest:");
-                    info += ' ';
-                    for(size_t i = 0; i < nodes->size(); ++i)
-                    {
-                        if (i > 0)
-                            info += ", ";
-                        info += QString::number(nodes->at(i));
-                    }
-                    delete nodes;
-                }
                 isValid = false;
             }
         }

@@ -145,8 +145,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             // if on last loop will be readed
             if (projection)
             {
-                projection->updateOriginalInfo();
-                projection->updateEccesntricity();
+                projection->updateAfterRead();
             }
 
             parent = new ProjectionElem(nodeFromNum);
@@ -243,10 +242,10 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
         return false;
     }
 
+    // for last loop to be shure that data updated
     if (projection && !projection->getEccentricity())
     {
-        projection->updateOriginalInfo();
-        projection->updateEccesntricity();
+        projection->updateAfterRead();
     }
     return true;
 }

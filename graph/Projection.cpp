@@ -12,7 +12,8 @@ Projection::Projection(size_t nodeId) :
     nodeId(nodeId),
     rootNode(nullptr),
     levelList(nullptr),
-    eccesntricity(0)
+    eccesntricity(0),
+    shortestLoop(0)
 {}
 
 
@@ -41,6 +42,7 @@ void Projection::clear()
     levelList = nullptr;
     rootNode = nullptr;
     eccesntricity = 0;
+    shortestLoop = 0;
 }
 
 
@@ -69,6 +71,13 @@ const ProjectionElem* Projection::getRootNode() const
 size_t Projection::getEccentricity() const
 {
     return eccesntricity;
+}
+
+
+
+size_t Projection::getShortestLoop() const
+{
+    return shortestLoop;
 }
 
 
@@ -174,6 +183,7 @@ void Projection::createProjection(GraphBase &graph)
     delete graphNodes;
 
     createLastLevelProjection(graph);
+    updateShortestLoop();
 }
 
 
@@ -286,6 +296,110 @@ void Projection::updateEccesntricity()
 }
 
 
+
+/**
+ * @brief Projection::updateShortestLoop find in projection shortest loop
+ * and update shortestLoop member
+ */
+void Projection::updateShortestLoop()
+{
+    if (!levelList || !levelList->size())
+        return;
+
+    shortestLoop = SIZE_MAX;
+    size_t origId;
+    size_t endL = levelList->size();
+
+    for(size_t origN = 1; origN < endL; ++origN)
+    {
+        // if start for this we not find less.
+        if (2 * origN >= shortestLoop)
+            break;
+
+        const auto &origL = *levelList->at(origN);
+        // move by level find original node
+        for (auto origIt = origL.begin(), origEnd = origL.end();
+             origIt != origEnd; ++origIt)
+        {
+            if (!origIt->second->isOriginal())
+            {
+                continue;
+            }
+
+            origId = origIt->first;
+            bool find = false;
+            size_t replN = origN;
+            // Skip first level for search - only original nodes
+            if (origN > 1)
+            {
+                // find replica of this node in current level
+                auto replIt = origIt;
+                for (++replIt; replIt != origEnd; ++replIt)
+                {
+                    if (replIt->first == origId &&
+                        !replIt->second->isOriginal())
+                    {
+                        find = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!find)
+            {
+                for(++replN; replN != endL; ++replN)
+                {
+                    const auto &replL = *levelList->at(replN);
+                    const auto replEnd = replL.end();
+                    // find replica of this node in next levels
+                    for (auto replIt = replL.begin(); replIt != replEnd;
+                         ++replIt)
+                    {
+                        if (replIt->first == origId &&
+                            !replIt->second->isOriginal())
+                        {
+                            find = true;
+                            break;
+                        }
+                    }
+                    if (find)
+                        break;
+                }
+            }
+
+            // For this orig node not exist replica
+            if (!find)
+                continue;
+
+            size_t currentN = origN + replN;
+            // minimal loop accessed. less not exist.
+            if (currentN == 3)
+            {
+                shortestLoop = currentN;
+                return;
+            }
+            if (currentN < shortestLoop)
+            {
+                shortestLoop = currentN;
+            }
+
+            // In this place check if replica find in same level origN == replN
+            // so search to deeper have no reason
+            if (2 * origN >= shortestLoop)
+                return;
+        }
+    }
+}
+
+
+
+/**
+ * @brief Projection::getProjectionNodeStat returns vector of projection
+ * level nodes statistic. Vector contains numbers pairs.
+ * First number contain original count, second contain replica count.
+ * Level size is half part size vector.
+ * @return vector of node numbers size of doubled levels count.
+ */
 size_vec* Projection::getProjectionNodeStat() const
 {
     if (!levelList->size())
@@ -305,4 +419,13 @@ size_vec* Projection::getProjectionNodeStat() const
         i += 2;
     }
     return list;
+}
+
+
+
+void Projection::updateAfterRead()
+{
+    updateOriginalInfo();
+    updateEccesntricity();
+    updateShortestLoop();
 }

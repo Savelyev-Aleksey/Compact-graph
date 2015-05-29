@@ -109,6 +109,15 @@ void NodeInfoForm::projectionInfo()
     size_t eccentr = pr->getEccentricity();
     ui->eccentricityLabel->setText(QString::number(eccentr));
 
+    size_t shortLoop = pr->getShortestLoop();
+    QString shortLoopStr("\u221E (inf)");
+    if (shortLoop != SIZE_MAX)
+    {
+        shortLoopStr = QString::number(shortLoop);
+    }
+
+    ui->shortLoopLabel->setText(shortLoopStr);
+
     size_vec* list = pr->getProjectionNodeStat();
     QTableWidget* t = ui->levelTable;
     size_t size = list->size();
@@ -122,9 +131,12 @@ void NodeInfoForm::projectionInfo()
         t->setItem(pos, 0, new QTableWidgetItem(QString::number(pos)) );
         t->setItem(pos, 1, new QTableWidgetItem(QString::number(orig)) );
         t->setItem(pos, 2, new QTableWidgetItem(QString::number(replica)) );
+        t->setItem(pos, 3, new QTableWidgetItem(QString::number(orig+replica)));
     }
+    t->resizeColumnsToContents();
     delete list;
 }
+
 
 
 void NodeInfoForm::createProjection()

@@ -27,7 +27,8 @@ Graph::Graph() :
     shortPath(new ShortPath(*graph)),
     projections(new Projections(*graph)),
     radius(0),
-    diameter(0)
+    diameter(0),
+    girth(0)
 { }
 
 
@@ -61,6 +62,13 @@ size_t Graph::getRadius() const
 size_t Graph::getDiameter() const
 {
     return diameter;
+}
+
+
+
+size_t Graph::getGraphGirth() const
+{
+    return girth;
 }
 
 
@@ -218,6 +226,7 @@ void Graph::updateParametersByProjections()
     }
     radius = min;
     diameter = max;
+    girth = projections->getGraphGirth();
 }
 
 

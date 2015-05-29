@@ -33,8 +33,9 @@ public:
     const ProjectionsList* getList() const;
     GraphBase& getGraph() const;
 
-    const Projection* getProjection(size_t nodeId) const;
+    Projection* getProjection(size_t nodeId) const;
     UlongMap* getEccentriciyStatistic() const;
+    size_t getGraphGirth() const;
 
     void createAllProjections();
     void createProjection(size_t nodeId);

@@ -31,6 +31,7 @@ public:
 
     size_t getRadius() const;
     size_t getDiameter() const;
+    size_t getGraphGirth() const;
 
     void clearGraph();
 
@@ -121,6 +122,7 @@ protected:
 
     size_t radius;
     size_t diameter;
+    size_t girth;
 
 };
 

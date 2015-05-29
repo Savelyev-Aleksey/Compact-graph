@@ -33,6 +33,7 @@ public:
     size_t getId() const;
     size_t levelCount() const;
     size_t getEccentricity() const;
+    size_t getShortestLoop() const;
 
     const ProjectionElem* getRootNode() const;
     size_vec* getProjectionNodeStat() const;
@@ -41,6 +42,7 @@ public:
 
     void updateOriginalInfo();
     void updateEccesntricity();
+    void updateShortestLoop();
 
 protected:
     size_t nodeId;
@@ -48,8 +50,11 @@ protected:
     ProjectionLevelList* levelList;
 
     size_t eccesntricity;
+    size_t shortestLoop;
 
     void createLastLevelProjection(const GraphBase& graph);
+
+    void updateAfterRead();
 
 };
 

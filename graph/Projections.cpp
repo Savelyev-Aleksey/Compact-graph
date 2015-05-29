@@ -53,7 +53,7 @@ GraphBase& Projections::getGraph() const
 
 
 
-const Projection* Projections::getProjection(size_t nodeId) const
+Projection* Projections::getProjection(size_t nodeId) const
 {
     auto it = projectionsList->find(nodeId);
     return it == projectionsList->end() ? nullptr : it->second;
@@ -183,4 +183,23 @@ UlongMap* Projections::getEccentriciyStatistic() const
         }
     }
     return map;
+}
+
+
+
+size_t Projections::getGraphGirth() const
+{
+    size_t min = SIZE_MAX, current;
+    for (const auto &it : *projectionsList)
+    {
+        current = it.second->getShortestLoop();
+        if (current < min)
+        {
+            min = current;
+        }
+        // it's minimal - no looks other
+        if (min == 3)
+            break;
+    }
+    return min;
 }

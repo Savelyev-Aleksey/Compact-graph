@@ -159,18 +159,18 @@
 <context>
     <name>GraphInfoForm</name>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="165"/>
+        <location filename="../../GraphInfoForm.ui" line="223"/>
         <source>Nodes degree statistic</source>
         <translation>Статистика степеней вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="214"/>
+        <location filename="../../GraphInfoForm.ui" line="272"/>
         <source>Degree</source>
         <translation>Степень</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="219"/>
-        <location filename="../../GraphInfoForm.ui" line="361"/>
+        <location filename="../../GraphInfoForm.ui" line="277"/>
+        <location filename="../../GraphInfoForm.ui" line="419"/>
         <source>Count</source>
         <translation>Количество</translation>
     </message>
@@ -180,17 +180,17 @@
         <translation>Параметры графа</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="32"/>
+        <location filename="../../GraphInfoForm.ui" line="45"/>
         <source>Radius:</source>
         <translation>Радиус:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="96"/>
+        <location filename="../../GraphInfoForm.ui" line="109"/>
         <source>Diameter:</source>
         <translation>Диаметр:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="57"/>
+        <location filename="../../GraphInfoForm.ui" line="70"/>
         <source>Before search parameters will be created short paths for each node.
 After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Перед поиском параметров будут созданы кратчайшие пути для каждой вершины.
@@ -198,63 +198,73 @@ After will be found diameter, radius and eccentricity statistic.</source>
     </message>
     <message>
         <location filename="../../GraphInfoForm.ui" line="20"/>
-        <location filename="../../GraphInfoForm.ui" line="235"/>
+        <location filename="../../GraphInfoForm.ui" line="293"/>
         <source>Graph info</source>
         <translation>Инормация о графе</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="61"/>
+        <location filename="../../GraphInfoForm.ui" line="74"/>
         <source>Create short paths</source>
         <translation>Создать кратчайшие пути</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="117"/>
+        <location filename="../../GraphInfoForm.ui" line="144"/>
         <source>Short paths:</source>
         <translation>Кратчайшие пути:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="133"/>
+        <location filename="../../GraphInfoForm.ui" line="153"/>
         <source>Create projections</source>
         <translation>Создать проекции</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="155"/>
+        <location filename="../../GraphInfoForm.ui" line="130"/>
         <source>Projections:</source>
         <translation>Проекции:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="254"/>
+        <location filename="../../GraphInfoForm.ui" line="192"/>
+        <source>Graph degree:</source>
+        <translation>Степень графа:</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="206"/>
+        <source>Graph girth:</source>
+        <translation>Обхват графа:</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="312"/>
         <source>File name:</source>
         <translation>Имя файла:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="261"/>
+        <location filename="../../GraphInfoForm.ui" line="319"/>
         <source>Parameters:</source>
         <translation>Параметры:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="282"/>
+        <location filename="../../GraphInfoForm.ui" line="340"/>
         <source>Node conut:</source>
         <translation>Количество вершин:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="299"/>
+        <location filename="../../GraphInfoForm.ui" line="357"/>
         <source>Edge Count:</source>
         <translation>Количество рёбер:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="322"/>
+        <location filename="../../GraphInfoForm.ui" line="380"/>
         <source>Nodes eccentricity statistic</source>
         <translation>Статистика экцентриситетов вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="183"/>
-        <location filename="../../GraphInfoForm.ui" line="340"/>
+        <location filename="../../GraphInfoForm.ui" line="241"/>
+        <location filename="../../GraphInfoForm.ui" line="398"/>
         <source>Detail info</source>
         <translation>Подробная информация</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="356"/>
+        <location filename="../../GraphInfoForm.ui" line="414"/>
         <source>Eccentricity</source>
         <translation>Экцентриситет</translation>
     </message>
@@ -268,14 +278,13 @@ After will be found diameter, radius and eccentricity statistic.</source>
     </message>
     <message>
         <location filename="../../MainWindow.ui" line="105"/>
-        <source>Open file</source>
-        <translation>Открыть файл</translation>
+        <source>Open</source>
+        <translation>Открыть</translation>
     </message>
     <message>
         <location filename="../../MainWindow.ui" line="152"/>
-        <source>Save to file</source>
-        <translation>Сохранить в
-файл</translation>
+        <source>Save</source>
+        <translation>Сохранить</translation>
     </message>
     <message>
         <location filename="../../MainWindow.ui" line="196"/>
@@ -306,47 +315,52 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Номер вершины:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="62"/>
+        <location filename="../../NodeInfoForm.ui" line="72"/>
         <source>Eccentricity:</source>
         <translation>Экцентриситет:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="76"/>
+        <location filename="../../NodeInfoForm.ui" line="86"/>
         <source>Degree:</source>
         <translation>Степень:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="90"/>
+        <location filename="../../NodeInfoForm.ui" line="100"/>
         <source>Shortest loop:</source>
         <translation>Кратчайший цикл:</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="125"/>
+        <location filename="../../NodeInfoForm.ui" line="146"/>
         <source>Projection</source>
         <translation>Проекция</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="136"/>
+        <location filename="../../NodeInfoForm.ui" line="157"/>
         <source>Create projection</source>
         <translation>Создать проекцию</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="159"/>
+        <location filename="../../NodeInfoForm.ui" line="201"/>
         <source>level</source>
         <translation>уровень</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="164"/>
+        <location filename="../../NodeInfoForm.ui" line="206"/>
         <source>original</source>
         <translation>оригинал</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="169"/>
+        <location filename="../../NodeInfoForm.ui" line="211"/>
         <source>replica</source>
         <translation>реплика</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.ui" line="106"/>
+        <location filename="../../NodeInfoForm.ui" line="216"/>
+        <source>total</source>
+        <translation>всего</translation>
+    </message>
+    <message>
+        <location filename="../../NodeInfoForm.ui" line="118"/>
         <source>Adjacent nodes</source>
         <translation>Смежные вершины</translation>
     </message>
@@ -356,7 +370,7 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Граф пуст.</translation>
     </message>
     <message>
-        <location filename="../../NodeInfoForm.cpp" line="92"/>
+        <location filename="../../NodeInfoForm.cpp" line="93"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>

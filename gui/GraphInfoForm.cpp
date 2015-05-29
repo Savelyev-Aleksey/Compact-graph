@@ -145,6 +145,13 @@ void GraphInfoForm::printGraphParameters()
     {
         eccentrType = 1;
         printEccentriciyStatistic();
+        QString g("\u221E (inf)");
+        size_t girth = graph.getGraphGirth();
+        if (girth != SIZE_MAX)
+        {
+            g = QString::number(girth);
+        }
+        ui->graphGirthLabel->setText(g);
     }
     else if (shortp)
     {
@@ -215,6 +222,8 @@ void GraphInfoForm::printGraphStatistic()
         compact = graph.compactStatistic(map, limit);
         delete map;
     }
+    ui->minDegreeLabel->setText( QString::number(compact->begin()->first) );
+    ui->maxDegreeLabel->setText( QString::number(compact->rbegin()->first) );
 
     printTableStat(compact, ui->degreeStatTable, shrink);
     delete compact;

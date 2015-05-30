@@ -128,7 +128,7 @@ bool GraphReader::readFile(FILE *f, FileTypes::Type typeId)
  */
 bool GraphReader::readEdges(FILE* f, bool readValue)
 {
-    size_t nodeFromNum, nodeToNum, readLine = 0;
+    unsigned nodeFromNum, nodeToNum, readLine = 0;
     float value;
     int count;
     bool isEdgeAdded;
@@ -150,11 +150,11 @@ bool GraphReader::readEdges(FILE* f, bool readValue)
         ++readLine;
         if (readValue)
         {
-            count = fscanf(f, "%zu %zu %f\n", &nodeFromNum, &nodeToNum, &value);
+            count = fscanf(f, "%u %u %f\n", &nodeFromNum, &nodeToNum, &value);
         }
         else
         {
-            count = fscanf(f, "%zu %zu\n", &nodeFromNum, &nodeToNum);
+            count = fscanf(f, "%u %u\n", &nodeFromNum, &nodeToNum);
             value = defaultWeight;
         }
 
@@ -219,7 +219,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
         }
     }
 
-    size_t nodeFromNum, nodeToNum;
+    unsigned nodeFromNum, nodeToNum;
     float value = 0;
     int count;
     fpos_t position;
@@ -227,14 +227,14 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
     unsigned char bracket;
     bool readError = false;
 
-    std::deque <size_t> nodesStack;
+    std::deque <unsigned> nodesStack;
 
     while (!feof(f))
     {
         // If parents not exists so read parent from file
         if (!nodesStack.size())
         {
-            count = fscanf(f, "%zu(", &nodeFromNum);
+            count = fscanf(f, "%u(", &nodeFromNum);
             if (count == -1)
             {
                 continue;
@@ -248,11 +248,11 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
         }
         if (readValue)
         {
-            count = fscanf(f, "%zu[%g]", &nodeToNum, &value);
+            count = fscanf(f, "%u[%g]", &nodeToNum, &value);
         }
         else
         {
-            count = fscanf(f, "%zu", &nodeToNum);
+            count = fscanf(f, "%u", &nodeToNum);
             value = defaultWeight;
         }
 

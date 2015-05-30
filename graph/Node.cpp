@@ -8,7 +8,7 @@
 
 
 
-Node::Node(size_t id) :
+Node::Node(unsigned id) :
     nodeId(id),
     edgeList(new EdgeList)
 {}
@@ -26,14 +26,14 @@ Node::~Node()
 
 
 
-void Node::setId(size_t num)
+void Node::setId(unsigned num)
 {
     nodeId = num;
 }
 
 
 
-size_t Node::getId() const
+unsigned Node::getId() const
 {
     return this->nodeId;
 }
@@ -58,7 +58,7 @@ bool Node::addEdge(Edge* edge)
  * @param nodeToNum - second node id.
  * @return pointer on Edge if exists, else null returned.
  */
-const Edge* Node::getEdge(size_t nodeToNum) const
+const Edge* Node::getEdge(unsigned nodeToNum) const
 {
     auto edgeIterator = edgeList->find(nodeToNum);
     if (edgeIterator == edgeList->end())
@@ -74,7 +74,7 @@ const Edge* Node::getEdge(size_t nodeToNum) const
  * @brief Node::deleteEdge remove pointer from edge list on this edge
  * @param nodeToNum - second node number connected by edge
  */
-void Node::deleteEdgePointer(size_t nodeToNum)
+void Node::deleteEdgePointer(unsigned nodeToNum)
 {
     edgeList->erase(nodeToNum);
 }

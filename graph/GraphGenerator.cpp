@@ -43,9 +43,9 @@ void GraphGenerator::generateHypercube(unsigned dimention, float weight)
     graph->addInfo("DIMENTION", dimentionStr);
     graph->addInfo("WEIGHT", weightStr);
 
-    size_t end = (size_t) pow(2, dimention);
-    size_t distance, onesCount;
-    for (size_t i = 0; i < end; ++i)
+    auto end = (unsigned) pow(2, dimention);
+    unsigned distance, onesCount;
+    for (unsigned i = 0; i < end; ++i)
     {
         graph->addNode(i);
     }
@@ -102,7 +102,7 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
     Node** currrentList = nullptr;
     Node** firstList = nullptr;
 
-    size_t id = 0;
+    unsigned id = 0;
     // Move by circle rotation
     for (unsigned i = 0; i < bigRadius; ++i)
     {

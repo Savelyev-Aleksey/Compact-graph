@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <deque>
 
@@ -99,17 +98,17 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
     shortPath->clear();
     GraphBase& graph = shortPath->getGraph();
 
-    size_t nodeFromNum, nodeToNum, startNode;
+    unsigned nodeFromNum, nodeToNum, startNode;
     float value = 0;
     int count;
     fpos_t position;
     unsigned outWarnings = options & (unsigned) Option::OUT_WARNINGS;
     unsigned char bracket;
     bool readError = false;
-    size_t indent;
+    unsigned indent;
 
     ShortPathElem* search, *parent, *elem;
-    std::deque <size_t> nodesStack;
+    std::deque <unsigned> nodesStack;
     std::deque <ShortPathElem*> nodesElemStack;
 
     while (!feof(fp))
@@ -117,7 +116,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
         // If parents not exists so read parent from file
         if (!nodesStack.size())
         {
-            count = fscanf(fp, "%zu(", &nodeFromNum);
+            count = fscanf(fp, "%u(", &nodeFromNum);
             if (count == 0)
             {
                 readError = true;
@@ -138,7 +137,7 @@ bool ShortPathReader::readShortPath(FILE* fp, FileTypes::Type typeId)
             nodesStack.push_front(nodeFromNum);
             nodesElemStack.push_front(parent);
         }
-        count = fscanf(fp, "%zu[%g]", &nodeToNum, &value);
+        count = fscanf(fp, "%u[%g]", &nodeToNum, &value);
 
         // If readed add new node.
         if (count == 2)

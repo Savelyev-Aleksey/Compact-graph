@@ -24,7 +24,7 @@ GraphWorker::~GraphWorker()
 
 
 
-void GraphWorker::progressDialog(size_t size, const QString& title,
+void GraphWorker::progressDialog(unsigned size, const QString& title,
                                  std::function<void ()> progressFn)
 {
     QString titleP = title + QString(" %1");
@@ -38,7 +38,7 @@ void GraphWorker::progressDialog(size_t size, const QString& title,
     std::thread creator(progressFn);
     creator.detach();
 
-    size_t current;
+    unsigned current;
     int value;
     do
     {
@@ -58,7 +58,7 @@ void GraphWorker::progressDialog(size_t size, const QString& title,
 
 void GraphWorker::generateAllShortPaths()
 {
-    size_t size = graph->nodeCount();
+    unsigned size = graph->nodeCount();
     if (!size)
         return;
     --size;
@@ -76,7 +76,7 @@ void GraphWorker::generateAllShortPaths()
 
 void GraphWorker::createAllProjections()
 {
-    size_t size = graph->nodeCount();
+    unsigned size = graph->nodeCount();
     if (!size)
         return;
     --size;
@@ -94,7 +94,7 @@ void GraphWorker::createAllProjections()
 
 bool GraphWorker::writeEdges(const char *fileName, cuint options)
 {
-    size_t size = graph->nodeCount();
+    unsigned size = graph->nodeCount();
 
     QString title = QObject::tr("Writing edges of node");
     bool result = false;
@@ -110,7 +110,7 @@ bool GraphWorker::writeEdges(const char *fileName, cuint options)
 
 bool GraphWorker::writeBracketsFlat(const char *fileName, cuint options)
 {
-    size_t size = graph->nodeCount();
+    unsigned size = graph->nodeCount();
 
     QString title = QObject::tr("Writing adjacency list");
     bool result = false;
@@ -125,10 +125,10 @@ bool GraphWorker::writeBracketsFlat(const char *fileName, cuint options)
 
 
 
-bool GraphWorker::writeBrackets(const char *fileName, const size_t startNodeId,
-                                const size_t pathLimit, cuint options)
+bool GraphWorker::writeBrackets(const char *fileName, cuint startNodeId,
+                                cuint pathLimit, cuint options)
 {
-    size_t size = graph->getNode(startNodeId)->getEdgeCount();
+    unsigned size = graph->getNode(startNodeId)->getEdgeCount();
     if (!size)
         return false;
     --size;
@@ -150,7 +150,7 @@ bool GraphWorker::writeBrackets(const char *fileName, const size_t startNodeId,
 
 bool GraphWorker::saveProjections(const char *fileName, cuint options)
 {
-    size_t size = projectionsCount();
+    unsigned size = projectionsCount();
     if (!size)
         return false;
     --size;
@@ -168,7 +168,7 @@ bool GraphWorker::saveProjections(const char *fileName, cuint options)
 
 
 
-bool GraphWorker::saveProjection(const char *fileName, size_t rootNode,
+bool GraphWorker::saveProjection(const char *fileName, cuint rootNode,
                                  cuint options)
 {
     const Projection* pr = getProjection(rootNode);
@@ -176,7 +176,7 @@ bool GraphWorker::saveProjection(const char *fileName, size_t rootNode,
     {
         return false;
     }
-    size_t size = pr->levelCount();
+    unsigned size = pr->levelCount();
     if (!size)
         return false;
     --size;
@@ -201,19 +201,19 @@ bool GraphWorker::saveProjection(const char *fileName, size_t rootNode,
  * @param info - info string to add info if node not found.
  * @return node pointer if found else nullptr
  */
-const Node* GraphWorker::findNode(size_t nodeId, QString& info) const
+const Node* GraphWorker::findNode(unsigned nodeId, QString& info) const
 {
     const Node* node = ::Graph::findNode(nodeId);
     if (node)
         return node;
     info += QObject::tr("Node %1 not found.").arg(nodeId);
     info += ' ';
-    size_vec *nodes = findNearNode(nodeId);
+    uint_vec *nodes = findNearNode(nodeId);
     if (nodes)
     {
         info += QObject::tr("Nearest:");
         info += ' ';
-        for(size_t i = 0; i < nodes->size(); ++i)
+        for(unsigned i = 0; i < nodes->size(); ++i)
         {
             if (i > 0)
                 info += ", ";

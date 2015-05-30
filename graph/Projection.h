@@ -15,14 +15,14 @@ class ProjectionElem;
 
 
 
-typedef std::multimap <size_t, ProjectionElem*> ProjectionLevelElem;
+typedef std::multimap <unsigned, ProjectionElem*> ProjectionLevelElem;
 typedef std::deque <ProjectionLevelElem*> ProjectionLevelList;
 
 
 class Projection
 {
 public:
-    Projection(size_t nodeId);
+    Projection(unsigned nodeId);
     ~Projection();
 
     friend bool ProjectionsReader::readProjections(FILE* fp,
@@ -30,13 +30,13 @@ public:
 
     void clear();
 
-    size_t getId() const;
-    size_t levelCount() const;
-    size_t getEccentricity() const;
-    size_t getShortestLoop() const;
+    unsigned getId() const;
+    unsigned levelCount() const;
+    unsigned getEccentricity() const;
+    unsigned getShortestLoop() const;
 
     const ProjectionElem* getRootNode() const;
-    size_vec* getProjectionNodeStat() const;
+    uint_vec* getProjectionNodeStat() const;
 
     void createProjection(GraphBase& graph);
 
@@ -45,12 +45,12 @@ public:
     void updateShortestLoop();
 
 protected:
-    size_t nodeId;
+    unsigned nodeId;
     ProjectionElem* rootNode;
     ProjectionLevelList* levelList;
 
-    size_t eccesntricity;
-    size_t shortestLoop;
+    unsigned eccesntricity;
+    unsigned shortestLoop;
 
     void createLastLevelProjection(const GraphBase& graph);
 

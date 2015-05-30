@@ -39,7 +39,7 @@ void Edge::setValue(float value)
  * @param nodeNum - node id
  * @return node pointer
  */
-Node* Edge::nodeElem(size_t nodeNum)
+Node* Edge::nodeElem(unsigned nodeNum)
 {
     if (nodeNum == node1->getId())
     {
@@ -81,7 +81,7 @@ Node* Edge::nodeElem2()
  * @param fromNodeNum - Node id from which looks
  * @return node id
  */
-size_t Edge::nodeToNum(size_t nodeFromNum)
+unsigned Edge::nodeToNum(unsigned nodeFromNum)
 {
     return node1->getId() == nodeFromNum ? node2->getId() : node1->getId();
 }
@@ -93,7 +93,7 @@ size_t Edge::nodeToNum(size_t nodeFromNum)
  * @param fromNodeNum - Node id from which looks
  * @return node pointer
  */
-Node* Edge::nodeTo(size_t nodeFromNum)
+Node* Edge::nodeTo(unsigned nodeFromNum)
 {
     return node1->getId() == nodeFromNum ? node2 : node1;
 }
@@ -119,7 +119,7 @@ void Edge::deleteEdge()
  * removing first node
  * @param nodeFromNum - first node num
  */
-void Edge::deleteEdge(size_t nodeFromNum)
+void Edge::deleteEdge(unsigned nodeFromNum)
 {
     Node* nodeTo = nodeFromNum == node1->getId() ? node2 : node1;
     nodeTo->deleteEdgePointer(nodeFromNum);

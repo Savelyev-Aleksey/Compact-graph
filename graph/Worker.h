@@ -15,22 +15,22 @@ public:
 
     void startProcess();
     void startProcess(Worker* newWorker);
-    void startProcess(size_t begin, size_t end);
+    void startProcess(unsigned begin, unsigned end);
     void interruptProcess();
 
-    size_t getProgress() const;
-    size_t getProgressEnd() const;
+    unsigned getProgress() const;
+    unsigned getProgressEnd() const;
 
 protected:
     void setWorker(Worker* newWorker);
     void completeProcess();
-    void updateProgress(size_t current);
+    void updateProgress(unsigned current);
 
 private:
     bool processed;
     bool interrupted;
-    size_t progress;
-    size_t progressEnd;
+    unsigned progress;
+    unsigned progressEnd;
     Worker* worker;
 };
 

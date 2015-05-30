@@ -2,7 +2,7 @@
 
 
 
-ProjectionElem::ProjectionElem(size_t nodeId) :
+ProjectionElem::ProjectionElem(unsigned nodeId) :
     nodeId(nodeId),
     parent(nullptr),
     originalElem(nullptr),
@@ -19,14 +19,14 @@ ProjectionElem::~ProjectionElem()
 
 
 
-size_t ProjectionElem::getId() const
+unsigned ProjectionElem::getId() const
 {
     return nodeId;
 }
 
 
 
-size_t ProjectionElem::listCount() const
+unsigned ProjectionElem::listCount() const
 {
     if (!listElem)
         return 0;
@@ -84,7 +84,7 @@ bool ProjectionElem::isEmpty() const
 
 
 
-ProjectionElem* ProjectionElem::addElem(size_t nodeId)
+ProjectionElem* ProjectionElem::addElem(unsigned nodeId)
 {
     if (!listElem)
         listElem = new ProjectionElemMap;
@@ -113,7 +113,7 @@ void ProjectionElem::eraseElem(const ProjectionElemMap::const_iterator pos)
  * @return node pointer if node already in lower projections
  * else nullptr.
  */
-const ProjectionElem* ProjectionElem::findInParents(size_t searchId) const
+const ProjectionElem* ProjectionElem::findInParents(unsigned searchId) const
 {
     const ProjectionElem* el = this->parent;
     while (el)

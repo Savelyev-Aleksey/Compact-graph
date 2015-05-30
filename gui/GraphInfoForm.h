@@ -27,7 +27,7 @@ private:
 
     unsigned short eccentrType;
 
-    void printTableStat(const UlongMap* map, QTableWidget* table, bool shrink);
+    void printTableStat(const UintMap* map, QTableWidget* table, bool shrink);
 
     void printGraphInfo();
     void printGraphParameters();

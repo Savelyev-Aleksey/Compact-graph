@@ -13,10 +13,10 @@ class ShortPathRootElem;
 class GraphBase;
 class Node;
 
-typedef std::pair <const size_t, ShortPathElem*> PathPair;
+typedef std::pair <cuint, ShortPathElem*> PathPair;
 // first hierarchy struct, second basic map
-typedef std::map  <size_t, ShortPathRootElem*> RootPathList;
-typedef std::deque <size_t> NodeIdDeque;
+typedef std::map  <unsigned, ShortPathRootElem*> RootPathList;
+typedef std::deque <unsigned> NodeIdDeque;
 typedef std::deque <const Node *> NodeDeque;
 
 
@@ -28,32 +28,33 @@ public:
     ~ShortPath();
 
     void generateAllShortPaths(float pathLimit);
-    void generateShortPath(const size_t startNodeId, float pathLimit = 0);
-    bool isPathExist(size_t nodeId) const;
+    void generateShortPath(const unsigned startNodeId, float pathLimit = 0);
+    bool isPathExist(unsigned nodeId) const;
 
     GraphBase& getGraph() const;
     RootPathList* getShortPathNodes();
 
-    size_t getShortPathCount() const;
+    unsigned getShortPathCount() const;
 
-    UlongMap* getEccentriciyStatistic() const;
+    UintMap* getEccentriciyStatistic() const;
 
-    void clearPath(size_t nodeId);
+    void clearPath(unsigned nodeId);
     void clear();
 
     bool isEmpty() const;
 
-    ShortPathRootElem* initShortPath(size_t startNodeId);
+    ShortPathRootElem* initShortPath(unsigned startNodeId);
+    void initShortAllPaths();
 
 protected:
     GraphBase* graph;
     RootPathList *shortPathNodes;
 
 
-    bool isNodeForVisit(const NodeDeque& list, size_t nodeId) const;
+    bool isNodeForVisit(const NodeDeque& list, unsigned nodeId) const;
     void createPath(NodeDeque& nodesToVisit, ShortPathRootElem* rootElem,
                     float pathLimit);
-    void updateSubpath(PathPair* pair, float difference, size_t indent,
+    void updateSubpath(PathPair* pair, float difference, unsigned indent,
                        NodeDeque& nodesToVisit);
 
 };

@@ -6,42 +6,42 @@
 
 class ShortPathElem;
 
-typedef std::map <size_t, ShortPathElem*> PathList;
+typedef std::map <unsigned, ShortPathElem*> PathList;
 typedef std::pair<PathList::const_iterator,
                   PathList::const_iterator> PathListItPair;
 
 class ShortPathElem
 {
 public:
-    ShortPathElem(size_t nodeId, float weight, size_t indent);
+    ShortPathElem(unsigned nodeId, float weight, unsigned indent);
     ~ShortPathElem();
 
-    ShortPathElem* addNodeElem(size_t nodeNum, float weight, size_t indent);
-    void addNodeElem(size_t nodeNum, ShortPathElem* pathElem);
-    bool popNodeElem(size_t nodeNum);
+    ShortPathElem* addNodeElem(unsigned nodeNum, float weight, unsigned indent);
+    void addNodeElem(unsigned nodeNum, ShortPathElem* pathElem);
+    bool popNodeElem(unsigned nodeNum);
 
     void setWeight(float newWeight);
     float getWeight() const;
 
-    void setIndent(size_t newIndent);
-    size_t getIndent() const;
+    void setIndent(unsigned newIndent);
+    unsigned getIndent() const;
 
     void setParent(ShortPathElem* newParent);
     ShortPathElem* getParent() const;
 
-    ShortPathElem* findElem(size_t nodeNum) const;
+    ShortPathElem* findElem(unsigned nodeNum) const;
 
     PathList* getPathList() const;
 
-    size_t size() const;
+    unsigned size() const;
 
 protected:
 
     ShortPathElem* parent;
     PathList* list;
-    size_t nodeId;
+    unsigned nodeId;
     float weight;
-    size_t indent;
+    unsigned indent;
 
 };
 

@@ -13,8 +13,8 @@
 class Node;
 class Edge;
 
-typedef std::map <size_t, Node*> NodeMap;
-typedef std::set <size_t> NodeIdSet;
+typedef std::map <unsigned, Node*> NodeMap;
+typedef std::set <unsigned> NodeIdSet;
 typedef std::deque < std::pair<char*, char*> > InfoDeque;
 
 
@@ -34,21 +34,21 @@ public:
 
     bool isEmpty() const;
 
-    size_t nodeCount() const;
-    size_t edgeCount() const;
+    unsigned nodeCount() const;
+    unsigned edgeCount() const;
 
-          Node* getNodeOrCreate(size_t nodeNum);
-    const Node* getNode(size_t nodeNum) const;
-    const Edge* getEdge(size_t nodeFromNum, size_t nodeToNum) const;
+          Node* getNodeOrCreate(unsigned nodeNum);
+    const Node* getNode(unsigned nodeNum) const;
+    const Edge* getEdge(unsigned nodeFromNum, unsigned nodeToNum) const;
     NodeMap* getNodeMap() const;
     NodeIdSet* getNodeIds();
 
-    UlongMap* getNodeDegreeStatistic() const;
+    UintMap* getNodeDegreeStatistic() const;
 
-    bool addEdge(size_t nodeFromNum, size_t nodeToNum, float value);
+    bool addEdge(unsigned nodeFromNum, unsigned nodeToNum, float value);
     bool addEdge(Node* nodeFrom, Node* nodeTo, float value);
-    bool addNode(size_t nodeNum);
-    Node *newNode(size_t nodeNum);
+    bool addNode(unsigned nodeNum);
+    Node *newNode(unsigned nodeNum);
 
     void addInfo(const char *str);
     void addInfo(const char *name, const char* value);
@@ -63,7 +63,7 @@ protected:
     NodeMap* nodeList;
     InfoDeque* info;
 
-    size_t edgeSize;
+    unsigned edgeSize;
 
     void clearInfo();
     void clearNodes();

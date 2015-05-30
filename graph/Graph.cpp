@@ -1,4 +1,4 @@
-
+#include <cstdint>
 #include <iostream>
 #include <functional>
 #include <cmath>
@@ -52,21 +52,21 @@ void Graph::clearGraph()
 
 
 
-size_t Graph::getRadius() const
+unsigned Graph::getRadius() const
 {
     return radius;
 }
 
 
 
-size_t Graph::getDiameter() const
+unsigned Graph::getDiameter() const
 {
     return diameter;
 }
 
 
 
-size_t Graph::getGraphGirth() const
+unsigned Graph::getGraphGirth() const
 {
     return girth;
 }
@@ -77,7 +77,7 @@ size_t Graph::getGraphGirth() const
  * @brief Graph::getNodeDegreeStatistic - Return graph degree statistic.
  * @return map of Node degree and matched count.
  */
-UlongMap* Graph::getNodeDegreeStatistic() const
+UintMap* Graph::getNodeDegreeStatistic() const
 {
     return graph->getNodeDegreeStatistic();
 }
@@ -89,13 +89,13 @@ UlongMap* Graph::getNodeDegreeStatistic() const
  * Show eccentricity and mathed count in graph.
  * @return map with eccentricity and matched count.
  */
-UlongMap* Graph::getEccentriciyStatisticByShortPaths() const
+UintMap* Graph::getEccentriciyStatisticByShortPaths() const
 {
     return shortPath->getEccentriciyStatistic();
 }
 
 
-UlongMap* Graph::getEccentriciyStatisticByProjections() const
+UintMap* Graph::getEccentriciyStatisticByProjections() const
 {
     return projections->getEccentriciyStatistic();
 }
@@ -111,30 +111,30 @@ UlongMap* Graph::getEccentriciyStatisticByProjections() const
  * @param limit - limit lines for map
  * @return copy of map shrinked to limit size
  */
-UlongMap* Graph::compactStatistic(UlongMap *map, unsigned short limit) const
+UintMap* Graph::compactStatistic(UintMap *map, unsigned short limit) const
 {
     if (!map || limit < 3)
     {
         return nullptr;
     }
-    size_t mapSize = map->size();
+    unsigned mapSize = map->size();
     if (mapSize < 3 || mapSize <= limit)
     {
-        return new UlongMap(*map);
+        return new UintMap(*map);
     }
-    UlongMap* compact = new UlongMap();
+    UintMap* compact = new UintMap();
 
-    size_t count = mapSize - 2;
+    unsigned count = mapSize - 2;
     unsigned short lines = limit - 2;
-    size_t i = mapSize - 1;
-    size_t pos, current = i;
-    UlongMap::const_reverse_iterator it = map->rbegin(), end = map->rend();
-    UlongMap::iterator compactIt;
+    unsigned i = mapSize - 1;
+    unsigned pos, current = i;
+    UintMap::const_reverse_iterator it = map->rbegin(), end = map->rend();
+    UintMap::iterator compactIt;
     compact->insert(*it);
 
     for (++it, --i; it != end; ++it, --i)
     {
-        pos = static_cast<size_t>( std::ceil( (double) i / count * lines ) );
+        pos = static_cast<unsigned>( std::ceil( (double) i / count * lines ) );
         if (pos != current)
         {
             current = pos;
@@ -153,16 +153,16 @@ UlongMap* Graph::compactStatistic(UlongMap *map, unsigned short limit) const
 
 
 
-size_t Graph::statisticParamSum(const UlongMap *map) const
+unsigned Graph::statisticParamSum(const UintMap *map) const
 {
     if (!map)
     {
         return 0;
     }
-    size_t sum = 0;
-    for (auto it = map->begin(), end = map->end(); it != end; ++it)
+    unsigned sum = 0;
+    for (const auto &it : *map)
     {
-        sum += it->second;
+        sum += it.second;
     }
     return sum;
 }
@@ -181,7 +181,7 @@ void Graph::updateParametersByShortPaths()
         return;
     }
     auto it = nodes->begin(), end = nodes->end();
-    size_t min, max, eccentr;
+    unsigned min, max, eccentr;
     min = max = it->second->getEccentricity();
     for (++it; it != end; ++it)
     {
@@ -212,7 +212,7 @@ void Graph::updateParametersByProjections()
         return;
     }
     auto it = nodes->begin(), end = nodes->end();
-    size_t min, max, eccentr;
+    unsigned min, max, eccentr;
     min = max = it->second->getEccentricity();
     for (++it; it != end; ++it)
     {
@@ -275,8 +275,8 @@ bool Graph::writeBracketsFlat(const char* fileName, cuint options)
  * @param options - available options look in GraphWriter::writeBrackets.
  * @return - true if file accessed to write and graph written.
  */
-bool Graph::writeBrackets(const char* fileName, const size_t startNodeId,
-                          const size_t pathLimit, cuint options)
+bool Graph::writeBrackets(const char* fileName, cuint startNodeId,
+                          cuint pathLimit, cuint options)
 {
     GraphWriter writer(*graph);
     startProcess(&writer);
@@ -323,14 +323,14 @@ bool Graph::isGraphEmpty() const
 
 
 
-size_t Graph::nodeCount() const
+unsigned Graph::nodeCount() const
 {
     return graph->nodeCount();
 }
 
 
 
-size_t Graph::edgeCount() const
+unsigned Graph::edgeCount() const
 {
     return graph->edgeCount();
 }
@@ -344,21 +344,21 @@ bool Graph::isShortPathEmpty() const
 
 
 
-bool Graph::isPathExist(size_t nodeId) const
+bool Graph::isPathExist(unsigned nodeId) const
 {
     return shortPath->isPathExist(nodeId);
 }
 
 
 
-const Node* Graph::findNode(size_t nodeId) const
+const Node* Graph::findNode(unsigned nodeId) const
 {
     return graph->getNode(nodeId);
 }
 
 
 
-size_t Graph::shortPathsCount() const
+unsigned Graph::shortPathsCount() const
 {
     return shortPath->getShortPathCount();
 }
@@ -383,7 +383,7 @@ void Graph::generateAllShortPaths(float pathLimit)
  * first no greater nodeId - 5
  * last no less nodeId + 5
  */
-size_vec* Graph::findNearNode(size_t nodeId) const
+uint_vec* Graph::findNearNode(unsigned nodeId) const
 {
     NodeMap* list = graph->getNodeMap();
     if (!list->size())
@@ -391,14 +391,14 @@ size_vec* Graph::findNearNode(size_t nodeId) const
         return nullptr;
     }
 
-    size_t start = nodeId < 5 ? 0 : nodeId - 5;
-    size_t end = nodeId > SIZE_MAX - 5 ? SIZE_MAX : nodeId + 5;
+    unsigned start = nodeId < 5 ? 0 : nodeId - 5;
+    unsigned end = nodeId > UINT32_MAX - 5 ? UINT32_MAX : nodeId + 5;
     auto itLess = list->lower_bound(start);
     if (itLess == list->end())
         --itLess;
     auto itMore = list->upper_bound(end);
 
-    size_vec* nodes = new size_vec;
+    uint_vec* nodes = new uint_vec;
     for (; itLess != itMore; ++itLess)
     {
         nodes->push_back(itLess->first);
@@ -587,21 +587,21 @@ void Graph::createAllProjections()
  * @brief Graph::createProjection create one projection for nodeId node.
  * @param nodeId - node for which will create projection
  */
-void Graph::createProjection(size_t nodeId)
+void Graph::createProjection(unsigned nodeId)
 {
     projections->createProjection(nodeId);
 }
 
 
 
-bool Graph::isProjectionExist(size_t nodeId) const
+bool Graph::isProjectionExist(unsigned nodeId) const
 {
     return projections->isProjectionExist(nodeId);
 }
 
 
 
-size_t Graph::projectionsCount() const
+unsigned Graph::projectionsCount() const
 {
     return projections->size();
 }
@@ -636,7 +636,7 @@ bool Graph::saveProjections(const char* fileName, cuint options)
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
-bool Graph::saveProjection(const char* fileName, size_t rootNode,
+bool Graph::saveProjection(const char* fileName, unsigned rootNode,
                            cuint options)
 {
     ProjectionsWriter writer(*projections);
@@ -648,7 +648,7 @@ bool Graph::saveProjection(const char* fileName, size_t rootNode,
 
 
 
-const Projection* Graph::getProjection(size_t nodeId) const
+const Projection* Graph::getProjection(unsigned nodeId) const
 {
     return projections->getProjection(nodeId);
 }

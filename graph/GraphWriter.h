@@ -19,15 +19,15 @@ public:
                     cuint options = (cuint) Option::PRINT_VALUE);
     bool writeBracketsFlat(const char* fileName,
                            cuint options = (cuint) Option::PRINT_VALUE);
-    bool writeBrackets(const char* fileName, const size_t startNodeId,
-                       const size_t pathLimit = 0,
+    bool writeBrackets(const char* fileName, cuint startNodeId,
+                       cuint pathLimit = 0,
                        cuint options = (cuint) Option::PRINT_VALUE);
 
 protected:
     const GraphBase* graph;
 
     FILE* openFile(const char* fileName);
-    bool isNodeVisited(const std::deque<size_t> &list, size_t nodeId) const;
+    bool isNodeVisited(const std::deque<unsigned> &list, unsigned nodeId) const;
 };
 
 #endif // GRAPHWRITER_H

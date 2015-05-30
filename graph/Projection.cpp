@@ -1,4 +1,5 @@
 #include <set>
+#include <cstdint>
 
 #include "Projection.h"
 #include "ProjectionElem.h"
@@ -8,7 +9,7 @@
 
 
 
-Projection::Projection(size_t nodeId) :
+Projection::Projection(unsigned nodeId) :
     nodeId(nodeId),
     rootNode(nullptr),
     levelList(nullptr),
@@ -29,7 +30,7 @@ void Projection::clear()
 {
     if (!levelList)
         return;
-    for(size_t i = levelList->size(); i > 0 ; --i)
+    for(unsigned i = levelList->size(); i > 0 ; --i)
     {
         auto *level = levelList->at(i - 1);
         for (auto &it : *level)
@@ -47,14 +48,14 @@ void Projection::clear()
 
 
 
-size_t Projection::getId() const
+unsigned Projection::getId() const
 {
     return nodeId;
 }
 
 
 
-size_t Projection::levelCount() const
+unsigned Projection::levelCount() const
 {
     return levelList->size();
 }
@@ -68,14 +69,14 @@ const ProjectionElem* Projection::getRootNode() const
 
 
 
-size_t Projection::getEccentricity() const
+unsigned Projection::getEccentricity() const
 {
     return eccesntricity;
 }
 
 
 
-size_t Projection::getShortestLoop() const
+unsigned Projection::getShortestLoop() const
 {
     return shortestLoop;
 }
@@ -111,7 +112,7 @@ void Projection::createProjection(GraphBase &graph)
     graphNodes->erase(nodeId);
 
     ProjectionLevelElem* parentLevel;
-    size_t projectionLevel = 0;
+    unsigned projectionLevel = 0;
     bool isComlpete = false;
 
     while (!isComlpete)
@@ -132,7 +133,7 @@ void Projection::createProjection(GraphBase &graph)
             const EdgeList* edgeList = node->getEdges();
             for (const auto &edgeIt : *edgeList)
             {
-                size_t curId = edgeIt.first;
+                unsigned curId = edgeIt.first;
                 // skip node if already it's parent in path
                 if (parent->findInParents(curId))
                     continue;
@@ -205,18 +206,18 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
     // need to add new level for add edge info between together
     if (nodes.size() > 1)
     {
-        size_t size = nodes.size();
+        unsigned size = nodes.size();
         ProjectionLevelElem* curLevel = new ProjectionLevelElem;
-        for(size_t i = 0; i < size - 1; ++i)
+        for(unsigned i = 0; i < size - 1; ++i)
         {
             ProjectionElem* elem = nodes.at(i);
-            for (size_t j = i + 1; j < size; ++j)
+            for (unsigned j = i + 1; j < size; ++j)
             {
                ProjectionElem* elem2 = nodes.at(j);
                if ( graph.getEdge(elem->getId(), elem2->getId()) )
                {
                    // Add second elem in first
-                   size_t curId = elem2->getId();
+                   unsigned curId = elem2->getId();
                    // insert elem as child in parent elem
                    ProjectionElem* el = elem->addElem(curId);
                    el->setOriginal(elem2);
@@ -306,11 +307,11 @@ void Projection::updateShortestLoop()
     if (!levelList || !levelList->size())
         return;
 
-    shortestLoop = SIZE_MAX;
-    size_t origId;
-    size_t endL = levelList->size();
+    shortestLoop = UINT32_MAX;
+    unsigned origId;
+    unsigned endL = levelList->size();
 
-    for(size_t origN = 1; origN < endL; ++origN)
+    for(unsigned origN = 1; origN < endL; ++origN)
     {
         // if start for this we not find less.
         if (2 * origN >= shortestLoop)
@@ -328,7 +329,7 @@ void Projection::updateShortestLoop()
 
             origId = origIt->first;
             bool find = false;
-            size_t replN = origN;
+            unsigned replN = origN;
             // Skip first level for search - only original nodes
             if (origN > 1)
             {
@@ -371,7 +372,7 @@ void Projection::updateShortestLoop()
             if (!find)
                 continue;
 
-            size_t currentN = origN + replN;
+            unsigned currentN = origN + replN;
             // minimal loop accessed. less not exist.
             if (currentN == 3)
             {
@@ -400,13 +401,13 @@ void Projection::updateShortestLoop()
  * Level size is half part size vector.
  * @return vector of node numbers size of doubled levels count.
  */
-size_vec* Projection::getProjectionNodeStat() const
+uint_vec* Projection::getProjectionNodeStat() const
 {
     if (!levelList->size())
         return nullptr;
 
-    size_t i = 0;
-    size_vec* list = new size_vec(levelList->size() * 2, 0);
+    unsigned i = 0;
+    uint_vec* list = new uint_vec(levelList->size() * 2, 0);
     for (const auto &level : *levelList)
     {
         for (const auto &it : *level)

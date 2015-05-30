@@ -77,7 +77,7 @@ void Worker::completeProcess()
 
 
 
-void Worker::startProcess(size_t begin, size_t end)
+void Worker::startProcess(unsigned begin, unsigned end)
 {
     interrupted = false;
     processed = true;
@@ -87,7 +87,7 @@ void Worker::startProcess(size_t begin, size_t end)
 
 
 
-void Worker::updateProgress(size_t current)
+void Worker::updateProgress(unsigned current)
 {
     progress = current;
 }
@@ -101,7 +101,7 @@ void Worker::setWorker(Worker *newWorker)
 
 
 
-size_t Worker::getProgress() const
+unsigned Worker::getProgress() const
 {
     if (worker)
         return worker->getProgress();
@@ -110,7 +110,7 @@ size_t Worker::getProgress() const
 
 
 
-size_t Worker::getProgressEnd() const
+unsigned Worker::getProgressEnd() const
 {
     if (worker)
         return worker->getProgressEnd();

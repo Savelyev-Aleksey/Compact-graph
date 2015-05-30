@@ -89,7 +89,7 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
     QString info;
     info = tr("File type = %1\n").arg(QLatin1String(typeIdStr.trimmed()));
 
-    size_t lines = 1;
+    unsigned long lines = 1;
     QByteArray text;
     QByteArray example;
 

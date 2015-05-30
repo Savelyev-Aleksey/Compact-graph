@@ -5,7 +5,7 @@
 
 
 
-ShortPathElem::ShortPathElem(size_t nodeId, float weight, size_t indent) :
+ShortPathElem::ShortPathElem(unsigned nodeId, float weight, unsigned indent) :
     parent(nullptr),
     list(nullptr),
     nodeId(nodeId),
@@ -22,7 +22,7 @@ ShortPathElem::~ShortPathElem()
 
 
 
-size_t ShortPathElem::size() const
+unsigned ShortPathElem::size() const
 {
     if (!list)
         return 0;
@@ -45,13 +45,13 @@ float ShortPathElem::getWeight() const
 
 
 
-void ShortPathElem::setIndent(size_t newIndent)
+void ShortPathElem::setIndent(unsigned newIndent)
 {
     indent = newIndent;
 }
 
 
-size_t ShortPathElem::getIndent() const
+unsigned ShortPathElem::getIndent() const
 {
     return indent;
 }
@@ -78,8 +78,8 @@ ShortPathElem* ShortPathElem::getParent() const
  * @param weight - Total weight from root node to current elem
  * @return true if inserted, false if already was inserted
  */
-ShortPathElem* ShortPathElem::addNodeElem(size_t nodeNum, float weight,
-                                          size_t indent)
+ShortPathElem* ShortPathElem::addNodeElem(unsigned nodeNum, float weight,
+                                          unsigned indent)
 {
     // Lazy init
     if (!list)
@@ -105,7 +105,7 @@ ShortPathElem* ShortPathElem::addNodeElem(size_t nodeNum, float weight,
  * @param pathElem - pointer on hierarchy placed node parent in which can seek
  * this elem
  */
-void ShortPathElem::addNodeElem(size_t nodeNum, ShortPathElem *pathElem)
+void ShortPathElem::addNodeElem(unsigned nodeNum, ShortPathElem *pathElem)
 {
     if (!list)
     {
@@ -121,7 +121,7 @@ void ShortPathElem::addNodeElem(size_t nodeNum, ShortPathElem *pathElem)
  * @param nodeNum - Removing node id
  * @return true if removed, false otherwise
  */
-bool ShortPathElem::popNodeElem(size_t nodeNum)
+bool ShortPathElem::popNodeElem(unsigned nodeNum)
 {
     if (!list)
     {
@@ -143,7 +143,7 @@ bool ShortPathElem::popNodeElem(size_t nodeNum)
  * @param nodeNum - searched nodeElem id
  * @return pointer on ShortPathElem or null if not found
  */
-ShortPathElem* ShortPathElem::findElem(size_t nodeNum) const
+ShortPathElem* ShortPathElem::findElem(unsigned nodeNum) const
 {
     if (!list)
     {

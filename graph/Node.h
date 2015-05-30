@@ -7,7 +7,7 @@
 
 class Edge;
 
-typedef std::map<size_t, Edge *> EdgeList;
+typedef std::map<unsigned, Edge *> EdgeList;
 typedef std::pair<EdgeList::const_iterator, EdgeList::const_iterator>
         EdgeListPairIt;
 typedef std::deque < std::pair<float, Edge*> > WeightedEdges;
@@ -20,21 +20,21 @@ typedef std::deque < std::pair<float, Edge*> > WeightedEdges;
  */
 class Node {
 public:
-    Node(size_t id);
+    Node(unsigned id);
     ~Node();
 
-    size_t  getId() const;
-    void setId(size_t num);
+    unsigned  getId() const;
+    void setId(unsigned num);
     bool addEdge(Edge* edge);
-    const Edge* getEdge(size_t nodeToNum) const;
+    const Edge* getEdge(unsigned nodeToNum) const;
     const EdgeList* getEdges() const;
     size_t getEdgeCount() const;
-    void deleteEdgePointer(size_t nodeToNum);
+    void deleteEdgePointer(unsigned nodeToNum);
 
     WeightedEdges* getValueSortedEdges();
 
 protected:
-    size_t nodeId;
+    unsigned nodeId;
     /**
      * @brief edgeList - map contains list of edges
      * by pair <toNodeNum, Edge pointer>

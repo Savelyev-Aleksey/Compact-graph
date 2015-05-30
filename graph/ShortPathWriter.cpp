@@ -106,7 +106,7 @@ bool ShortPathWriter::writeExistPaths(const char* fileName,
 void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
                                      cuint options)
 {
-    size_t parentId = pathIt->first;
+    unsigned parentId = pathIt->first;
     ShortPathElem* pathElem = pathIt->second->getNodes();
     PathList* pathList = pathElem->getPathList();
     if (pathList == nullptr)
@@ -114,18 +114,18 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
         return;
     }
 
-    size_t nodeId;
+    unsigned nodeId;
     float weight;
     bool isFirst = true;
     std::deque <PathListItPair> pathStack;
-    size_t currentIndent = 1;
+    unsigned currentIndent = 1;
 
     bool printIndents = options & (unsigned) Option::PRINT_INDENTS;
 
 
     pathStack.push_front( PathListItPair(pathList->begin(), pathList->end()) );
 
-    fprintf(fp, "%zu(", parentId);
+    fprintf(fp, "%u(", parentId);
     if (printIndents)
     {
         fputc('\n', fp);
@@ -172,7 +172,7 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
         }
         weight = pathElem->getWeight();
 
-        fprintf(fp, "%zu[%g]", nodeId, weight);
+        fprintf(fp, "%u[%g]", nodeId, weight);
 
         ++(pathStack.front().first);
 

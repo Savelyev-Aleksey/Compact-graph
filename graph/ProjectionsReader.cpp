@@ -109,20 +109,20 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
         weight = 0;
     }
 
-    size_t nodeFromNum, nodeToNum;
+    unsigned nodeFromNum, nodeToNum;
 
     int count;
     fpos_t position;
     unsigned outWarnings = options & (unsigned) Option::OUT_WARNINGS;
     unsigned char bracket;
     bool readError = false;
-    size_t indent;
+    unsigned indent;
 
     Projection* projection = nullptr;
     ProjectionElem *parent, *elem;
     ProjectionLevelList* levelList;
     ProjectionLevelElem* level;
-    std::deque <size_t> nodesStack;
+    std::deque <unsigned> nodesStack;
     std::deque <ProjectionElem*> nodesElemStack;
 
     ProjectionsList* projectionsList = projections->projectionsList;

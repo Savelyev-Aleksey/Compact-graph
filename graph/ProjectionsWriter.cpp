@@ -58,7 +58,7 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
     }
 
     bool result = true;
-    size_t pos = 0;
+    unsigned pos = 0;
 
     startProcess(pos, list->size() - 1);
 
@@ -91,7 +91,7 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
-bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
+bool ProjectionsWriter::saveProjection(const char *fileName, unsigned rootNode,
                                        cuint options)
 {
     const Projection* pr = projections->getProjection(rootNode);
@@ -124,7 +124,7 @@ bool ProjectionsWriter::saveProjection(const char *fileName, size_t rootNode,
         projections->getGraph().printInfo(f);
     }
 
-    size_t size = pr->getRootNode()->listCount();
+    unsigned size = pr->getRootNode()->listCount();
     if (size)
         --size;
 
@@ -156,10 +156,10 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
         return false;
     }
 
-    size_t nodeId, count = 0;
+    unsigned nodeId, count = 0;
     bool isFirst = true;
     std::deque <ProjectionElemMapItPair> pathStack;
-    size_t currentIndent = 1;
+    unsigned currentIndent = 1;
 
     bool printIndents = options & (unsigned) Option::PRINT_INDENTS;
 
@@ -169,7 +169,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
 
     pathStack.push_front({ pathList->begin(), pathList->end() });
 
-    fprintf(f, "%zu(", rootNode->getId() );
+    fprintf(f, "%u(", rootNode->getId() );
     if (printIndents)
     {
         fputc('\n', f);
@@ -219,7 +219,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
             isFirst = false;
         }
 
-        fprintf(f, "%zu", nodeId);
+        fprintf(f, "%u", nodeId);
 
         ++(pathStack.front().first);
 

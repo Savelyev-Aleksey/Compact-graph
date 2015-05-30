@@ -1,3 +1,5 @@
+#include <cstdint>
+
 #include "GraphInfoForm.h"
 #include "ui_GraphInfoForm.h"
 
@@ -47,13 +49,13 @@ void GraphInfoForm::updateButtonsStatus()
 {
     GraphWorker& graph = mainWindow->getGraph();
 
-    size_t size = graph.nodeCount();
+    unsigned size = graph.nodeCount();
     bool isProj = false;
     bool isShort = false;
     if (size)
     {
-        size_t proj = graph.projectionsCount();
-        size_t shortp = graph.shortPathsCount();
+        unsigned proj = graph.projectionsCount();
+        unsigned shortp = graph.shortPathsCount();
         isProj = proj ? proj != size : true;
         isShort = shortp ? shortp != size : true;
     }
@@ -110,11 +112,11 @@ void GraphInfoForm::printGraphInfo()
 
     const InfoDeque *info = graph.getAllInfo();
     QString infoStr;
-    for (size_t i = 0, end = info->size(); i < end; ++i)
+    for (const auto &it : *info)
     {
-        infoStr += info->at(i).first;
+        infoStr += it.first;
         infoStr += " = ";
-        infoStr += info->at(i).second;
+        infoStr += it.second;
         infoStr += '\n';
     }
     ui->paramsLabel->setText(infoStr);
@@ -126,7 +128,7 @@ void GraphInfoForm::printGraphParameters()
 {
     const GraphWorker& graph = mainWindow->getGraph();
 
-    size_t value = graph.shortPathsCount();
+    unsigned value = graph.shortPathsCount();
     ui->shortPathsLabel->setText( QString::number(value) );
 
     value = graph.projectionsCount();
@@ -138,16 +140,16 @@ void GraphInfoForm::printGraphParameters()
     value = graph.getRadius();
     ui->radiusLabel->setText( QString::number(value) );
 
-    size_t proj = graph.projectionsCount();
-    size_t shortp = graph.shortPathsCount();
+    unsigned proj = graph.projectionsCount();
+    unsigned shortp = graph.shortPathsCount();
 
     if (proj)
     {
         eccentrType = 1;
         printEccentriciyStatistic();
         QString g("\u221E (inf)");
-        size_t girth = graph.getGraphGirth();
-        if (girth != SIZE_MAX)
+        unsigned girth = graph.getGraphGirth();
+        if (girth != UINT32_MAX)
         {
             g = QString::number(girth);
         }
@@ -162,16 +164,16 @@ void GraphInfoForm::printGraphParameters()
 
 
 
-void GraphInfoForm::printTableStat(const UlongMap* map, QTableWidget* table,
+void GraphInfoForm::printTableStat(const UintMap* map, QTableWidget* table,
                                    bool shrink)
 {
     const GraphWorker& graph = mainWindow->getGraph();
-    size_t count = graph.statisticParamSum(map);
+    unsigned count = graph.statisticParamSum(map);
     double percent;
 
     QTableWidgetItem *item;
 
-    size_t rowCount = map->size();
+    unsigned rowCount = map->size();
     table->clearContents();
     table->setRowCount(rowCount);
 
@@ -205,8 +207,8 @@ void GraphInfoForm::printGraphStatistic()
 {
     const GraphWorker& graph = mainWindow->getGraph();
 
-    UlongMap* compact = nullptr;
-    UlongMap* map = graph.getNodeDegreeStatistic();
+    UintMap* compact = nullptr;
+    UintMap* map = graph.getNodeDegreeStatistic();
     if (!map)
     {
         return;
@@ -235,8 +237,8 @@ void GraphInfoForm::printEccentriciyStatistic()
 {
     const GraphWorker& graph = mainWindow->getGraph();
 
-    UlongMap* compact = nullptr;
-    UlongMap* map = nullptr;
+    UintMap* compact = nullptr;
+    UintMap* map = nullptr;
     if (eccentrType == 0)
         map = graph.getEccentriciyStatisticByShortPaths();
     else if (eccentrType == 1)

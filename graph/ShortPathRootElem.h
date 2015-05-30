@@ -18,26 +18,26 @@ class ShortPathElem;
 class ShortPathRootElem
 {
 public:
-    ShortPathRootElem(size_t nodeId);
+    ShortPathRootElem(unsigned nodeId);
     ~ShortPathRootElem();
 
     ShortPathElem* getNodes() const;
     ShortPathElem* getSearch() const;
 
-    size_t size() const;
+    unsigned size() const;
 
-    void setEccentricity(size_t eccentricity);
+    void setEccentricity(unsigned eccentricity);
     void updateEccentricity();
-    size_t getEccentricity() const;
-    size_t getNodeId() const;
+    unsigned getEccentricity() const;
+    unsigned getNodeId() const;
 
     void clear();
 
 private:
     ShortPathElem* nodes;
     ShortPathElem* search;
-    size_t eccentricity;
-    size_t nodeId;
+    unsigned eccentricity;
+    unsigned nodeId;
 
 };
 

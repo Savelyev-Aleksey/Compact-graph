@@ -21,7 +21,7 @@ public:
 private:
     Ui::NodeInfoForm *ui;
     MainWindow* mainWindow;
-    size_t currentNodeId;
+    unsigned currentNodeId;
 
     void findNode();
     void projectionInfo();

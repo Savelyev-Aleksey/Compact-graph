@@ -106,28 +106,28 @@ void NodeInfoForm::projectionInfo()
         ui->createProjectionButton->setEnabled(true);
         return;
     }
-    size_t eccentr = pr->getEccentricity();
+    unsigned eccentr = pr->getEccentricity();
     ui->eccentricityLabel->setText(QString::number(eccentr));
 
-    size_t shortLoop = pr->getShortestLoop();
+    unsigned shortLoop = pr->getShortestLoop();
     QString shortLoopStr("\u221E (inf)");
-    if (shortLoop != SIZE_MAX)
+    if (shortLoop != UINT32_MAX)
     {
         shortLoopStr = QString::number(shortLoop);
     }
 
     ui->shortLoopLabel->setText(shortLoopStr);
 
-    size_vec* list = pr->getProjectionNodeStat();
+    uint_vec* list = pr->getProjectionNodeStat();
     QTableWidget* t = ui->levelTable;
-    size_t size = list->size();
+    unsigned size = list->size();
     t->clearContents();
     t->setRowCount(size >> 1);
-    for (size_t i = 0; i < size; i += 2)
+    for (unsigned i = 0; i < size; i += 2)
     {
-        size_t orig = (*list)[i];
-        size_t replica = (*list)[i + 1];
-        size_t pos = i >> 1;
+        unsigned orig = (*list)[i];
+        unsigned replica = (*list)[i + 1];
+        unsigned pos = i >> 1;
         t->setItem(pos, 0, new QTableWidgetItem(QString::number(pos)) );
         t->setItem(pos, 1, new QTableWidgetItem(QString::number(orig)) );
         t->setItem(pos, 2, new QTableWidgetItem(QString::number(replica)) );

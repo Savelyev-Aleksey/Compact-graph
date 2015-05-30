@@ -53,7 +53,7 @@ GraphBase& Projections::getGraph() const
 
 
 
-Projection* Projections::getProjection(size_t nodeId) const
+Projection* Projections::getProjection(unsigned nodeId) const
 {
     auto it = projectionsList->find(nodeId);
     return it == projectionsList->end() ? nullptr : it->second;
@@ -73,12 +73,12 @@ void Projections::createAllProjections()
     }
     // Prepare nodes
     NodeMap* list = graph->getNodeMap();
-    size_t count = list->size();
-    size_t end;
+    unsigned count = list->size();
+    unsigned end;
     auto it = list->begin();
 
     // prepare threads
-    size_t threadsCount = std::thread::hardware_concurrency();
+    unsigned threadsCount = std::thread::hardware_concurrency();
     if (!threadsCount)
         threadsCount = 2;
 
@@ -90,7 +90,7 @@ void Projections::createAllProjections()
         pr->createProjection(*graph);
     };
 
-    for (size_t i = 0; i < count; i += threadsCount)
+    for (unsigned i = 0; i < count; i += threadsCount)
     {
         if (isInterrupted())
             return;
@@ -131,7 +131,7 @@ void Projections::createAllProjections()
  * graph.
  * @param nodeId - node id wich will be respectived node.
  */
-void Projections::createProjection(size_t nodeId)
+void Projections::createProjection(unsigned nodeId)
 {
     auto it = projectionsList->find(nodeId);
     if (it != projectionsList->end())
@@ -143,14 +143,14 @@ void Projections::createProjection(size_t nodeId)
 
 
 
-size_t Projections::size() const
+unsigned Projections::size() const
 {
     return projectionsList->size();
 }
 
 
 
-bool Projections::isProjectionExist(size_t nodeId) const
+bool Projections::isProjectionExist(unsigned nodeId) const
 {
     auto it = projectionsList->find(nodeId);
     return (it != projectionsList->end()) ? true : false;
@@ -163,14 +163,14 @@ bool Projections::isProjectionExist(size_t nodeId) const
  * Show eccentricity and mathed count in graph.
  * @return map with eccentricity and matched count.
  */
-UlongMap* Projections::getEccentriciyStatistic() const
+UintMap* Projections::getEccentriciyStatistic() const
 {
     if (!projectionsList->size())
     {
         return nullptr;
     }
-    size_t eccentr;
-    UlongMap* map = new UlongMap();
+    unsigned eccentr;
+    UintMap* map = new UintMap();
 
     for (const auto &it : *projectionsList)
     {
@@ -187,9 +187,9 @@ UlongMap* Projections::getEccentriciyStatistic() const
 
 
 
-size_t Projections::getGraphGirth() const
+unsigned Projections::getGraphGirth() const
 {
-    size_t min = SIZE_MAX, current;
+    unsigned min = SIZE_MAX, current;
     for (const auto &it : *projectionsList)
     {
         current = it.second->getShortestLoop();

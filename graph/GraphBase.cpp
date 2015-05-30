@@ -47,14 +47,14 @@ bool GraphBase::isEmpty() const
 
 
 
-size_t GraphBase::nodeCount() const
+unsigned GraphBase::nodeCount() const
 {
     return nodeList->size();
 }
 
 
 
-size_t GraphBase::edgeCount() const
+unsigned GraphBase::edgeCount() const
 {
     return edgeSize;
 }
@@ -81,7 +81,7 @@ void GraphBase::clearNodes()
  */
 void GraphBase::clearInfo()
 {
-    for (size_t i = 0; i < info->size(); ++i)
+    for (unsigned i = 0; i < info->size(); ++i)
     {
         delete[] info->at(i).first;
         delete[] info->at(i).second;
@@ -104,7 +104,7 @@ NodeMap* GraphBase::getNodeMap() const
  */
 NodeIdSet* GraphBase::getNodeIds()
 {
-    std::set <size_t>* graphNodes = new std::set <size_t>;
+    std::set <unsigned>* graphNodes = new std::set <unsigned>;
 
     for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
     {
@@ -119,14 +119,14 @@ NodeIdSet* GraphBase::getNodeIds()
  * @brief GraphBase::getNodeDegreeStatistic - Return graph degree statistic.
  * @return map of Node degree and matched count.
  */
-UlongMap* GraphBase::getNodeDegreeStatistic() const
+UintMap* GraphBase::getNodeDegreeStatistic() const
 {
     if (!nodeList->size())
     {
         return nullptr;
     }
-    size_t degree;
-    UlongMap* map = new UlongMap();
+    unsigned degree;
+    UintMap* map = new UintMap();
     for (auto it = nodeList->begin(), end = nodeList->end(); it != end; ++it)
     {
         degree = it->second->getEdgeCount();
@@ -191,8 +191,8 @@ void GraphBase::addInfo(const char *name, const char *value)
     {
         return;
     }
-    size_t l1 = strlen(name)  + 1;
-    size_t l2 = strlen(value) + 1;
+    unsigned l1 = strlen(name)  + 1;
+    unsigned l2 = strlen(value) + 1;
     char* newName  = new char[l1];
     char* newValue = new char[l2];
     strcpy(newName,  name);
@@ -210,11 +210,11 @@ void GraphBase::addInfo(const char *name, const char *value)
  */
 const char* GraphBase::getInfo(const char *name) const
 {
-    for (size_t i = 0; i < info->size(); ++i)
+    for (const auto &it : *info)
     {
-        if (!strcmp(name, info->at(i).first))
+        if (!strcmp(name, it.first))
         {
-            return info->at(i).second;
+            return it.second;
         }
     }
     return nullptr;
@@ -276,7 +276,7 @@ void GraphBase::scanInfo(FILE *f)
  * @param nodeToNum   - Id to node
  * @param value       - edge value
  */
-bool GraphBase::addEdge(size_t nodeFromNum, size_t nodeToNum, float value)
+bool GraphBase::addEdge(unsigned nodeFromNum, unsigned nodeToNum, float value)
 {
     Node *fromNode, *toNode;
 
@@ -327,7 +327,7 @@ bool GraphBase::addEdge(Node* nodeFrom, Node* nodeTo, float value)
  * @param nodeNum - node id.
  * @return true - if inserted. false - if already exists.
  */
-bool GraphBase::addNode(size_t nodeNum)
+bool GraphBase::addNode(unsigned nodeNum)
 {
     Node* node = new Node(nodeNum);
     bool result;
@@ -346,7 +346,7 @@ bool GraphBase::addNode(size_t nodeNum)
  * @param nodeNum - node id
  * @return return pointer on new or existing node
  */
-Node* GraphBase::newNode(size_t nodeNum)
+Node* GraphBase::newNode(unsigned nodeNum)
 {
     Node* node = new Node(nodeNum);
     auto result = nodeList->insert({nodeNum, node});
@@ -365,7 +365,7 @@ Node* GraphBase::newNode(size_t nodeNum)
  * @param nodeNum - node id to find
  * @return pointer on node
  */
-Node *GraphBase::getNodeOrCreate(size_t nodeNum)
+Node *GraphBase::getNodeOrCreate(unsigned nodeNum)
 {
     Node* node;
     auto nodeIterator = nodeList->find(nodeNum);
@@ -389,7 +389,7 @@ Node *GraphBase::getNodeOrCreate(size_t nodeNum)
  * @param nodeNum - node id
  * @return pointer on node or nullptr
  */
-const Node* GraphBase::getNode(size_t nodeNum) const
+const Node* GraphBase::getNode(unsigned nodeNum) const
 {
     auto nodeIterator = nodeList->find(nodeNum);
     if (nodeIterator != nodeList->end())
@@ -407,7 +407,7 @@ const Node* GraphBase::getNode(size_t nodeNum) const
  * @param nodeToNum - second node id
  * @return const edge pointer or nullptr
  */
-const Edge* GraphBase::getEdge(size_t nodeFromNum, size_t nodeToNum) const
+const Edge* GraphBase::getEdge(unsigned nodeFromNum, unsigned nodeToNum) const
 {
     const auto nodeIterator = nodeList->find(nodeFromNum);
     if (nodeIterator == nodeList->end())

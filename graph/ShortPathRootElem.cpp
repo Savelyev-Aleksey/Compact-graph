@@ -6,7 +6,7 @@
 
 
 
-ShortPathRootElem::ShortPathRootElem(size_t nodeId) :
+ShortPathRootElem::ShortPathRootElem(unsigned nodeId) :
     nodes(new ShortPathElem(nodeId, 0, 0)),
     search(new ShortPathElem(nodeId, 0, 0)),
     eccentricity(0),
@@ -24,7 +24,7 @@ ShortPathRootElem::~ShortPathRootElem()
 
 
 
-size_t ShortPathRootElem::size() const
+unsigned ShortPathRootElem::size() const
 {
     return search->size();
 }
@@ -58,7 +58,7 @@ void ShortPathRootElem::updateEccentricity()
     {
         return;
     }
-    size_t eccentrMax = 0, eccentr;
+    unsigned eccentrMax = 0, eccentr;
     for (auto it = list->begin(), end = list->end(); it != end; ++it)
     {
         eccentr = it->second->getIndent();
@@ -84,21 +84,21 @@ ShortPathElem* ShortPathRootElem::getSearch() const
 
 
 
-void ShortPathRootElem::setEccentricity(size_t eccentricity)
+void ShortPathRootElem::setEccentricity(unsigned eccentricity)
 {
     this->eccentricity = eccentricity;
 }
 
 
 
-size_t ShortPathRootElem::getEccentricity() const
+unsigned ShortPathRootElem::getEccentricity() const
 {
     return eccentricity;
 }
 
 
 
-size_t ShortPathRootElem::getNodeId() const
+unsigned ShortPathRootElem::getNodeId() const
 {
     return nodeId;
 }

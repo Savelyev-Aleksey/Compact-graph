@@ -311,8 +311,8 @@ bool SaveGraphForm::validateProjections(QString &info, bool isGraphEmpty)
         const GraphWorker& graph = mainWindow->getGraph();
         if (printAll)
         {
-            size_t gSize = graph.nodeCount();
-            size_t pSize = graph.projectionsCount();
+            unsigned gSize = graph.nodeCount();
+            unsigned pSize = graph.projectionsCount();
             if (gSize != pSize)
             {
                 info += tr("Not all projections are created yet. "
@@ -325,7 +325,7 @@ bool SaveGraphForm::validateProjections(QString &info, bool isGraphEmpty)
             isValid = checkStartNodeEdit(info);
             if (isValid)
             {
-                size_t nodeId = ui->startNodeLineEdit->text().toULong();
+                unsigned nodeId = ui->startNodeLineEdit->text().toULong();
                 if (!graph.isProjectionExist(nodeId))
                 {
                     info += tr("Projection not exist yet. "
@@ -488,7 +488,7 @@ void SaveGraphForm::saveGraph()
     QByteArray file = fileName.toLatin1();
 
     bool result = false;
-    size_t startNodeId, pathLimit;
+    unsigned startNodeId, pathLimit;
 
     switch (fileTypeId)
     {

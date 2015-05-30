@@ -78,7 +78,7 @@ bool GraphWriter::writeEdges(const char *fileName, cuint options)
         graph->printInfo(f);
     }
 
-    size_t nodeFromId, nodeToId, progress = 0;
+    unsigned nodeFromId, nodeToId, progress = 0;
     const EdgeList* edges;
     NodeMap* nodeList = graph->getNodeMap();
 
@@ -103,12 +103,12 @@ bool GraphWriter::writeEdges(const char *fileName, cuint options)
             }
             if (printValue)
             {
-                fprintf(f, "%zu %zu %g\n", nodeFromId, nodeToId,
+                fprintf(f, "%u %u %g\n", nodeFromId, nodeToId,
                         jt->second->getValue());
             }
             else
             {
-                fprintf(f, "%zu %zu\n", nodeFromId, nodeToId);
+                fprintf(f, "%u %u\n", nodeFromId, nodeToId);
             }
         }
     }
@@ -149,7 +149,7 @@ bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
 
     const EdgeList* edges;
     Node* node;
-    size_t toNodeNum, progress = 0;
+    unsigned toNodeNum, progress = 0;
     float edgeValue;
     bool isFirst;
     NodeMap* nodeList = graph->getNodeMap();
@@ -166,7 +166,7 @@ bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
         updateProgress(progress);
         node = nodeIt->second;
         edges = node->getEdges();
-        fprintf(f, "%zu(", nodeIt->first);
+        fprintf(f, "%u(", nodeIt->first);
         isFirst = true;
 
         for (auto edgeIt = edges->begin(); edgeIt != edges->end(); ++edgeIt)
@@ -183,11 +183,11 @@ bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
             edgeValue = edgeIt->second->getValue();
             if (printValue)
             {
-                fprintf(f, "%zu[%g]", toNodeNum, edgeValue);
+                fprintf(f, "%u[%g]", toNodeNum, edgeValue);
             }
             else
             {
-                fprintf(f, "%zu", toNodeNum);
+                fprintf(f, "%u", toNodeNum);
             }
         }
         fputs(")\n", f);
@@ -206,15 +206,13 @@ bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
  * @param nodeId - searching node is
  * @return true if node in list.
  */
-bool GraphWriter::isNodeVisited(const std::deque<size_t> &list, size_t nodeId)
-const
+bool GraphWriter::isNodeVisited(const std::deque<unsigned>& list,
+                                unsigned nodeId) const
 {
-    for(size_t i = 0; i < list.size(); ++i)
+    for(const auto &n : list)
     {
-        if (list.at(i) == nodeId)
-        {
+        if (n == nodeId)
             return true;
-        }
     }
     return false;
 }
@@ -231,8 +229,8 @@ const
  * @param options     - output options
  * @return true if save, false if node not fonud or file can't to write.
  */
-bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
-                                const size_t pathLimit, cuint options)
+bool GraphWriter::writeBrackets(const char *fileName, cuint startNodeId,
+                                cuint pathLimit, cuint options)
 {
     const Node* nodeStart = graph->getNode(startNodeId);
     if (!nodeStart)
@@ -261,7 +259,7 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
         graph->printInfo(f);
     }
 
-    fprintf(f, "%zu(", startNodeId);
+    fprintf(f, "%u(", startNodeId);
     if (printIndents)
     {
         fputc('\n', f);
@@ -269,11 +267,11 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
 
     bool isFirst = true;
     float weight;
-    size_t nodeId, process = 0;
+    unsigned nodeId, process = 0;
     const Node* node;
-    size_t currentLimit = 1;
+    unsigned currentLimit = 1;
 
-    std::deque <size_t> nodeStack;
+    std::deque <unsigned> nodeStack;
     std::deque <EdgeListPairIt> edgeStack;
     const EdgeList* edgeList = nodeStart->getEdges();
     auto edgeIt = edgeList->begin();
@@ -344,11 +342,11 @@ bool GraphWriter::writeBrackets(const char *fileName, const size_t startNodeId,
 
         if (printValue)
         {
-            fprintf(f, "%zu[%g]", nodeId, weight);
+            fprintf(f, "%u[%g]", nodeId, weight);
         }
         else
         {
-            fprintf(f, "%zu", nodeId);
+            fprintf(f, "%u", nodeId);
         }
 
         edgeList = node->getEdges();

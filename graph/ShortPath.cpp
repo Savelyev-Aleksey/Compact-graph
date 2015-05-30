@@ -34,7 +34,7 @@ ShortPath::~ShortPath()
 
 
 
-bool ShortPath::isPathExist(size_t nodeId) const
+bool ShortPath::isPathExist(unsigned nodeId) const
 {
     auto it = shortPathNodes->find(nodeId);
     return it != shortPathNodes->end();
@@ -62,7 +62,7 @@ RootPathList* ShortPath::getShortPathNodes()
  * @param startNodeId - node id to init
  * @return iterator on ShortPath Element
  */
-ShortPathRootElem* ShortPath::initShortPath(size_t startNodeId)
+ShortPathRootElem* ShortPath::initShortPath(unsigned startNodeId)
 {
     auto it = shortPathNodes->find(startNodeId);
     if (it != shortPathNodes->end())
@@ -80,7 +80,7 @@ ShortPathRootElem* ShortPath::initShortPath(size_t startNodeId)
  * @brief ShortPath::clearPath - Remove short path from list.
  * @param nodeId - node id from which short path beginning
  */
-void ShortPath::clearPath(size_t nodeId)
+void ShortPath::clearPath(unsigned nodeId)
 {
     auto it = shortPathNodes->find(nodeId);
     if (it == shortPathNodes->end())
@@ -114,7 +114,7 @@ bool ShortPath::isEmpty() const
 
 
 
-size_t ShortPath::getShortPathCount() const
+unsigned ShortPath::getShortPathCount() const
 {
     return shortPathNodes->size();
 }
@@ -126,14 +126,14 @@ size_t ShortPath::getShortPathCount() const
  * Show eccentricity and mathed count in graph.
  * @return map with eccentricity and matched count.
  */
-UlongMap* ShortPath::getEccentriciyStatistic() const
+UintMap* ShortPath::getEccentriciyStatistic() const
 {
     if (!shortPathNodes->size())
     {
         return nullptr;
     }
-    size_t eccentr;
-    UlongMap* map = new UlongMap();
+    unsigned eccentr;
+    UintMap* map = new UintMap();
 
     for (const auto &it : *shortPathNodes)
     {
@@ -156,7 +156,7 @@ UlongMap* ShortPath::getEccentriciyStatistic() const
  * @param nodeId - node id
  * @return true if node in list, false if not
  */
-bool ShortPath::isNodeForVisit(const NodeDeque& list, size_t nodeId)
+bool ShortPath::isNodeForVisit(const NodeDeque& list, unsigned nodeId)
 const
 {
     for (const auto &it : list)
@@ -178,14 +178,14 @@ const
  * @param indent - new element indent
  */
 void ShortPath::updateSubpath(PathPair* pair, float difference,
-                             size_t indent, NodeDeque& nodesToVisit)
+                             unsigned indent, NodeDeque& nodesToVisit)
 {
     std::deque <PathPair *> elemList;
     ShortPathElem* elem = pair->second;
     elemList.push_front(pair);
     float old = elem->getWeight();
-    size_t oldIndent = elem->getIndent();
-    size_t indentDiff;
+    unsigned oldIndent = elem->getIndent();
+    unsigned indentDiff;
     bool negative = false;
     if (indent > oldIndent)
     {
@@ -202,7 +202,7 @@ void ShortPath::updateSubpath(PathPair* pair, float difference,
     while (elemList.size())
     {
         pair = elemList.back();
-        size_t nodeId = pair->first;
+        unsigned nodeId = pair->first;
         PathList* list = pair->second->getPathList();
         elemList.pop_back();
         if (!list)
@@ -244,12 +244,12 @@ void ShortPath::generateAllShortPaths(float pathLimit)
     }
     // Prepare nodes
     NodeMap* list = graph->getNodeMap();
-    size_t count = list->size();
-    size_t end;
+    unsigned count = list->size();
+    unsigned end;
     auto it = list->begin();
 
     // prepare threads
-    size_t threadsCount = std::thread::hardware_concurrency();
+    unsigned threadsCount = std::thread::hardware_concurrency();
     if (!threadsCount)
         threadsCount = 2;
 
@@ -258,18 +258,18 @@ void ShortPath::generateAllShortPaths(float pathLimit)
     startProcess(0, count - 1);
 
     // create for each node root element
-    for (size_t i = 0; i < count; ++i, ++it)
+    for (unsigned i = 0; i < count; ++i, ++it)
     {
         initShortPath(it->first);
     }
     // reset iterator
     it = list->begin();
 
-    auto func = [this](size_t nodeId, float path){
+    auto func = [this](unsigned nodeId, float path){
         this->generateShortPath(nodeId, path);
     };
 
-    for (size_t i = 0; i < count; i += threadsCount)
+    for (unsigned i = 0; i < count; i += threadsCount)
     {
         if (isInterrupted())
             return;
@@ -299,7 +299,7 @@ void ShortPath::generateAllShortPaths(float pathLimit)
  * @param startNodeId - Node id from which start short path
  * @param pathLimit - set max weight for path search
  */
-void ShortPath::generateShortPath(const size_t startNodeId, float pathLimit)
+void ShortPath::generateShortPath(const unsigned startNodeId, float pathLimit)
 {
     NodeMap* nodeList = graph->getNodeMap();
     // Check exists node
@@ -337,18 +337,18 @@ void ShortPath::createPath(NodeDeque& nodesToVisit,
                             ShortPathRootElem* rootElem, float pathLimit)
 {
     const Node* node;
-    size_t fromNodeId, currentId;
+    unsigned fromNodeId, currentId;
     float weight;
     bool isFirst = true;
     const EdgeList* edgeList;
 
-    size_t startId = rootElem->getNodeId();
+    unsigned startId = rootElem->getNodeId();
     // Using for keep short path hierarchy
     ShortPathElem* parent = rootElem->getNodes();
     // Using for keep short path node in one dimention to fast access
     ShortPathElem* search = rootElem->getSearch();
     float baseWeight = 0;
-    size_t indent = 1;
+    unsigned indent = 1;
 
     while (nodesToVisit.size())
     {

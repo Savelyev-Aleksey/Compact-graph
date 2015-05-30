@@ -29,18 +29,18 @@ public:
 
     // Common methods
 
-    size_t getRadius() const;
-    size_t getDiameter() const;
-    size_t getGraphGirth() const;
+    unsigned getRadius() const;
+    unsigned getDiameter() const;
+    unsigned getGraphGirth() const;
 
     void clearGraph();
 
     // Statistics
-    UlongMap* getNodeDegreeStatistic() const;
-    UlongMap* getEccentriciyStatisticByShortPaths() const;
-    UlongMap* getEccentriciyStatisticByProjections() const;
-    UlongMap* compactStatistic(UlongMap* map, unsigned short limit) const;
-    size_t statisticParamSum(const UlongMap* map) const;
+    UintMap* getNodeDegreeStatistic() const;
+    UintMap* getEccentriciyStatisticByShortPaths() const;
+    UintMap* getEccentriciyStatisticByProjections() const;
+    UintMap* compactStatistic(UintMap* map, unsigned short limit) const;
+    unsigned statisticParamSum(const UintMap* map) const;
 
     // Readers
     bool readFile(const char* fileName);
@@ -51,8 +51,8 @@ public:
     // GraphBase methods
 
     bool isGraphEmpty() const;
-    size_t nodeCount() const;
-    size_t edgeCount() const;
+    unsigned nodeCount() const;
+    unsigned edgeCount() const;
 
     const InfoDeque* getAllInfo() const;
 
@@ -61,8 +61,8 @@ public:
     void generateTorus(unsigned bigRadius, unsigned smallRadius, float weight);
 
     // Node finders
-    const Node* findNode(size_t nodeId) const;
-    size_vec* findNearNode(size_t nodeId) const;
+    const Node* findNode(unsigned nodeId) const;
+    uint_vec* findNearNode(unsigned nodeId) const;
 
 
     // Graph writers
@@ -72,8 +72,8 @@ public:
     virtual bool writeBracketsFlat(const char* fileName, cuint options =
                                    (cuint) WOption::PRINT_VALUE );
 
-    virtual bool writeBrackets(const char* fileName, const size_t startNodeId,
-                               const size_t pathLimit = 0,
+    virtual bool writeBrackets(const char* fileName, cuint startNodeId,
+                               cuint pathLimit = 0,
                                cuint options = (cuint) WOption::PRINT_VALUE);
 
 public:
@@ -82,8 +82,8 @@ public:
     void updateParametersByShortPaths();
 
     bool isShortPathEmpty() const;
-    bool isPathExist(size_t nodeId) const;
-    size_t shortPathsCount() const;
+    bool isPathExist(unsigned nodeId) const;
+    unsigned shortPathsCount() const;
 
     virtual void generateAllShortPaths(float pathLimit = 0);
 
@@ -99,19 +99,19 @@ public:
 
     void updateParametersByProjections();
 
-    void createProjection(size_t nodeId);
+    void createProjection(unsigned nodeId);
 
-    bool isProjectionExist(size_t nodeId) const;
-    size_t projectionsCount() const;
+    bool isProjectionExist(unsigned nodeId) const;
+    unsigned projectionsCount() const;
 
-    const Projection* getProjection(size_t nodeId) const;
+    const Projection* getProjection(unsigned nodeId) const;
 
     virtual void createAllProjections();
 
     // Projections writers
     virtual bool saveProjections(const char* fileName,
                                  cuint options = (cuint) WOption::NONE);
-    virtual bool saveProjection(const char* fileName, size_t rootNode,
+    virtual bool saveProjection(const char* fileName, unsigned rootNode,
                                 cuint options = (cuint) WOption::NONE);
 
 
@@ -120,9 +120,9 @@ protected:
     ShortPath* shortPath;
     Projections* projections;
 
-    size_t radius;
-    size_t diameter;
-    size_t girth;
+    unsigned radius;
+    unsigned diameter;
+    unsigned girth;
 
 };
 

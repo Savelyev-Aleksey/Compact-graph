@@ -21,7 +21,7 @@ public:
     GraphWorker(QWidget* parent);
     virtual ~GraphWorker();
 
-    const Node* findNode(size_t nodeId, QString& info) const;
+    const Node* findNode(unsigned nodeId, QString& info) const;
 
 
     // Graph writers
@@ -31,15 +31,15 @@ public:
     virtual bool writeBracketsFlat(const char* fileName, cuint options = (cuint)
                             WriterBase::Option::PRINT_VALUE );
 
-    virtual bool writeBrackets(const char* fileName, const size_t startNodeId,
-                       const size_t pathLimit = 0,
+    virtual bool writeBrackets(const char* fileName, cuint startNodeId,
+                       cuint pathLimit = 0,
                        cuint options = (cuint) WriterBase::Option::PRINT_VALUE);
 
 
     // Projections writers
     virtual bool saveProjections(const char* fileName,
                                  cuint options = (cuint) Option::NONE);
-    virtual bool saveProjection(const char* fileName, size_t rootNode,
+    virtual bool saveProjection(const char* fileName, cuint rootNode,
                                 cuint options = (cuint) Option::NONE);
 
     virtual void createAllProjections();
@@ -53,7 +53,7 @@ protected:
 
     QWidget* parent;
 
-    void progressDialog(size_t size, const QString& title,
+    void progressDialog(unsigned size, const QString& title,
                         std::function<void()> progressFn);
 
 };

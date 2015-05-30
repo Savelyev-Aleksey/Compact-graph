@@ -22,7 +22,7 @@ public:
 
     bool saveProjections(const char* fileName,
                          cuint options = (cuint) Option::NONE);
-    bool saveProjection(const char* fileName, size_t rootNode,
+    bool saveProjection(const char* fileName, unsigned rootNode,
                         cuint options = (cuint) Option::NONE);
 
 protected:

@@ -22,15 +22,15 @@ public:
     float getValue();
     void setValue(float);
 
-    Node* nodeElem(size_t nodeNum);
+    Node* nodeElem(unsigned nodeNum);
     Node* nodeElem1();
     Node* nodeElem2();
 
-    size_t nodeToNum(size_t nodeFromNum);
-    Node* nodeTo(size_t nodeFromNum);
+    unsigned nodeToNum(unsigned nodeFromNum);
+    Node* nodeTo(unsigned nodeFromNum);
 
     void deleteEdge();
-    void deleteEdge(size_t nodeFromNum);
+    void deleteEdge(unsigned nodeFromNum);
 
 protected:
     Node* node1;

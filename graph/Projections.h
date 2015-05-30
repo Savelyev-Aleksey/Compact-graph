@@ -12,7 +12,7 @@
 class Projection;
 class GraphBase;
 
-typedef std::map <size_t, Projection*> ProjectionsList;
+typedef std::map <unsigned, Projection*> ProjectionsList;
 
 
 class Projections : public Worker
@@ -28,19 +28,19 @@ public:
 
     void clear();
 
-    size_t size() const;
+    unsigned size() const;
 
     const ProjectionsList* getList() const;
     GraphBase& getGraph() const;
 
-    Projection* getProjection(size_t nodeId) const;
-    UlongMap* getEccentriciyStatistic() const;
-    size_t getGraphGirth() const;
+    Projection* getProjection(unsigned nodeId) const;
+    UintMap* getEccentriciyStatistic() const;
+    unsigned getGraphGirth() const;
 
     void createAllProjections();
-    void createProjection(size_t nodeId);
+    void createProjection(unsigned nodeId);
 
-    bool isProjectionExist(size_t nodeId) const;
+    bool isProjectionExist(unsigned nodeId) const;
 
 protected:
     GraphBase* graph;

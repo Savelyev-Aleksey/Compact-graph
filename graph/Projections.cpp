@@ -1,4 +1,5 @@
 #include <thread>
+#include <algorithm>
 
 #include "Projections.h"
 #include "Projection.h"
@@ -25,7 +26,7 @@ void Projections::clear()
     for (auto it = projectionsList->rbegin();
          it != projectionsList->rend(); ++it)
     {
-        delete it->second;
+        delete *it;
     }
     projectionsList->clear();
 }
@@ -55,8 +56,10 @@ GraphBase& Projections::getGraph() const
 
 Projection* Projections::getProjection(unsigned nodeId) const
 {
-    auto it = projectionsList->find(nodeId);
-    return it == projectionsList->end() ? nullptr : it->second;
+    auto start = projectionsList->begin();
+    auto end = projectionsList->end();
+    auto it = std::lower_bound(start, end, nodeId, Projection::lessById);
+    return (it != end && (*it)->getId() == nodeId) ? *it : nullptr;
 }
 
 
@@ -72,10 +75,21 @@ void Projections::createAllProjections()
         return;
     }
     // Prepare nodes
-    NodeMap* list = graph->getNodeMap();
-    unsigned count = list->size();
-    unsigned end;
-    auto it = list->begin();
+    NodeMap* nodeList = graph->getNodeMap();
+    unsigned count = nodeList->size();
+
+    // all projections exist. skip
+    if (projectionsList->size() == count)
+        return;
+
+    unsigned oldSize = projectionsList->size();
+    bool isWasEmpty = !oldSize;
+
+    projectionsList->resize(count, nullptr);
+
+    auto oldStart = projectionsList->begin();
+    auto oldEnd = projectionsList->begin() + oldSize;
+
 
     // prepare threads
     unsigned threadsCount = std::thread::hardware_concurrency();
@@ -90,27 +104,43 @@ void Projections::createAllProjections()
         pr->createProjection(*graph);
     };
 
-    for (unsigned i = 0; i < count; i += threadsCount)
+    auto it = nodeList->begin();
+
+    unsigned i = 0, end, currentId;
+    unsigned pos = oldSize;
+    while (i < count)
     {
         if (isInterrupted())
             return;
 
         end = std::min(count - i, threadsCount);
 
-        for (unsigned j = 0; j < end; ++j, ++it)
+        unsigned j = 0;
+        while (j < end && i < count)
         {
-            Projection* pr = new Projection(it->first);
-            auto result = projectionsList->insert({it->first, pr});
-            if (result.second)
+            currentId = it->first;
+            // Projection exist - skip
+            if (!isWasEmpty)
             {
-                threads[j] = new std::thread(func, pr, graph);
+                auto e = std::lower_bound(oldStart, oldEnd, currentId,
+                                          Projection::lessById);
+                if (e != oldEnd && (*e)->getId() == currentId)
+                {
+                    ++it;
+                    ++i;
+                    continue;
+                }
             }
-            else
-            {
-                delete pr;
-            }
+
+            Projection* pr = new Projection(currentId);
+            (*projectionsList)[pos] = pr;
+            threads[j] = new std::thread(func, pr, graph);
+            ++pos;
+            ++i;
+            ++j;
+            ++it;
         }
-        for (unsigned j = 0; j < end; ++j)
+        for (j = 0; j < end; ++j)
         {
             if (threads[j])
             {
@@ -119,7 +149,12 @@ void Projections::createAllProjections()
             }
             threads[j] = nullptr;
         }
-        updateProgress(i + end);
+        updateProgress(i);
+    }
+    if (!isWasEmpty)
+    {
+        oldEnd = projectionsList->end();
+        std::sort(oldStart, oldEnd, Projection::less);
     }
     completeProcess();
 }
@@ -133,11 +168,15 @@ void Projections::createAllProjections()
  */
 void Projections::createProjection(unsigned nodeId)
 {
-    auto it = projectionsList->find(nodeId);
-    if (it != projectionsList->end())
+    if (getProjection(nodeId))
         return;
     Projection* pr = new Projection(nodeId);
-    projectionsList->insert({nodeId, pr});
+
+    auto begin = projectionsList->begin();
+    auto end = projectionsList->end();
+    auto pos = std::lower_bound(begin, end, nodeId, Projection::lessById);
+
+    projectionsList->insert(pos, pr);
     pr->createProjection(*graph);
 }
 
@@ -152,8 +191,7 @@ unsigned Projections::size() const
 
 bool Projections::isProjectionExist(unsigned nodeId) const
 {
-    auto it = projectionsList->find(nodeId);
-    return (it != projectionsList->end()) ? true : false;
+    return getProjection(nodeId) ? true : false;
 }
 
 
@@ -174,7 +212,7 @@ UintMap* Projections::getEccentriciyStatistic() const
 
     for (const auto &it : *projectionsList)
     {
-        eccentr = it.second->getEccentricity();
+        eccentr = it->getEccentricity();
         auto result = map->insert({eccentr, 1});
         if (!result.second)
         {
@@ -189,10 +227,10 @@ UintMap* Projections::getEccentriciyStatistic() const
 
 unsigned Projections::getGraphGirth() const
 {
-    unsigned min = SIZE_MAX, current;
+    unsigned min = UINT32_MAX, current;
     for (const auto &it : *projectionsList)
     {
-        current = it.second->getShortestLoop();
+        current = it->getShortestLoop();
         if (current < min)
         {
             min = current;

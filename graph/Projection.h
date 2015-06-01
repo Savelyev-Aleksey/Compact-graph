@@ -15,7 +15,7 @@ class ProjectionElem;
 
 
 
-typedef std::multimap <unsigned, ProjectionElem*> ProjectionLevelElem;
+typedef std::deque <ProjectionElem*> ProjectionLevelElem;
 typedef std::deque <ProjectionLevelElem*> ProjectionLevelList;
 
 
@@ -24,6 +24,9 @@ class Projection
 public:
     Projection(unsigned nodeId);
     ~Projection();
+
+    static bool less(const Projection* a, const Projection* b);
+    static bool lessById(const Projection* a, const unsigned &id);
 
     friend bool ProjectionsReader::readProjections(FILE* fp,
                                                    FileTypes::Type typeId);
@@ -53,6 +56,7 @@ protected:
     unsigned shortestLoop;
 
     void createLastLevelProjection(const GraphBase& graph);
+    void sortAllProjections();
 
     void updateAfterRead();
 

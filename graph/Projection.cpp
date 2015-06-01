@@ -1,5 +1,6 @@
 #include <set>
 #include <cstdint>
+#include <algorithm>
 
 #include "Projection.h"
 #include "ProjectionElem.h"
@@ -35,7 +36,7 @@ void Projection::clear()
         auto *level = levelList->at(i - 1);
         for (auto &it : *level)
         {
-            delete it.second;
+            delete it;
         }
         delete level;
     }
@@ -44,6 +45,20 @@ void Projection::clear()
     rootNode = nullptr;
     eccesntricity = 0;
     shortestLoop = 0;
+}
+
+
+
+bool Projection::less(const Projection *a, const Projection *b)
+{
+    return a->nodeId < b->nodeId;
+}
+
+
+
+bool Projection::lessById(const Projection *a, const unsigned &id)
+{
+    return a->nodeId < id;
 }
 
 
@@ -97,16 +112,17 @@ void Projection::createProjection(GraphBase &graph)
     NodeIdSet* graphNodes = graph.getNodeIds();
     // init perspectived node, for projection it's a root node
     ProjectionElem* elem = new ProjectionElem(nodeId);
+    elem->setLevel(0);
     rootNode = elem;
     // init zero level
     ProjectionLevelElem* curLevel = new ProjectionLevelElem;
     // add in zero level perspectived node
-    curLevel->insert({nodeId, elem});
+    curLevel->push_back(elem);
     // push level in level list
     levelList->push_back(curLevel);
 
     // Add map for original nodes - use for set link in replics to original node
-    ProjectionElemMap origianlNodes;
+    std::map <unsigned, ProjectionElem*> origianlNodes;
     origianlNodes.insert({nodeId, elem});
     // Remove perspectived node - already in projection
     graphNodes->erase(nodeId);
@@ -123,13 +139,13 @@ void Projection::createProjection(GraphBase &graph)
 
         for (const auto &parentIt : *parentLevel)
         {
-            ProjectionElem* parent = parentIt.second;
+            ProjectionElem* parent = parentIt;
             if (!parent->isOriginal())
                 continue;
 
             isEmpty = false;
 
-            const Node* node = graph.getNode(parentIt.first);
+            const Node* node = graph.getNode(parentIt->getId());
             const EdgeList* edgeList = node->getEdges();
             for (const auto &edgeIt : *edgeList)
             {
@@ -140,8 +156,9 @@ void Projection::createProjection(GraphBase &graph)
 
                 // insert elem as child in parent elem
                 elem = parent->addElem(curId);
+                elem->setLevel(projectionLevel);
                 // insert elem in current projection level list
-                curLevel->insert({curId, elem});
+                curLevel->push_back(elem);
 
                 // insert original node in search list
                 // if not inserted - it's replica node
@@ -166,6 +183,8 @@ void Projection::createProjection(GraphBase &graph)
         }
         else
         {
+            // Sort level for fast search
+            std::sort(curLevel->begin(), curLevel->end(), ProjectionElem::less);
             // add new level in projection list
             levelList->push_back(curLevel);
             ++projectionLevel;
@@ -195,11 +214,11 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
     // which have edges between together
     std::deque <ProjectionElem*> nodes;
     ProjectionLevelElem* parentLevel = levelList->back();
-    for (const auto &parentIt : *parentLevel)
+    for (const auto &elem : *parentLevel)
     {
-        if (parentIt.second->isOriginal())
+        if (elem->isOriginal())
         {
-            nodes.push_back(parentIt.second);
+            nodes.push_back(elem);
         }
     }
     // If more one original nodes in last level
@@ -222,7 +241,7 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
                    ProjectionElem* el = elem->addElem(curId);
                    el->setOriginal(elem2);
                    // insert elem in current projection level list
-                   curLevel->insert({curId, el});
+                   curLevel->push_back(el);
 
                    // Add first elem in second
                    curId = elem->getId();
@@ -230,7 +249,7 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
                    el = elem2->addElem(curId);
                    el->setOriginal(elem);
                    // insert elem in current projection level list
-                   curLevel->insert({curId, el});
+                   curLevel->push_back(el);
                }
             }
         }
@@ -256,17 +275,17 @@ void Projection::updateOriginalInfo()
 {
     if (!levelList)
         return;
-    ProjectionElemMap origianlNodes;
+    std::map <unsigned, ProjectionElem*> origianlNodes;
 
     for(const auto &level : *levelList)
     {
         for (const auto &it : *level)
         {
-            auto res = origianlNodes.insert({it.first, it.second});
+            auto res = origianlNodes.insert({it->getId(), it});
             if (!res.second)
             {
                 // set node as replica - set original node address
-                it.second->setOriginal(res.first->second);
+                it->setOriginal(res.first->second);
             }
         }
     }
@@ -280,11 +299,11 @@ void Projection::updateEccesntricity()
         return;
 
     ProjectionLevelElem* level = levelList->back();
-    for (const auto &it : *level)
+    for (const auto &elem : *level)
     {
         // If one node is original so all original nodes on this level
         // have no edges between together
-        if (it.second->isOriginal())
+        if (elem->isOriginal())
         {
             eccesntricity = levelList->size() - 1;
             return;
@@ -322,12 +341,12 @@ void Projection::updateShortestLoop()
         for (auto origIt = origL.begin(), origEnd = origL.end();
              origIt != origEnd; ++origIt)
         {
-            if (!origIt->second->isOriginal())
+            if (!(*origIt)->isOriginal())
             {
                 continue;
             }
 
-            origId = origIt->first;
+            origId = (*origIt)->getId();
             bool find = false;
             unsigned replN = origN;
             // Skip first level for search - only original nodes
@@ -337,8 +356,8 @@ void Projection::updateShortestLoop()
                 auto replIt = origIt;
                 for (++replIt; replIt != origEnd; ++replIt)
                 {
-                    if (replIt->first == origId &&
-                        !replIt->second->isOriginal())
+                    if ((*replIt)->getId() == origId &&
+                        !(*replIt)->isOriginal())
                     {
                         find = true;
                         break;
@@ -356,8 +375,8 @@ void Projection::updateShortestLoop()
                     for (auto replIt = replL.begin(); replIt != replEnd;
                          ++replIt)
                     {
-                        if (replIt->first == origId &&
-                            !replIt->second->isOriginal())
+                        if ((*replIt)->getId() == origId &&
+                            !(*replIt)->isOriginal())
                         {
                             find = true;
                             break;
@@ -412,7 +431,7 @@ uint_vec* Projection::getProjectionNodeStat() const
     {
         for (const auto &it : *level)
         {
-            if (it.second->isOriginal())
+            if (it->isOriginal())
                 ++((*list)[i]);
             else
                 ++((*list)[i + 1]);
@@ -424,9 +443,25 @@ uint_vec* Projection::getProjectionNodeStat() const
 
 
 
+void Projection::sortAllProjections()
+{
+    if (!levelList || !levelList->size())
+        return;
+
+    auto level = levelList->begin();
+    auto end = levelList->end();
+    for (++level; level < end; ++level)
+    {
+        std::sort((*level)->begin(), (*level)->end(), ProjectionElem::less);
+    }
+}
+
+
+
 void Projection::updateAfterRead()
 {
     updateOriginalInfo();
+    sortAllProjections();
     updateEccesntricity();
     updateShortestLoop();
 }

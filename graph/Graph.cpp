@@ -213,10 +213,10 @@ void Graph::updateParametersByProjections()
     }
     auto it = nodes->begin(), end = nodes->end();
     unsigned min, max, eccentr;
-    min = max = it->second->getEccentricity();
+    min = max = (*it)->getEccentricity();
     for (++it; it != end; ++it)
     {
-        eccentr = it->second->getEccentricity();
+        eccentr = (*it)->getEccentricity();
         if (eccentr > max)
             max = eccentr;
         else if (eccentr < min)

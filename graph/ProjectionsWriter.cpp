@@ -62,7 +62,7 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
 
     startProcess(pos, list->size() - 1);
 
-    for (const auto &pair : *list)
+    for (const auto &projection : *list)
     {
         if (isInterrupted())
         {
@@ -71,7 +71,7 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
         }
         updateProgress(++pos);
 
-        result = writeProjection(f, pair.second, options, false);
+        result = writeProjection(f, projection, options, false);
         if (!result)
             break;
     }
@@ -158,12 +158,12 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
 
     unsigned nodeId, count = 0;
     bool isFirst = true;
-    std::deque <ProjectionElemMapItPair> pathStack;
+    std::deque <ProjectionElemListItPair> pathStack;
     unsigned currentIndent = 1;
 
     bool printIndents = options & (unsigned) Option::PRINT_INDENTS;
 
-    const ProjectionElemMap* pathList = rootNode->getList();
+    const ProjectionElemList* pathList = rootNode->getList();
     const ProjectionElem* pathElem;
 
 
@@ -200,8 +200,8 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
             }
             continue;
         }
-        nodeId = pathIt->first;
-        pathElem = pathIt->second;
+        pathElem = *pathIt;
+        nodeId = pathElem->getId();
         pathList = pathElem->getList();
 
         if (printIndents)

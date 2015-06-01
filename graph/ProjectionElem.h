@@ -2,13 +2,13 @@
 #define PROJECTIONELEM_H
 
 #include <cstddef>
-#include <map>
+#include <deque>
 
 class ProjectionElem;
 
-typedef std::map <unsigned, ProjectionElem*> ProjectionElemMap;
-typedef std::pair<ProjectionElemMap::const_iterator,
-                  ProjectionElemMap::const_iterator> ProjectionElemMapItPair;
+typedef std::deque <ProjectionElem*> ProjectionElemList;
+typedef std::pair<ProjectionElemList::const_iterator,
+                  ProjectionElemList::const_iterator> ProjectionElemListItPair;
 
 
 class ProjectionElem
@@ -17,8 +17,12 @@ public:
     ProjectionElem(unsigned nodeId);
     ~ProjectionElem();
 
+    static bool less(const ProjectionElem* a, const ProjectionElem* b);
+    static bool lessById(const ProjectionElem* a, const unsigned id);
+
     unsigned getId() const;
     unsigned listCount() const;
+    unsigned getLevel() const;
 
     bool isOriginal() const;
     bool isLeaf() const;
@@ -27,19 +31,21 @@ public:
     ProjectionElem* getParent() const;
     void setParent(ProjectionElem* newParent);
     void setOriginal(ProjectionElem* newOriginal);
+    void setLevel(unsigned newLevel);
 
     const ProjectionElem* findInParents(unsigned searchId) const;
 
-    const ProjectionElemMap* getList() const;
+    const ProjectionElemList* getList() const;
 
     ProjectionElem* addElem(unsigned nodeId);
-    void eraseElem(const ProjectionElemMap::const_iterator pos);
+    void eraseElem(const ProjectionElemList::const_iterator pos);
 
 protected:
     unsigned nodeId;
+    unsigned level;
     ProjectionElem* parent;
     ProjectionElem* originalElem;
-    ProjectionElemMap* listElem;
+    ProjectionElemList* listElem;
 
 };
 

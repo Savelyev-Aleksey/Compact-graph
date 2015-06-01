@@ -56,7 +56,21 @@ void ProjectionElem::setOriginal(ProjectionElem *newOriginal)
 
 
 
-const ProjectionElemMap* ProjectionElem::getList() const
+void ProjectionElem::setLevel(unsigned newLevel)
+{
+    level = newLevel;
+}
+
+
+
+unsigned ProjectionElem::getLevel() const
+{
+    return level;
+}
+
+
+
+const ProjectionElemList* ProjectionElem::getList() const
 {
     return listElem;
 }
@@ -87,17 +101,17 @@ bool ProjectionElem::isEmpty() const
 ProjectionElem* ProjectionElem::addElem(unsigned nodeId)
 {
     if (!listElem)
-        listElem = new ProjectionElemMap;
+        listElem = new ProjectionElemList;
 
     ProjectionElem* el = new ProjectionElem(nodeId);
     el->setParent(this);
-    listElem->insert({nodeId, el});
+    listElem->push_back(el);
     return el;
 }
 
 
 
-void ProjectionElem::eraseElem(const ProjectionElemMap::const_iterator pos)
+void ProjectionElem::eraseElem(const ProjectionElemList::const_iterator pos)
 {
     if (listElem)
         listElem->erase(pos);
@@ -126,3 +140,16 @@ const ProjectionElem* ProjectionElem::findInParents(unsigned searchId) const
 }
 
 
+
+bool ProjectionElem::less(const ProjectionElem *a, const ProjectionElem *b)
+{
+    return (a->nodeId <  b->nodeId) ||
+           (a->nodeId == b->nodeId  && !a->originalElem);
+}
+
+
+
+bool ProjectionElem::lessById(const ProjectionElem *a, const unsigned id)
+{
+    return a->nodeId < id;
+}

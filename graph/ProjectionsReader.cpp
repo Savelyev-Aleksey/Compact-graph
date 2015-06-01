@@ -134,7 +134,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
         // If parents not exists so read parent from file
         if (!nodesStack.size())
         {
-            count = fscanf(fp, "%zu(", &nodeFromNum);
+            count = fscanf(fp, "%u(", &nodeFromNum);
             if (!count)
             {
                 readError = true;
@@ -149,16 +149,16 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             }
 
             parent = new ProjectionElem(nodeFromNum);
+            parent->setLevel(0);
             levelList = new ProjectionLevelList;
             projection = new Projection(nodeFromNum);
-            //projection->setProjection(parent, levelList);
             projection->rootNode = parent;
             projection->levelList = levelList;
-            projectionsList->insert({nodeFromNum, projection});
+            projectionsList->push_back(projection);
 
             // This is root level with respectived node
             level = new ProjectionLevelElem;
-            level->insert({nodeFromNum, parent});
+            level->push_back(parent);
             levelList->push_back(level);
             // This is current level for add child elements
             level = new ProjectionLevelElem;
@@ -167,7 +167,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             nodesStack.push_front(nodeFromNum);
             nodesElemStack.push_front(parent);
         }
-        count = fscanf(fp, "%zu", &nodeToNum);
+        count = fscanf(fp, "%u", &nodeToNum);
 
         // If readed add new node.
         if (count == 1)
@@ -186,8 +186,9 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
 
             // Add node
             elem = parent->addElem(nodeToNum);
+            elem->setLevel(indent);
             // Add node in current projection level
-            levelList->at(indent)->insert({nodeToNum, elem});
+            levelList->at(indent)->push_back(elem);
 
             graph.addEdge(nodeFromNum, nodeToNum, weight);
         }

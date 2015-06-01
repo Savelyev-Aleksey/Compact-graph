@@ -2,7 +2,7 @@
 #define PROJECTIONS_H
 
 #include <cstddef>
-#include <map>
+#include <deque>
 
 #include "types.h"
 #include "Worker.h"
@@ -12,7 +12,7 @@
 class Projection;
 class GraphBase;
 
-typedef std::map <unsigned, Projection*> ProjectionsList;
+typedef std::deque <Projection*> ProjectionsList;
 
 
 class Projections : public Worker

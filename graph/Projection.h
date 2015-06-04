@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <map>
 #include <deque>
+#include <vector>
 
 #include "types.h"
 
@@ -17,6 +18,7 @@ class ProjectionElem;
 
 typedef std::deque <ProjectionElem*> ProjectionLevelElem;
 typedef std::deque <ProjectionLevelElem*> ProjectionLevelList;
+typedef std::vector <std::vector<unsigned>*> ProjShortPaths;
 
 
 class Projection
@@ -30,8 +32,12 @@ public:
 
     friend bool ProjectionsReader::readProjections(FILE* fp,
                                                    FileTypes::Type typeId);
+    friend bool ProjectionsReader::readProjectionInfo(const char *fileName,
+                                                      Projection* pr);
 
     void clear();
+
+    bool isEmpty() const;
 
     unsigned getId() const;
     unsigned levelCount() const;
@@ -40,6 +46,8 @@ public:
 
     const ProjectionElem* getRootNode() const;
     uint_vec* getProjectionNodeStat() const;
+
+    ProjShortPaths* findShortPaths(unsigned nodeId, bool reverse = false);
 
     void createProjection(GraphBase& graph);
 
@@ -54,12 +62,15 @@ protected:
 
     unsigned eccesntricity;
     unsigned shortestLoop;
+    bool isFileExist;
 
     void createLastLevelProjection(const GraphBase& graph);
     void sortAllProjections();
 
     void updateAfterRead();
 
+private:
+    void clearLevels();
 };
 
 #endif // PROJECTION_H

@@ -8,6 +8,20 @@
 
 #include "GraphBase.h"
 #include "GraphReader.h"
+#include "FileTypes.h"
+
+
+/**
+ * Types[] must be in same order with FileTypes::Type
+ */
+const char* const GraphReader::types[] = {
+    "{NODE_NODE}",
+    "{NODE_NODE_VALUE}",
+    "{BRACKETS_FLAT}",
+    "{BRACKETS_FLAT_VALUE}",
+    "{BRACKETS}",
+    "{BRACKETS_VALUE}"
+};
 
 
 
@@ -22,53 +36,53 @@ GraphReader::~GraphReader()
 
 
 
+bool GraphReader::isCanRead(const char* type)
+{
+    Type t = FileTypes<Type>::typeId(type, types);
+    return t == Type::UNDEFINED ? false : true;
+}
+
+
+
+GraphReader::Type GraphReader::getType(const char *type)
+{
+    return FileTypes<Type>::typeId(type, types);
+}
+
+
+
 /**
- * @brief GraphReader::readFile - read file contain nodes. If file
- * not recognised error will logged.
- * This function used if class used standalone. It can read not all file types.
- * For other types used another classes.
- * For all types use class wrapper with overloaded readFile function.
- * @param fileName - string contain file name
- * @return true if read successful
+ * @brief GraphReader::readFile trying to open file to read.
+ * Checking file type. Returning file pointer for next reading file
+ * @param fileName - file name to open
+ * @param typeId - will return type if of file
+ * @return file pointer on success (file accessed to read and have proper type)
+ * otherwise nullptr returned
  */
-bool GraphReader::readFile(const char* fileName)
+FILE* GraphReader::openFile(const char* fileName, Type &typeId)
 {
     FILE* f = fopen(fileName, "r");
     if (f == nullptr)
     {
         lastError = Error::READ;
-        std::clog << "[!!!] Critical: Can't read file (" << fileName << ")\n";
-        return false;
+        std::clog << "[!!!] Error: Can't read file (" << fileName << ")\n";
+        return nullptr;
     }
 
     char typeStr[200];
     fgets(typeStr, 200, f);
-    FileTypes::Type typeId = FileTypes::typeId(typeStr);
-    if (typeId == FileTypes::Type::UNDEFINED)
+    typeId = FileTypes<Type>::typeId(typeStr, types);
+    if (typeId == Type::UNDEFINED)
     {
         lastError = Error::TYPE;
-        std::clog << "[!!!] Critical: File type is unknown " << typeStr
-                  << "in file (" << fileName << ")" << std::endl;
+        std::clog << "[!] Warning: File type is unknown " << typeStr
+                  << "Try to use an another class for read."
+                  << std::endl;
         fclose(f);
-        return false;
+        return nullptr;
     }
-    graph->scanInfo(f);
-    bool result = readFile(f, typeId);
-    fclose(f);
-
-    if (result)
-    {
-        lastError = Error::NONE;
-        std::clog << "File (" << fileName << ") readed" << std::endl;
-    }
-    else
-    {
-        std::clog << "Error in file (" << fileName << ")" << std::endl;
-    }
-
-    graph->logStatus();
-
-    return result;
+    lastError = Error::NONE;
+    return f;
 }
 
 
@@ -79,7 +93,7 @@ bool GraphReader::readFile(const char* fileName)
  * @param typeId - file type id
  * @return true if file readed successful
  */
-bool GraphReader::readFile(FILE *f, FileTypes::Type typeId)
+bool GraphReader::readFile(FILE *f, Type typeId)
 {
     bool result;
 
@@ -87,20 +101,18 @@ bool GraphReader::readFile(FILE *f, FileTypes::Type typeId)
 
     switch (typeId)
     {
-    case FileTypes::Type::NODE_NODE:
+    case Type::NODE_NODE:
         result = readEdges(f, false);
         break;
-    case FileTypes::Type::NODE_NODE_VALUE:
+    case Type::NODE_NODE_VALUE:
         result = readEdges(f, true);
         break;
-    case FileTypes::Type::BRACKETS:
-        // no break
-    case FileTypes::Type::BRACKETS_FLAT:
+    case Type::BRACKETS: // no break
+    case Type::BRACKETS_FLAT:
         result = readBrackets(f, false);
         break;
-    case FileTypes::Type::BRACKETS_VALUE:
-        // no break
-    case FileTypes::Type::BRACKETS_FLAT_VALUE:
+    case Type::BRACKETS_VALUE: // no break
+    case Type::BRACKETS_FLAT_VALUE:
         result = readBrackets(f, true);
         break;
 
@@ -163,7 +175,7 @@ bool GraphReader::readEdges(FILE* f, bool readValue)
             char buf[20];
             buf[19] = '\0';
             fread(buf, sizeof(char), 19, f);
-            std::clog << "[!!!] Critical: Error while reading from file on: "
+            std::clog << "[!!!] Error while reading from file on: "
                       << buf << std::endl;
             lastError = Error::SYNTAX;
             return false;
@@ -305,7 +317,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
     {
         if (feof(f))
         {
-            std::clog << "[!!!] Critical: Error while reading "
+            std::clog << "[!!!] Error while reading "
                          "at the end of file" << std::endl;
         }
         else
@@ -313,7 +325,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
             char buf[20] = "";
             buf[19] = '\0';
             fread(buf, sizeof(char), 19, f);
-            std::clog << "[!!!] Critical: Error while reading from file near: "
+            std::clog << "[!!!] Error while reading from file near: "
                       << buf << std::endl;
         }
         lastError = Error::SYNTAX;
@@ -321,7 +333,7 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
     }
     if (nodesStack.size())
     {
-        std::clog << "[!!!] Critical: Error while reading at the end of file. "
+        std::clog << "[!!!] Error while reading at the end of file. "
                      "File not full, nesting are wrong." << std::endl;
         lastError = Error::SYNTAX;
         return false;

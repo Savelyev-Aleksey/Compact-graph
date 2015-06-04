@@ -5,6 +5,8 @@
 #include "Projection.h"
 #include "GraphBase.h"
 
+
+
 Projections::Projections(GraphBase& graph) :
     Worker(),
     graph(&graph),
@@ -15,7 +17,11 @@ Projections::Projections(GraphBase& graph) :
 
 Projections::~Projections()
 {
-    clear();
+    for (auto it = projectionsList->rbegin();
+         it != projectionsList->rend(); ++it)
+    {
+        delete *it;
+    }
     delete projectionsList;
 }
 
@@ -54,6 +60,11 @@ GraphBase& Projections::getGraph() const
 
 
 
+/**
+ * @brief Projections::getProjection find projection for nodeId
+ * @param nodeId - node id for search projection
+ * @return pointer on projections if found else nullptr.
+ */
 Projection* Projections::getProjection(unsigned nodeId) const
 {
     auto start = projectionsList->begin();
@@ -66,7 +77,7 @@ Projection* Projections::getProjection(unsigned nodeId) const
 
 /**
  * @brief Projections::createAllProjections creates projection
- * for each node in graph.
+ * for each node in graph. Used on small graphs.
  */
 void Projections::createAllProjections()
 {
@@ -78,7 +89,7 @@ void Projections::createAllProjections()
     NodeMap* nodeList = graph->getNodeMap();
     unsigned count = nodeList->size();
 
-    // all projections exist. skip
+    // all projections exist - skip
     if (projectionsList->size() == count)
         return;
 
@@ -86,6 +97,7 @@ void Projections::createAllProjections()
     bool isWasEmpty = !oldSize;
 
     projectionsList->resize(count, nullptr);
+    projectionsList->shrink_to_fit();
 
     auto oldStart = projectionsList->begin();
     auto oldEnd = projectionsList->begin() + oldSize;
@@ -98,13 +110,14 @@ void Projections::createAllProjections()
 
     std::thread* threads[threadsCount] {nullptr} ;
 
-    startProcess(0, count - 1);
 
-    auto func = [](Projection* pr, GraphBase* graph){
+
+    auto func = [](Projection* pr, const GraphBase* graph){
         pr->createProjection(*graph);
     };
 
     auto it = nodeList->begin();
+    startProcess(0, count - 1);
 
     unsigned i = 0, end, currentId;
     unsigned pos = oldSize;
@@ -153,8 +166,8 @@ void Projections::createAllProjections()
     }
     if (!isWasEmpty)
     {
-        oldEnd = projectionsList->end();
-        std::sort(oldStart, oldEnd, Projection::less);
+        auto end = projectionsList->end();
+        std::sort(oldStart, end, Projection::less);
     }
     completeProcess();
 }
@@ -166,18 +179,28 @@ void Projections::createAllProjections()
  * graph.
  * @param nodeId - node id wich will be respectived node.
  */
-void Projections::createProjection(unsigned nodeId)
+const Projection* Projections::createProjection(unsigned nodeId)
 {
-    if (getProjection(nodeId))
-        return;
-    Projection* pr = new Projection(nodeId);
+    if (!graph->getNode(nodeId))
+        return false;
 
-    auto begin = projectionsList->begin();
-    auto end = projectionsList->end();
-    auto pos = std::lower_bound(begin, end, nodeId, Projection::lessById);
+    Projection* pr = getProjection(nodeId);
+    if (pr)
+    {
+        if (!pr->isEmpty())
+            return pr;
+    }
+    else
+    {
+        pr = new Projection(nodeId);
+        auto begin = projectionsList->begin();
+        auto end = projectionsList->end();
+        auto pos = std::lower_bound(begin, end, nodeId, Projection::lessById);
+        projectionsList->insert(pos, pr);
+    }
 
-    projectionsList->insert(pos, pr);
     pr->createProjection(*graph);
+    return pr;
 }
 
 
@@ -240,4 +263,23 @@ unsigned Projections::getGraphGirth() const
             break;
     }
     return min;
+}
+
+
+
+/**
+ * @brief Projections::findShortPaths finds paths between fromId and toId
+ * nodes Functions returns all available not intersected paths same length.
+ * @param fromId - node id for seach paths.
+ * @param toId - node id for seatch paths
+ * @param reverse - by default path order from root elem to find elem
+ * @return nullptr if no paths else vector of paths. path is vector of ids.
+ */
+ProjShortPaths* Projections::findShortPaths(unsigned fromId, unsigned toId,
+                                            bool reverse)
+{
+    Projection* pr = getProjection(fromId);
+    if (!pr)
+        return nullptr;
+    return pr->findShortPaths(toId, reverse);
 }

@@ -57,8 +57,6 @@ public:
     void printInfo(FILE* f) const;
     void scanInfo(FILE* f);
 
-    void logStatus();
-
 protected:
     NodeMap* nodeList;
     InfoDeque* info;

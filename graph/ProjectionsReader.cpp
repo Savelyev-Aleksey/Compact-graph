@@ -1,21 +1,157 @@
 #include <cstddef>
 #include <iostream>
-
+#include <cstring>
+#include <string>
+#include <algorithm>
 
 
 #include "ProjectionsReader.h"
 
 #include "ProjectionElem.h"
 #include "Projection.h"
-#include "Projections.h"
+#include "FileProjections.h"
 #include "GraphBase.h"
 
 
 
-ProjectionsReader::ProjectionsReader(Projections& projections) :
+/**
+ * Types[] must be in same order with FileTypes::Type
+ */
+const char* const ProjectionsReader::types[] = {
+    "{PROJECTIONS}"
+};
+
+
+
+ProjectionsReader::ProjectionsReader(FileProjections& projections) :
     ReaderBase(),
-    projections(&projections)
+    projections(&projections),
+    eccesntricity(0),
+    shortestLoop(0)
 {}
+
+
+
+ProjectionsReader::Type ProjectionsReader::getType(const char *type)
+{
+    return FileTypes<Type>::typeId(type, types);
+}
+
+
+
+/**
+ * @brief ProjectionsReader::readProjectionsInfo read projections info from
+ * files, stored near current graph file
+ * @param fileName - loaded graph file name.
+ * @return true if file found and no errors. false if file type wrong.
+ */
+bool ProjectionsReader::readProjectionsInfo(const std::string& fileName)
+{
+    if (!fileName.size())
+    {
+        lastError = Error::READ;
+        return false;
+    }
+
+    std::string projectionName(fileName);
+    auto end = projectionName.find_last_of('.', fileName.size());
+
+    const auto nodes = projections->getGraph().getNodeMap();
+    projections->clear();
+
+    unsigned nodesCount = nodes->size();
+
+    auto prList = projections->projectionsList;
+    prList->resize(nodesCount, nullptr);
+    prList->shrink_to_fit();
+
+
+    bool wasMissing = false, wasReaded = false, res;
+
+    unsigned nodeId, pos = 0;
+    Projection* pr;
+
+    for (const auto &it : *nodes)
+    {
+        nodeId = it.first;
+        projectionName.resize(end);
+        projectionName += "_pr_";
+        projectionName += std::to_string(nodeId);
+        projectionName += ".txt";
+
+        pr = new Projection(nodeId);
+        (*prList)[pos++] = pr;
+
+        res = readProjectionInfo(projectionName.data(), pr);
+        if (res)
+        {
+            wasReaded = true;
+        }
+        else
+        {
+            if (lastError == Error::TYPE)
+            {
+                return false;
+            }
+            else if (lastError == Error::READ)
+            {
+                wasMissing = true;
+            }
+        }
+    }
+
+    if (wasMissing)
+    {
+        if (!wasReaded)
+            projections->projectionStatus = Projections::Status::EMPTY;
+        else
+            projections->projectionStatus = Projections::Status::PARTIAL;
+    }
+    else
+    {
+        projections->projectionStatus = Projections::Status::ALL;
+    }
+
+
+    lastError = Error::NONE;
+    return true;
+}
+
+
+
+bool ProjectionsReader::readProjectionInfo(const char *fileName, Projection* pr)
+{
+    FILE* f = fopen(fileName, "r");
+    // If file not exist skip error to log.
+    // Maby graph is new and projections not created yet.
+    if (f == nullptr)
+    {
+        pr->isFileExist = false;
+        lastError = Error::READ;
+        return false;
+    }
+
+    char typeStr[200];
+    fgets(typeStr, 200, f);
+
+    Type typeId = FileTypes::typeId(typeStr, types);
+
+    if (typeId == Type::UNDEFINED)
+    {
+        lastError = Error::TYPE;
+        std::clog << "[!!!] Error: File type is unknown " << typeStr
+                  << std::endl;
+        fclose(f);
+        return false;
+    }
+    readInfo(f);
+
+    pr->eccesntricity = eccesntricity;
+    pr->shortestLoop = shortestLoop;
+    pr->isFileExist = true;
+
+    return true;
+}
 
 
 
@@ -28,52 +164,31 @@ ProjectionsReader::ProjectionsReader(Projections& projections) :
  * @param fileName - string contain file name
  * @return true if read successful
  */
-bool ProjectionsReader::readFile(const char *fileName)
+FILE* ProjectionsReader::openFile(const char *fileName, Type& typeId)
 {
     FILE* f = fopen(fileName, "r");
     if (f == nullptr)
     {
-        std::clog << "[!!!] Critical: Can't read file (" << fileName << ")\n";
-        return false;
+        std::clog << "[!!!] Error: Can't read file (" << fileName << ")\n";
+        lastError = Error::READ;
+        return nullptr;
     }
 
     char typeStr[200];
     fgets(typeStr, 200, f);
 
-    FileTypes::Type typeId = FileTypes::typeId(typeStr);
+    typeId = FileTypes::typeId(typeStr, types);
 
-    if (typeId == FileTypes::Type::UNDEFINED)
+    if (typeId == Type::UNDEFINED)
     {
         lastError = Error::TYPE;
-        std::clog << "[!!!] Critical: File type is unknown " << typeStr
+        std::clog << "[!] Warning: File type is unknown " << typeStr
+                  << ". Use other class implementations." << std::endl;
                   << std::endl;
         fclose(f);
-        return false;
+        return nullptr;
     }
-
-    bool outWarnings = options & (unsigned) Option::OUT_WARNINGS;
-    bool result;
-
-    if (typeId == FileTypes::Type::PROJECTIONS)
-    {
-        result = readProjections(f, typeId);
-    }
-    else if (outWarnings)
-    {
-        lastError = Error::TYPE;
-        std::clog << "[!] Warning: ShortPathReader can't read this file type, "
-                  << "use other class implementations" << std::endl;
-    }
-
-    fclose(f);
-
-    if (result)
-    {
-        lastError = Error::NONE;
-        std::clog << "File (" << fileName << ") readed" << std::endl;
-    }
-
-    return result;
+    return f;
 }
 
 
@@ -85,29 +200,20 @@ bool ProjectionsReader::readFile(const char *fileName)
  * @param options - some optinons (OUT_WARNINGS)
  * @return true if readed successful
  */
-bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
+bool ProjectionsReader::readProjections(FILE *fp, Type typeId)
 {
     if (!fp)
     {
         lastError = Error::READ;
         return false;
     }
-    if (typeId != FileTypes::Type::PROJECTIONS)
+    if (typeId != Type::PROJECTIONS)
     {
         lastError = Error::TYPE;
         return false;
     }
-    // Cleanup structures before read
-    projections->clear();
 
-    GraphBase& graph = projections->getGraph();
-
-    float weight = 0;
-    const char* weightStr = graph.getInfo("WEIGHT");
-    if (!weightStr || sscanf(weightStr, "%f", &weight) != 1)
-    {
-        weight = 0;
-    }
+    readInfo(fp);
 
     unsigned nodeFromNum, nodeToNum;
 
@@ -126,8 +232,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
     std::deque <ProjectionElem*> nodesElemStack;
 
     ProjectionsList* projectionsList = projections->projectionsList;
-
-//    ProjectionElemMap origianlNodes;
+    bool isPrWasEmpty = !projectionsList->size();
 
     while (!feof(fp))
     {
@@ -135,31 +240,48 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
         if (!nodesStack.size())
         {
             count = fscanf(fp, "%u(", &nodeFromNum);
-            if (!count)
+            if (count == 0)
             {
                 readError = true;
                 break;
             }
+            else if (count == -1)
+                continue;
             indent = 1;
 
-            // if on last loop will be readed
+            // if on last loop projection was readed
             if (projection)
             {
                 projection->updateAfterRead();
             }
 
+            if (!isPrWasEmpty)
+            {
+                projection=projections->Projections::getProjection(nodeFromNum);
+                if (projection)
+                {
+                    // Projection not empty
+                    if (projection->levelCount())
+                        continue;
+                }
+            }
+
+            if (isPrWasEmpty || !projection)
+            {
+                projection = new Projection(nodeFromNum);
+                projectionsList->push_back(projection);
+            }
+            // This is root level with respectived node
             parent = new ProjectionElem(nodeFromNum);
             parent->setLevel(0);
             levelList = new ProjectionLevelList;
-            projection = new Projection(nodeFromNum);
             projection->rootNode = parent;
             projection->levelList = levelList;
-            projectionsList->push_back(projection);
-
-            // This is root level with respectived node
+            // add zero level or respectived node
             level = new ProjectionLevelElem;
             level->push_back(parent);
             levelList->push_back(level);
+
             // This is current level for add child elements
             level = new ProjectionLevelElem;
             levelList->push_back(level);
@@ -178,8 +300,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
                 if (outWarnings)
                 {
                     std::clog << "[!] Warning: Loop found "
-                              << nodeFromNum << ' ' << nodeToNum
-                              << ' ' << weight << std::endl;
+                              << nodeFromNum << ' ' << nodeToNum << std::endl;
                 }
                 continue;
             }
@@ -189,8 +310,6 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
             elem->setLevel(indent);
             // Add node in current projection level
             levelList->at(indent)->push_back(elem);
-
-            graph.addEdge(nodeFromNum, nodeToNum, weight);
         }
         else if (count == 0)
         {
@@ -237,7 +356,7 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
         char buf[20] = "";
         buf[19] = '\0';
         fread(buf, sizeof(char), 19, fp);
-        std::clog << "[!!!] Critical: Error while reading from file near: "
+        std::clog << "[!!!] Error while reading from file near: "
                   << buf << std::endl;
         lastError = Error::SYNTAX;
         return false;
@@ -249,5 +368,84 @@ bool ProjectionsReader::readProjections(FILE *fp, FileTypes::Type typeId)
         projection->updateAfterRead();
     }
     return true;
+}
+
+
+
+/**
+ * @brief ProjectionsReader::scanInfo - read parameters from projection.
+ * This parameters was calculated then projection was created.
+ * Which parameters loaded - look at addInfo function
+ * @param f - open projection file
+ */
+void ProjectionsReader::readInfo(FILE *f)
+{
+    char buf[200], bracket;
+    fpos_t position;
+    while (true)
+    {
+        fgetpos(f, &position);
+        bracket = fgetc(f);
+        if (bracket != '{')
+        {
+            fsetpos(f, &position);
+            return;
+        }
+        fgets(buf, 200, f);
+        setInfo(buf);
+    }
+}
+
+
+
+/**
+ * @brief ProjectionsReader::addInfo - perfom readed parameters to trimmed
+ * upper case strings and add info in projection
+ * @param str
+ */
+void ProjectionsReader::setInfo(const char *str)
+{
+    if (!str)
+    {
+        return;
+    }
+    const char* pos = strchr(str, '=');
+    if (pos == nullptr)
+    {
+        return;
+    }
+
+    std::string name(str, pos - str);
+    std::string value(pos + 1);
+
+    // upper case
+    std::transform(name.begin(), name.end(), name.begin(),
+                   (int (*)(int))std::toupper);
+    // trim
+    name.erase(0, name.find_first_not_of(" \t") );
+    name.erase(name.find_last_not_of(" \t") +1, name.size() );
+
+    // upper case
+    std::transform(value.begin(), value.end(), value.begin(),
+                   (int (*)(int))std::toupper);
+    // trim
+    value.erase(0, value.find_first_not_of(" \r\n\t") );
+    value.erase(value.find_last_not_of(" \r\n\t}") + 1, value.size() );
+
+    setInfo(name, value);
+}
+
+
+
+void ProjectionsReader::setInfo(const std::string& prop, std::string& value)
+{
+    if (prop.compare("ECCESNTRICITY") == 0)
+    {
+        eccesntricity = static_cast <unsigned> ( std::stoul(value) );
+    }
+    else if (prop.compare("SHORTEST_LOOP") == 0)
+    {
+        shortestLoop = static_cast <unsigned> ( std::stoul(value) );
+    }
 }
 

@@ -2,7 +2,6 @@
 #define GRAPHREADER_H
 
 #include <cstdio>
-#include "FileTypes.h"
 #include "ReaderBase.h"
 
 class GraphBase;
@@ -18,11 +17,31 @@ public:
     GraphReader(GraphBase& graph);
     ~GraphReader();
 
-    bool readFile(const char* fileName);
-    bool readFile(FILE* f, FileTypes::Type typeId);
+    static const char* const types[];
+
+    enum class Type : unsigned
+    {
+        // Type id must be in same order with types[]
+        NODE_NODE,
+        NODE_NODE_VALUE,
+        BRACKETS_FLAT,
+        BRACKETS_FLAT_VALUE,
+        BRACKETS,
+        BRACKETS_VALUE,
+        // Always must be last - used in loop
+        UNDEFINED
+    };
+
+    static Type getType(const char* type);
+
+    static bool isCanRead(const char* type);
+
+    FILE* openFile(const char* fileName, Type& typeId);
+    bool readFile(FILE* f, Type typeId);
 
 protected:
     GraphBase* graph;
+
 
     bool readEdges(FILE* f, bool readValue);
     bool readBrackets(FILE* f, bool readValue);

@@ -22,7 +22,6 @@ GraphBase::~GraphBase()
 {
     clear();
     std::clog << "GraphBase was cleaned from destructor" << std::endl;
-    logStatus();
     delete nodeList;
     delete info;
 }
@@ -66,9 +65,9 @@ unsigned GraphBase::edgeCount() const
  */
 void GraphBase::clearNodes()
 {
-    for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
+    for (auto &it : *nodeList)
     {
-        delete it->second;
+        delete it.second;
     }
     nodeList->clear();
     edgeSize = 0;
@@ -81,10 +80,10 @@ void GraphBase::clearNodes()
  */
 void GraphBase::clearInfo()
 {
-    for (unsigned i = 0; i < info->size(); ++i)
+    for (auto &pair : *info)
     {
-        delete[] info->at(i).first;
-        delete[] info->at(i).second;
+        delete[] pair.first;
+        delete[] pair.second;
     }
     info->clear();
 }
@@ -415,18 +414,5 @@ const Edge* GraphBase::getEdge(unsigned nodeFromNum, unsigned nodeToNum) const
         return nullptr;
     }
     return nodeIterator->second->getEdge(nodeToNum);
-}
-
-
-
-/**
- * Write in log current node and edge status
- */
-void GraphBase::logStatus()
-{
-    std::clog << std::endl << "Print info:" << std::endl
-              << "\tNode count: \t" << nodeList->size() << std::endl
-              << "\tEdge count: \t" << edgeSize << std::endl
-              << std::endl;
 }
 

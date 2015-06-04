@@ -4,22 +4,6 @@
 #include "FileTypes.h"
 
 
-/**
- * Types[] must be in same order with FileTypes::Type
- */
-const char* const FileTypes::types[] = {
-    "{NODE_NODE}",
-    "{NODE_NODE_VALUE}",
-    "{BRACKETS_FLAT}",
-    "{BRACKETS_FLAT_VALUE}",
-    "{BRACKETS}",
-    "{BRACKETS_VALUE}",
-    "{BRACKETS_SHORT_PATH_VALUE}",
-    "{PROJECTIONS}"
-};
-
-
-
 FileTypes::FileTypes()
 { }
 
@@ -35,17 +19,18 @@ FileTypes::~FileTypes()
  * @param typeStr - string file type
  * @return file type id from enum of UNDEFINED id if found
  */
-FileTypes::Type FileTypes::typeId(const char* typeStr)
+template <typename T>
+T FileTypes::typeId(const char* typeStr, const char** types)
 {
-    unsigned end = (unsigned) Type::UNDEFINED;
+    unsigned end = (unsigned) T::UNDEFINED;
     for (unsigned i = 0; i < end; ++i)
     {
         if (!strncmp(typeStr, types[i], strlen(types[i])))
         {
-            return (Type) i;
+            return static_cast <T> (i);
         }
     }
-    return Type::UNDEFINED;
+    return T::UNDEFINED;
 }
 
 
@@ -54,9 +39,10 @@ FileTypes::Type FileTypes::typeId(const char* typeStr)
  * @param typeId - searched by enum file id
  * @return file type string pointer or nullptr if not found
  */
-const char* FileTypes::typeName(Type typeId)
+template <typename T>
+const char* FileTypes::typeName(T typeId, const char** types)
 {
-    if (typeId >= Type::UNDEFINED)
+    if (typeId >= T::UNDEFINED)
     {
         return nullptr;
     }

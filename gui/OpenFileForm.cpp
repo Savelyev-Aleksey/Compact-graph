@@ -135,7 +135,7 @@ void OpenFileForm::readFile()
     QByteArray name( fileName.toLocal8Bit() );
 
     mainWindow->showStatusMessage(tr("Clearing graph..."));
-    graph.clearGraph();
+    graph.clear();
 
     bool isReaded = graph.readFile(name.data());
     if (isReaded)

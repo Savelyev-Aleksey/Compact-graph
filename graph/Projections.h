@@ -7,9 +7,9 @@
 #include "types.h"
 #include "Worker.h"
 
+#include "Projection.h"
 #include "ProjectionsReader.h"
 
-class Projection;
 class GraphBase;
 
 typedef std::deque <Projection*> ProjectionsList;
@@ -21,26 +21,33 @@ public:
     Projections(GraphBase& graph);
     virtual ~Projections();
 
-    friend bool ProjectionsReader::readProjections(FILE *fp,
-                                                   FileTypes::Type typeId);
+    friend bool ProjectionsReader::
+                readProjections(FILE *fp, ProjectionsReader::Type typeId);
+
+    friend bool ProjectionsReader::
+                readProjectionsInfo(const std::string& fileName);
+
 
     bool isEmpty() const;
 
-    void clear();
+    virtual void clear();
 
     unsigned size() const;
 
     const ProjectionsList* getList() const;
     GraphBase& getGraph() const;
 
-    Projection* getProjection(unsigned nodeId) const;
+    virtual Projection* getProjection(unsigned nodeId) const;
     UintMap* getEccentriciyStatistic() const;
     unsigned getGraphGirth() const;
 
-    void createAllProjections();
-    void createProjection(unsigned nodeId);
-
     bool isProjectionExist(unsigned nodeId) const;
+
+    virtual void createAllProjections();
+    virtual const Projection* createProjection(unsigned nodeId);
+
+    virtual ProjShortPaths* findShortPaths(unsigned fromId, unsigned toId,
+                                           bool reverse = false);
 
 protected:
     GraphBase* graph;

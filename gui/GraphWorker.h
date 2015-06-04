@@ -46,7 +46,7 @@ public:
 
 public:
     // Short path
-    virtual void generateAllShortPaths();
+    virtual void createAllShortPaths();
 
 
 protected:

@@ -14,7 +14,7 @@ class GraphBase;
 class Node;
 
 typedef std::pair <cuint, ShortPathElem*> PathPair;
-// first hierarchy struct, second basic map
+// TODO: move paths on deque instead map, add less comp func and others
 typedef std::map  <unsigned, ShortPathRootElem*> RootPathList;
 typedef std::deque <unsigned> NodeIdDeque;
 typedef std::deque <const Node *> NodeDeque;
@@ -27,7 +27,7 @@ public:
     ShortPath(GraphBase& graph);
     ~ShortPath();
 
-    void generateAllShortPaths(float pathLimit);
+    void createAllShortPaths(float pathLimit);
     void generateShortPath(const unsigned startNodeId, float pathLimit = 0);
     bool isPathExist(unsigned nodeId) const;
 
@@ -57,6 +57,8 @@ protected:
     void updateSubpath(PathPair* pair, float difference, unsigned indent,
                        NodeDeque& nodesToVisit);
 
+private:
+    void clearPathList();
 };
 
 #endif // SHORTPATH_H

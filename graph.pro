@@ -52,7 +52,11 @@ SOURCES += gui/main.cpp\
     graph/ProjectionsWriter.cpp \
     graph/ProjectionsReader.cpp \
     gui/NodeInfoForm.cpp \
-    gui/StatisticMenuForm.cpp
+    gui/StatisticMenuForm.cpp \
+    graph/FileProjections.cpp \
+    graph/GraphBaseFacade.cpp \
+    graph/ShortPathFacade.cpp \
+    graph/FileProjectionsFacade.cpp
 
 HEADERS  += \
     graph/Edge.h \
@@ -87,7 +91,11 @@ HEADERS  += \
     graph/ProjectionsWriter.h \
     graph/ProjectionsReader.h \
     gui/NodeInfoForm.h \
-    gui/StatisticMenuForm.h
+    gui/StatisticMenuForm.h \
+    graph/FileProjections.h \
+    graph/GraphBaseFacade.h \
+    graph/ShortPathFacade.h \
+    graph/FileProjectionsFacade.h
 
 FORMS    += \
     gui/OpenFileForm.ui \

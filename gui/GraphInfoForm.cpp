@@ -71,7 +71,7 @@ void GraphInfoForm::createShortPaths()
 
     GraphWorker& graph = mainWindow->getGraph();
 
-    graph.generateAllShortPaths();
+    graph.createAllShortPaths();
     graph.updateParametersByShortPaths();
 
     printGraphParameters();

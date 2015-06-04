@@ -141,6 +141,15 @@ const ProjectionElem* ProjectionElem::findInParents(unsigned searchId) const
 
 
 
+/**
+ * @brief ProjectionElem::less used in std sort function. Added condition
+ * what garanty each original node will be before all it's replicas.
+ * Used in Projection::sortAllProjections() function
+ * @param a left elem
+ * @param b right elem
+ * @return true if id's of a less id's of b or
+ * if both are equal elem a is original
+ */
 bool ProjectionElem::less(const ProjectionElem *a, const ProjectionElem *b)
 {
     return (a->nodeId <  b->nodeId) ||

@@ -25,11 +25,30 @@ ShortPath::ShortPath(GraphBase& graph) :
 
 ShortPath::~ShortPath()
 {
-    for (auto it = shortPathNodes->begin(); it != shortPathNodes->end(); ++it)
-    {
-        delete it->second;
-    }
+    clearPathList();
     delete shortPathNodes;
+}
+
+
+
+void ShortPath::clearPathList()
+{
+    for (auto i = shortPathNodes->rbegin(), e = shortPathNodes->rend();
+         i != e; ++i)
+    {
+        delete i->second;
+    }
+    shortPathNodes->clear();
+}
+
+
+
+/**
+ * @brief ShortPath::clearAllPaths - Clean all exists paths
+ */
+void ShortPath::clear()
+{
+    clearPathList();
 }
 
 
@@ -89,20 +108,6 @@ void ShortPath::clearPath(unsigned nodeId)
     }
     delete it->second;
     shortPathNodes->erase(it);
-}
-
-
-
-/**
- * @brief ShortPath::clearAllPaths - Clean all exists path
- */
-void ShortPath::clear()
-{
-    for (auto it = shortPathNodes->begin(); it != shortPathNodes->end(); ++it)
-    {
-        delete it->second;
-    }
-    shortPathNodes->clear();
 }
 
 
@@ -236,7 +241,7 @@ void ShortPath::updateSubpath(PathPair* pair, float difference,
  * for each node.
  * @param pathLimit - set max weight for path search
  */
-void ShortPath::generateAllShortPaths(float pathLimit)
+void ShortPath::createAllShortPaths(float pathLimit)
 {
     if (graph->isEmpty())
     {

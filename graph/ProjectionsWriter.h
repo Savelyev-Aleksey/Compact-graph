@@ -9,7 +9,7 @@
 #include "WriterBase.h"
 
 
-class Projections;
+class FileProjections;
 class Projection;
 
 
@@ -17,7 +17,7 @@ class Projection;
 class ProjectionsWriter : public WriterBase
 {
 public:
-    ProjectionsWriter(Projections& projections);
+    ProjectionsWriter(FileProjections& projections);
     ~ProjectionsWriter();
 
     bool saveProjections(const char* fileName,
@@ -26,10 +26,12 @@ public:
                         cuint options = (cuint) Option::NONE);
 
 protected:
-    Projections* projections;
+    FileProjections* projections;
 
     bool writeProjection(FILE* f, const Projection* projection,
          cuint options = (cuint) Option::NONE, bool isProgress = true);
+
+    void writeParameters(FILE* f, const Projection* pr);
 };
 
 #endif // PROJECTIONSWRITER_H

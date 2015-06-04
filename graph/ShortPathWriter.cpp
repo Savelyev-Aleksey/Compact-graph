@@ -4,6 +4,7 @@
 #include "GraphBase.h"
 #include "ShortPathElem.h"
 #include "ShortPathRootElem.h"
+#include "ShortPathReader.h"
 
 
 
@@ -76,9 +77,10 @@ bool ShortPathWriter::writeExistPaths(const char* fileName,
         return false;
     }
 
-    FileTypes::Type typeId = FileTypes::Type::BRACKETS_SHORT_PATH_VALUE;
+    ShortPathReader::Type typeId =
+                          ShortPathReader::Type::BRACKETS_SHORT_PATH_VALUE;
 
-    const char* fileType = FileTypes::typeName(typeId);
+    const char* fileType = FileTypes::typeName(typeId, ShortPathReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 

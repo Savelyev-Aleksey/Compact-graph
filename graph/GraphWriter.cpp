@@ -1,10 +1,11 @@
 
 #include <iostream>
 
+#include "GraphWriter.h"
 #include "Node.h"
 #include "Edge.h"
 #include "GraphBase.h"
-#include "GraphWriter.h"
+#include "GraphReader.h"
 
 
 
@@ -30,14 +31,14 @@ FILE* GraphWriter::openFile(const char *fileName)
 {
     if (fileName == nullptr)
     {
-        std::clog << "[!!!] Critical: File name not set" << std::endl;
+        std::clog << "[!!!] Error: File name not set" << std::endl;
         return nullptr;
     }
 
     FILE* f = fopen(fileName, "w");
     if (f == nullptr)
     {
-        std::clog << "[!!!] Critical: Can't open file on write - " << fileName
+        std::clog << "[!!!] Error: Can't open file on write - " << fileName
                   << std::endl;
         return nullptr;
     }
@@ -66,10 +67,10 @@ bool GraphWriter::writeEdges(const char *fileName, cuint options)
     bool outInfo    = options & (unsigned) Option::PRINT_INFO;
     bool printValue = options & (unsigned) Option::PRINT_VALUE;
 
-    FileTypes::Type typeId = printValue ? FileTypes::Type::NODE_NODE_VALUE :
-                                          FileTypes::Type::NODE_NODE;
+    GraphReader::Type typeId = printValue ? GraphReader::Type::NODE_NODE_VALUE :
+                                            GraphReader::Type::NODE_NODE;
 
-    const char* fileType = FileTypes::typeName(typeId);
+    const char* fileType = FileTypes::typeName(typeId, GraphReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 
@@ -135,10 +136,11 @@ bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
     bool printInfo  = options & (unsigned) Option::PRINT_INFO;
     bool printValue = options & (unsigned) Option::PRINT_VALUE;
 
-    FileTypes::Type typeId = printValue ? FileTypes::Type::BRACKETS_FLAT_VALUE :
-                                          FileTypes::Type::BRACKETS_FLAT;
+    GraphReader::Type typeId = printValue ?
+                               GraphReader::Type::BRACKETS_FLAT_VALUE :
+                               GraphReader::Type::BRACKETS_FLAT;
 
-    const char* fileType = FileTypes::typeName(typeId);
+    const char* fileType = FileTypes::typeName(typeId, GraphReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 
@@ -247,10 +249,10 @@ bool GraphWriter::writeBrackets(const char *fileName, cuint startNodeId,
     bool printValue   = options & (unsigned) Option::PRINT_VALUE;
     bool printIndents = options & (unsigned) Option::PRINT_INDENTS;
 
-    FileTypes::Type typeId = printValue ? FileTypes::Type::BRACKETS_VALUE :
-                                          FileTypes::Type::BRACKETS;
+    GraphReader::Type typeId = printValue ? GraphReader::Type::BRACKETS_VALUE :
+                                            GraphReader::Type::BRACKETS;
 
-    const char* fileType = FileTypes::typeName(typeId);
+    const char* fileType = FileTypes::typeName(typeId, GraphReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 

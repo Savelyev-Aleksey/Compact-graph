@@ -15,14 +15,35 @@ Projection::Projection(unsigned nodeId) :
     rootNode(nullptr),
     levelList(nullptr),
     eccesntricity(0),
-    shortestLoop(0)
+    shortestLoop(0),
+    isFileExist(false)
 {}
 
 
 
 Projection::~Projection()
 {
-    clear();
+    clearLevels();
+    if (levelList)
+        delete levelList;
+}
+
+
+
+void Projection::clearLevels()
+{
+    if (!levelList)
+        return;
+
+    for(auto i = levelList->rbegin(), end = levelList->rend(); i != end ; ++i)
+    {
+        for (auto &elem : **i)
+        {
+            delete elem;
+        }
+        delete *i;
+    }
+    levelList->clear();
 }
 
 
@@ -31,20 +52,11 @@ void Projection::clear()
 {
     if (!levelList)
         return;
-    for(unsigned i = levelList->size(); i > 0 ; --i)
-    {
-        auto *level = levelList->at(i - 1);
-        for (auto &it : *level)
-        {
-            delete it;
-        }
-        delete level;
-    }
+
+    clearLevels();
     delete levelList;
     levelList = nullptr;
     rootNode = nullptr;
-    eccesntricity = 0;
-    shortestLoop = 0;
 }
 
 
@@ -72,7 +84,7 @@ unsigned Projection::getId() const
 
 unsigned Projection::levelCount() const
 {
-    return levelList->size();
+    return levelList ? levelList->size() : 0;
 }
 
 
@@ -98,6 +110,13 @@ unsigned Projection::getShortestLoop() const
 
 
 
+bool Projection::isEmpty() const
+{
+    return levelList ? !levelList->size() : true;
+}
+
+
+
 /**
  * @brief Projection::createProjection create projection for current
  * projection element
@@ -118,6 +137,7 @@ void Projection::createProjection(GraphBase &graph)
     ProjectionLevelElem* curLevel = new ProjectionLevelElem;
     // add in zero level perspectived node
     curLevel->push_back(elem);
+    curLevel->shrink_to_fit();
     // push level in level list
     levelList->push_back(curLevel);
 
@@ -183,7 +203,7 @@ void Projection::createProjection(GraphBase &graph)
         }
         else
         {
-            // Sort level for fast search
+            // Sort level for fast search, original elem between same id's first
             std::sort(curLevel->begin(), curLevel->end(), ProjectionElem::less);
             // add new level in projection list
             levelList->push_back(curLevel);
@@ -255,6 +275,7 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
         }
         if (curLevel->size())
         {
+            std::sort(curLevel->begin(), curLevel->end(), ProjectionElem::less);
             levelList->push_back(curLevel);
         }
         else
@@ -268,8 +289,9 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
 
 /**
  * @brief Projection::updateOriginalInfo updates info about original nodes.
- * Usual used after read projections from file. Where difficult store original
- * info about nodes. After reading start this function for update this info
+ * Usual used after read projections from file where difficult store original
+ * info about nodes. After reading this function called for update orign info.
+ * In current version it's automatically calls from updateAfterRead function.
  */
 void Projection::updateOriginalInfo()
 {
@@ -302,7 +324,9 @@ void Projection::updateEccesntricity()
     for (const auto &elem : *level)
     {
         // If one node is original so all original nodes on this level
-        // have no edges between together
+        // have no edges between together else in create function was created
+        // new level for add info about edges between nodes
+        // with same path length by createLastLevelProjection function
         if (elem->isOriginal())
         {
             eccesntricity = levelList->size() - 1;
@@ -330,6 +354,7 @@ void Projection::updateShortestLoop()
     unsigned origId;
     unsigned endL = levelList->size();
 
+    // going by levels exclude zero level with one node
     for(unsigned origN = 1; origN < endL; ++origN)
     {
         // if start for this we not find less.
@@ -337,7 +362,7 @@ void Projection::updateShortestLoop()
             break;
 
         const auto &origL = *levelList->at(origN);
-        // move by level find original node
+        // move by level to find original node
         for (auto origIt = origL.begin(), origEnd = origL.end();
              origIt != origEnd; ++origIt)
         {
@@ -345,23 +370,22 @@ void Projection::updateShortestLoop()
             {
                 continue;
             }
-
+            // So orig node founded, get id
             origId = (*origIt)->getId();
             bool find = false;
             unsigned replN = origN;
-            // Skip first level for search - only original nodes
+            // Skip first level for search (in first only original nodes)
             if (origN > 1)
             {
-                // find replica of this node in current level
-                auto replIt = origIt;
-                for (++replIt; replIt != origEnd; ++replIt)
+                // find replica of this node in current same level
+                // continue search after founded original node
+                auto repIt = origIt;
+                ++repIt;
+
+                if (repIt != origEnd && (*repIt)->getId() == origId)
                 {
-                    if ((*replIt)->getId() == origId &&
-                        !(*replIt)->isOriginal())
-                    {
-                        find = true;
-                        break;
-                    }
+                    find = true;
+                    break;
                 }
             }
 
@@ -369,21 +393,17 @@ void Projection::updateShortestLoop()
             {
                 for(++replN; replN != endL; ++replN)
                 {
-                    const auto &replL = *levelList->at(replN);
-                    const auto replEnd = replL.end();
+                    const auto &repLevel = *levelList->at(replN);
+                    const auto repB = repLevel.begin();
+                    const auto repE = repLevel.end();
                     // find replica of this node in next levels
-                    for (auto replIt = replL.begin(); replIt != replEnd;
-                         ++replIt)
+                    const auto repIt = std::lower_bound(repB, repE, origId,
+                                                         Projection::lessById);
+                    if (repIt != repE && (*repIt)->getId() == origId)
                     {
-                        if ((*replIt)->getId() == origId &&
-                            !(*replIt)->isOriginal())
-                        {
-                            find = true;
-                            break;
-                        }
-                    }
-                    if (find)
+                        find = true;
                         break;
+                    }
                 }
             }
 
@@ -443,6 +463,11 @@ uint_vec* Projection::getProjectionNodeStat() const
 
 
 
+/**
+ * @brief Projection::sortAllProjections sort all elements in each projection.
+ * After sorting all original nodes will be first after same node id replicas.
+ * It's added in less compare function.
+ */
 void Projection::sortAllProjections()
 {
     if (!levelList || !levelList->size())
@@ -464,4 +489,78 @@ void Projection::updateAfterRead()
     sortAllProjections();
     updateEccesntricity();
     updateShortestLoop();
+}
+
+
+
+/**
+ * @brief Projection::findShortPaths finds paths from current node to root elem
+ * (respectived node). Functions returns all available not intersected paths
+ * from respectived node to the current same length.
+ * @param nodeId - node id to search in current projection
+ * @param reverse - by default path order from root elem to find elem
+ * @return nullptr if no paths else vector of paths. path is vector of ids.
+ */
+ProjShortPaths* Projection::findShortPaths(unsigned nodeId, bool reverse)
+{
+    if (!levelList || !levelList->size())
+        return nullptr;
+
+    ProjectionLevelElem::const_iterator start, stop;
+    const ProjectionLevelElem* level = nullptr;
+    unsigned levelNum = 1;
+    // start search from first level in zero perspectived node
+    const auto it = levelList->begin(), end = levelList->end();
+    // Find first level where located
+    for(++it; it != end; ++it, ++levelNum)
+    {
+        start = std::lower_bound(it->begin(), it->end(),
+                                 nodeId, ProjectionElem::lessById);
+        if (start == it->end())
+            continue;
+
+        if (start->getId() == nodeId)
+        {
+            level = *it;
+            break;
+        }
+    }
+    if (!level)
+        return nullptr;
+
+    // find count same elements
+    stop = std::upper_bound(start, level->end(),
+                            nodeId, ProjectionElem::lessById);
+    unsigned count = std::distance(start, stop);
+
+    // add elements in list
+    ProjShortPaths* paths = new ProjShortPaths(count, nullptr);
+    unsigned i = 0;
+    for (; start != stop; ++start)
+    {
+        auto v = new std::vector<unsigned>(levelNum + 1);
+        (*paths)[i] = v;
+        const ProjectionElem* el = (*start);
+        if (reverse)
+        {
+            // move from the current elem to the respectived (root) elem
+            unsigned j = 0;
+            do
+            {
+                (*v)[j++] = el->getId();
+                el = el->getParent();
+            } while (el);
+        }
+        else
+        {
+            // move from the respectived (root) elem to current elem
+            unsigned j = levelNum;
+            do
+            {
+                (*v)[j--] = el->getId();
+                el = el->getParent();
+            } while (el);
+        }
+    }
+    return paths;
 }

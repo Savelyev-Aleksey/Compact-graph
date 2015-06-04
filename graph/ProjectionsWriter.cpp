@@ -2,15 +2,17 @@
 
 
 #include "ProjectionsWriter.h"
+#include "FileProjections.h"
 #include "Projections.h"
 #include "Projection.h"
 #include "ProjectionElem.h"
 #include "FileTypes.h"
 #include "GraphBase.h"
+#include "ProjectionsReader.h"
 
 
 
-ProjectionsWriter::ProjectionsWriter(Projections& projections) :
+ProjectionsWriter::ProjectionsWriter(FileProjections& projections) :
     WriterBase(),
     projections(&projections)
 {}
@@ -44,9 +46,9 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
         return false;
     }
 
-    FileTypes::Type typeId = FileTypes::Type::PROJECTIONS;
+    ProjectionsReader::Type typeId = ProjectionsReader::Type::PROJECTIONS;
 
-    const char* fileType = FileTypes::typeName(typeId);
+    const char* fileType = FileTypes::typeName(typeId,ProjectionsReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 
@@ -111,9 +113,9 @@ bool ProjectionsWriter::saveProjection(const char *fileName, unsigned rootNode,
         return false;
     }
 
-    FileTypes::Type typeId = FileTypes::Type::PROJECTIONS;
+    ProjectionsReader::Type typeId = ProjectionsReader::Type::PROJECTIONS;
 
-    const char* fileType = FileTypes::typeName(typeId);
+    const char* fileType = FileTypes::typeName(typeId,ProjectionsReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 
@@ -123,6 +125,7 @@ bool ProjectionsWriter::saveProjection(const char *fileName, unsigned rootNode,
     {
         projections->getGraph().printInfo(f);
     }
+    writeParameters(f, pr);
 
     unsigned size = pr->getRootNode()->listCount();
     if (size)
@@ -247,3 +250,9 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
 }
 
 
+
+void ProjectionsWriter::writeParameters(FILE *f, const Projection* pr)
+{
+    fprintf(f, "{ECCESNTRICITY=%u}\n", pr->getEccentricity());
+    fprintf(f, "{SHORTEST_LOOP=%u}\n", pr->getShortestLoop());
+}

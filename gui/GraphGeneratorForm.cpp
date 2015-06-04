@@ -81,7 +81,7 @@ void GraphGeneratorForm::generateHypercube()
     GraphWorker& graph = mainWindow->getGraph();
 
     mainWindow->showStatusMessage(tr("Clearing graph..."));
-    graph.clearGraph();
+    graph.clear();
 
     graph.generateHypercube(dimention, weight);
     mainWindow->showStatusMessage(tr("Hypercube created"), 5000);
@@ -112,7 +112,7 @@ void GraphGeneratorForm::generateTorus()
     GraphWorker& graph = mainWindow->getGraph();
 
     mainWindow->showStatusMessage(tr("Clearing graph..."));
-    graph.clearGraph();
+    graph.clear();
 
     graph.generateTorus(bigRadius, smallRadius, weight);
     mainWindow->showStatusMessage(tr("Torus created"), 5000);

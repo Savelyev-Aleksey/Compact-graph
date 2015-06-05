@@ -41,6 +41,7 @@ public:
     UintMap* getEccentriciyStatisticByProjections() const;
 
     // Reader
+    static bool isCanRead(const char* typeStr);
     bool readFile(const char* fileName);
 
     // For ShortPath method

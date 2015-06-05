@@ -33,7 +33,6 @@ public:
     };
 
     static Type getType(const char* type);
-
     static bool isCanRead(const char* type);
 
     FILE* openFile(const char* fileName, Type& typeId);

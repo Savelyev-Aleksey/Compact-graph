@@ -70,7 +70,8 @@ bool GraphWriter::writeEdges(const char *fileName, cuint options)
     GraphReader::Type typeId = printValue ? GraphReader::Type::NODE_NODE_VALUE :
                                             GraphReader::Type::NODE_NODE;
 
-    const char* fileType = FileTypes::typeName(typeId, GraphReader::types);
+    const char* fileType = FileTypes<GraphReader::Type>::
+                           typeName(typeId, GraphReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 
@@ -140,7 +141,8 @@ bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
                                GraphReader::Type::BRACKETS_FLAT_VALUE :
                                GraphReader::Type::BRACKETS_FLAT;
 
-    const char* fileType = FileTypes::typeName(typeId, GraphReader::types);
+    const char* fileType = FileTypes<GraphReader::Type>::
+                           typeName(typeId, GraphReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 
@@ -252,7 +254,8 @@ bool GraphWriter::writeBrackets(const char *fileName, cuint startNodeId,
     GraphReader::Type typeId = printValue ? GraphReader::Type::BRACKETS_VALUE :
                                             GraphReader::Type::BRACKETS;
 
-    const char* fileType = FileTypes::typeName(typeId, GraphReader::types);
+    const char* fileType = FileTypes<GraphReader::Type>::
+                           typeName(typeId, GraphReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 

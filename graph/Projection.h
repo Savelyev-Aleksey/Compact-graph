@@ -24,16 +24,14 @@ typedef std::vector <std::vector<unsigned>*> ProjShortPaths;
 class Projection
 {
 public:
+    friend class ProjectionsReader;
+
     Projection(unsigned nodeId);
     ~Projection();
 
     static bool less(const Projection* a, const Projection* b);
     static bool lessById(const Projection* a, const unsigned &id);
 
-    friend bool ProjectionsReader::readProjections(FILE* fp,
-                                                   FileTypes::Type typeId);
-    friend bool ProjectionsReader::readProjectionInfo(const char *fileName,
-                                                      Projection* pr);
 
     void clear();
 

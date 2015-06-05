@@ -30,6 +30,7 @@ public:
 
     virtual void clear();
 
+    static bool isCanRead(const char* typeStr);
     static Type getType(const char* typeStr);
 
     virtual bool readFile(const char* fileName);

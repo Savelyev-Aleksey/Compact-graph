@@ -28,6 +28,7 @@ public:
         UNDEFINED
     };
 
+    static bool isCanRead(const char* typeStr);
     static Type getType(const char *type);
 
     FILE* openFile(const char* fileName, Type& typeId);

@@ -2,7 +2,7 @@
 #define FILETYPES_H
 
 
-template <typename T>
+template< typename Type >
 class FileTypes
 {
 public:
@@ -10,8 +10,8 @@ public:
     FileTypes();
     ~FileTypes();
 
-    static T typeId(const char* typeStr, const char** types);
-    static const char* typeName(T typeId, const char** types);
+    static Type typeId(const char* typeStr, const char* const types[]);
+    static const char* typeName(Type typeId, const char* const types[]);
 };
 
 #endif // FILETYPES_H

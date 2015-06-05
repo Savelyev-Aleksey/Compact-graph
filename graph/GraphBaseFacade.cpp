@@ -346,7 +346,14 @@ bool GraphBaseFacade::writeBrackets(const char* fileName, cuint startNodeId,
 
 
 
-static GraphReader::Type GraphReader::getType(const char* type)
+GraphBaseFacade::Type GraphBaseFacade::getType(const char* type)
 {
    return GraphReader::getType(type);
+}
+
+
+
+bool GraphBaseFacade::isCanRead(const char* typeStr)
+{
+    return GraphReader::isCanRead(typeStr);
 }

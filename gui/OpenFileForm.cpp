@@ -78,9 +78,9 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
     }
     QByteArray typeIdStr;
     typeIdStr = file.readLine();
-    FileTypes::Type typeId = FileTypes::typeId(typeIdStr.data());
 
-    if (typeId == FileTypes::Type::UNDEFINED)
+
+    if (!GraphWorker::isCanRead(typeIdStr.data()))
     {
         ui->openFileInfo->setText(tr("Can't read file. "
                                      "File type is not recognised."));

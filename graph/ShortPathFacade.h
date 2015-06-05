@@ -7,6 +7,7 @@
 #include "Worker.h"
 #include "ShortPath.h"
 #include "ShortPathReader.h"
+#include "ShortPathWriter.h"
 
 
 class ShortPath;
@@ -22,11 +23,14 @@ public:
     ShortPathFacade(GraphBase& graph);
     virtual ~ShortPathFacade();
 
+    typedef ShortPathWriter::Option WOption;
+
     typedef ShortPathReader::Type Type;
 
-    virtual clear();
+    virtual void clear();
 
-    static Type getType(const char typeStr);
+    static bool isCanRead(const char* typeStr);
+    static Type getType(const char* typeStr);
     virtual bool readFile(const char* fileName);
     bool readFile(FILE* f, Type typeId);
 

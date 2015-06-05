@@ -33,6 +33,14 @@ bool ShortPathReader::isCanRead(const char* type)
 
 
 
+
+ShortPathReader::Type ShortPathReader::getType(const char* type)
+{
+    return FileTypes<Type>::typeId(type, types);
+}
+
+
+
 /**
  * @brief ShortPathReader::readFile trying to open file to read.
  * Checking file type. Returning file pointer for next reading file

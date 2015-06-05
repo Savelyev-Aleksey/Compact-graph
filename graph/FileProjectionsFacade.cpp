@@ -152,6 +152,13 @@ FileProjectionsFacade::Type FileProjectionsFacade::getType(const char* typeStr)
 
 
 
+bool FileProjectionsFacade::isCanRead(const char *typeStr)
+{
+    return ProjectionsReader::isCanRead(typeStr);
+}
+
+
+
 bool FileProjectionsFacade::readFile(const char* fileName)
 {
     bool result = false;

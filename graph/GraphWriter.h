@@ -2,6 +2,8 @@
 #define GRAPHWRITER_H
 
 #include <cstdio>
+#include <deque>
+
 #include "types.h"
 #include "FileTypes.h"
 #include "WriterBase.h"

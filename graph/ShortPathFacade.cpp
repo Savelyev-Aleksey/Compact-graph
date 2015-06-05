@@ -131,3 +131,16 @@ bool ShortPathFacade::readFile(FILE *f, Type typeId)
     return result;
 }
 
+
+
+ShortPathFacade::Type ShortPathFacade::getType(const char* typeStr)
+{
+    return ShortPathReader::getType(typeStr);
+}
+
+
+
+bool ShortPathFacade::isCanRead(const char *typeStr)
+{
+    return ShortPathReader::isCanRead(typeStr);
+}

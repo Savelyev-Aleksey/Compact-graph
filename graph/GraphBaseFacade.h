@@ -38,6 +38,7 @@ public:
 
     virtual void clear();
 
+
     const InfoDeque* getAllInfo() const;
     const std::string& getFileName() const;
 
@@ -51,6 +52,7 @@ public:
     unsigned statisticParamSum(const UintMap* map) const;
 
 
+    static bool isCanRead(const char* typeStr);
     static Type getType(const char* type);
 
     virtual bool readFile(const char* fileName);

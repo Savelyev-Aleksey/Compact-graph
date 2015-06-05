@@ -14,7 +14,7 @@
 #include "ShortPathWriter.h"
 
 #include "Projection.h"
-#include "Projections.h"
+#include "FileProjections.h"
 #include "ProjectionsWriter.h"
 #include "ProjectionsReader.h"
 
@@ -202,3 +202,16 @@ bool Graph::readTxtFile(const char *fileName)
     return result;
 }
 
+
+
+bool Graph::isCanRead(const char *typeStr)
+{
+    if (GraphBaseFacade::isCanRead(typeStr))
+        return true;
+    if (ShortPathFacade::isCanRead(typeStr))
+        return true;
+    if (FileProjectionsFacade::isCanRead(typeStr))
+        return true;
+
+    return false;
+}

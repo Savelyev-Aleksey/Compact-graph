@@ -39,6 +39,14 @@ ProjectionsReader::Type ProjectionsReader::getType(const char *type)
 
 
 
+bool ProjectionsReader::isCanRead(const char* type)
+{
+    Type t = FileTypes<Type>::typeId(type, types);
+    return t == Type::UNDEFINED ? false : true;
+}
+
+
+
 /**
  * @brief ProjectionsReader::readProjectionsInfo read projections info from
  * files, stored near current graph file

@@ -158,7 +158,14 @@ bool ProjectionElem::less(const ProjectionElem *a, const ProjectionElem *b)
 
 
 
-bool ProjectionElem::lessById(const ProjectionElem *a, const unsigned id)
+bool ProjectionElem::lessPrId(const ProjectionElem *a, const unsigned &id)
 {
     return a->nodeId < id;
+}
+
+
+
+bool ProjectionElem::lessIdPr(const unsigned &id, const ProjectionElem *a)
+{
+    return id < a->nodeId;
 }

@@ -22,7 +22,6 @@ CONFIG += c++11
 
 SOURCES += gui/main.cpp\
     graph/Edge.cpp \
-    graph/FileTypes.cpp \
     graph/Graph.cpp \
     graph/GraphBase.cpp \
     graph/GraphGenerator.cpp \

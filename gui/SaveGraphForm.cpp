@@ -450,9 +450,8 @@ void SaveGraphForm::saveGraph()
         (!ui->printAllNodesCheck->isChecked() &&
          graph.isProjectionsMemoryUsed()) )
     {
-
-        fileName = QFileDialog::getSaveFileName(this, tr("Save graph"), "",
-            tr("Text files (*.txt)"));
+        fileName = QFileDialog::getSaveFileName(this, tr("Save graph"),
+            QString(), tr("Text files (*.txt)"));
 
         if (fileName.isEmpty())
         {
@@ -492,9 +491,7 @@ void SaveGraphForm::saveGraph()
         }
         else
         {
-            startId = ui->startNodeLineEdit->text().toUInt(&result);
-            if (!result)
-                break;
+            startId = ui->startNodeLineEdit->text().toUInt();
             graph.createProjection(startId);
             result = graph.saveProjection(file.data(), startId,options);
         }

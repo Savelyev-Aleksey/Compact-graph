@@ -405,7 +405,8 @@ void Projection::updateShortestLoop()
                     const auto repE = repLevel.end();
                     // find replica of this node in next levels
                     const auto repIt = std::lower_bound(repB, repE, origId,
-                                                         Projection::lessById);
+                                                      ProjectionElem::lessPrId);
+
                     if (repIt != repE && (*repIt)->getId() == origId)
                     {
                         find = true;
@@ -513,20 +514,20 @@ ProjShortPaths* Projection::findShortPaths(unsigned nodeId, bool reverse)
     if (!levelList || !levelList->size())
         return nullptr;
 
-    ProjectionLevelElem::const_iterator start, stop;
+    ProjectionLevelElem::const_iterator startI, stopI;
     const ProjectionLevelElem* level = nullptr;
     unsigned levelNum = 1;
     // start search from first level in zero perspectived node
-    const auto it = levelList->begin(), end = levelList->end();
+    auto it = levelList->begin(), end = levelList->end();
     // Find first level where located
     for(++it; it != end; ++it, ++levelNum)
     {
-        start = std::lower_bound(it->begin(), it->end(),
-                                 nodeId, ProjectionElem::lessById);
-        if (start == it->end())
+        startI = std::lower_bound((*it)->begin(), (*it)->end(),
+                                 nodeId, ProjectionElem::lessPrId);
+        if (startI == (*it)->end())
             continue;
 
-        if (start->getId() == nodeId)
+        if ((*startI)->getId() == nodeId)
         {
             level = *it;
             break;
@@ -536,18 +537,18 @@ ProjShortPaths* Projection::findShortPaths(unsigned nodeId, bool reverse)
         return nullptr;
 
     // find count same elements
-    stop = std::upper_bound(start, level->end(),
-                            nodeId, ProjectionElem::lessById);
-    unsigned count = std::distance(start, stop);
+    stopI = std::upper_bound(startI, level->end(),
+                            nodeId, ProjectionElem::lessIdPr);
+    unsigned count = std::distance(startI, stopI);
 
     // add elements in list
     ProjShortPaths* paths = new ProjShortPaths(count, nullptr);
     unsigned i = 0;
-    for (; start != stop; ++start)
+    for (; startI != stopI; ++startI)
     {
         auto v = new std::vector<unsigned>(levelNum + 1);
         (*paths)[i] = v;
-        const ProjectionElem* el = (*start);
+        const ProjectionElem* el = (*startI);
         if (reverse)
         {
             // move from the current elem to the respectived (root) elem

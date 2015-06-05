@@ -80,8 +80,8 @@ bool ShortPathWriter::writeExistPaths(const char* fileName,
     ShortPathReader::Type typeId =
                           ShortPathReader::Type::BRACKETS_SHORT_PATH_VALUE;
 
-    const char* fileType = FileTypes<ShortPathReader::Type>::
-                           typeName(typeId, ShortPathReader::types);
+    const char* fileType = FileTypes::typeName<ShortPathReader::Type>
+                                      (typeId, ShortPathReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 

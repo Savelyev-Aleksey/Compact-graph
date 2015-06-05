@@ -48,7 +48,8 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
 
     ProjectionsReader::Type typeId = ProjectionsReader::Type::PROJECTIONS;
 
-    const char* fileType = FileTypes::typeName(typeId,ProjectionsReader::types);
+    const char* fileType = FileTypes::typeName<ProjectionsReader::Type>
+                                      (typeId,ProjectionsReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 
@@ -115,7 +116,8 @@ bool ProjectionsWriter::saveProjection(const char *fileName, unsigned rootNode,
 
     ProjectionsReader::Type typeId = ProjectionsReader::Type::PROJECTIONS;
 
-    const char* fileType = FileTypes::typeName(typeId,ProjectionsReader::types);
+    const char* fileType = FileTypes::typeName<ProjectionsReader::Type>
+                                      (typeId, ProjectionsReader::types);
     fputs(fileType, f);
     fputc('\n', f);
 

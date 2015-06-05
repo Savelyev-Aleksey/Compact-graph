@@ -27,7 +27,7 @@ ShortPathReader::ShortPathReader(ShortPath& shortPath) : ReaderBase(),
 
 bool ShortPathReader::isCanRead(const char* type)
 {
-    Type t = FileTypes<Type>::typeId(type, types);
+    Type t = FileTypes::typeId<Type>(type, types);
     return t == Type::UNDEFINED ? false : true;
 }
 
@@ -36,7 +36,7 @@ bool ShortPathReader::isCanRead(const char* type)
 
 ShortPathReader::Type ShortPathReader::getType(const char* type)
 {
-    return FileTypes<Type>::typeId(type, types);
+    return FileTypes::typeId<Type>(type, types);
 }
 
 
@@ -60,7 +60,7 @@ FILE* ShortPathReader::openFile(const char* fileName, Type& typeId)
 
     char typeStr[200];
     fgets(typeStr, 200, f);
-    typeId = FileTypes<Type>::typeId(typeStr, types);
+    typeId = FileTypes::typeId<Type>(typeStr, types);
     if (typeId == Type::UNDEFINED)
     {
         lastError = Error::TYPE;

@@ -34,14 +34,14 @@ ProjectionsReader::ProjectionsReader(FileProjections& projections) :
 
 ProjectionsReader::Type ProjectionsReader::getType(const char *type)
 {
-    return FileTypes<Type>::typeId(type, types);
+    return FileTypes::typeId<Type>(type, types);
 }
 
 
 
 bool ProjectionsReader::isCanRead(const char* type)
 {
-    Type t = FileTypes<Type>::typeId(type, types);
+    Type t = FileTypes::typeId<Type>(type, types);
     return t == Type::UNDEFINED ? false : true;
 }
 
@@ -62,7 +62,9 @@ bool ProjectionsReader::readProjectionsInfo(const std::string& fileName)
     }
 
     std::string projectionName(fileName);
-    auto end = projectionName.find_last_of('.', fileName.size());
+    auto end = projectionName.find_last_of('.');
+    if (end == std::string::npos)
+        end = fileName.size();
 
     const auto nodes = projections->getGraph().getNodeMap();
     projections->clear();
@@ -142,7 +144,7 @@ bool ProjectionsReader::readProjectionInfo(const char *fileName, Projection* pr)
     char typeStr[200];
     fgets(typeStr, 200, f);
 
-    Type typeId = FileTypes::typeId(typeStr, types);
+    Type typeId = FileTypes::typeId<Type>(typeStr, types);
 
     if (typeId == Type::UNDEFINED)
     {
@@ -185,14 +187,13 @@ FILE* ProjectionsReader::openFile(const char *fileName, Type& typeId)
     char typeStr[200];
     fgets(typeStr, 200, f);
 
-    typeId = FileTypes::typeId(typeStr, types);
+    typeId = FileTypes::typeId<Type>(typeStr, types);
 
     if (typeId == Type::UNDEFINED)
     {
         lastError = Error::TYPE;
-        std::clog << "[!] Warning: File type is unknown " << typeStr
-                  << ". Use other class implementations." << std::endl;
-                  << std::endl;
+        std::clog << "[!] Warning: File type is unknown " << typeStr << ". "
+                  << "Use other class implementations." << std::endl;
         fclose(f);
         return nullptr;
     }

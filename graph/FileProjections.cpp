@@ -34,14 +34,14 @@ FileProjections::~FileProjections()
 
 
 
-Projections::Status Projections::getStatus() const
+FileProjections::Status FileProjections::getStatus() const
 {
     return projectionStatus;
 }
 
 
 
-std::string& FileProjections::getFileName() const
+const std::string& FileProjections::getFileName() const
 {
     return graphFileName;
 }
@@ -51,7 +51,9 @@ std::string& FileProjections::getFileName() const
 void FileProjections::updateGraphFileName(const std::string& newName)
 {
     graphFileName = newName;
-    auto end = graphFileName.find_last_of('.', graphFileName.size());
+    auto end = graphFileName.find_last_of('.');
+    if (end == std::string::npos)
+        end = graphFileName.size();
     graphFileName.resize(end);
     graphFileName.shrink_to_fit();
 }
@@ -236,7 +238,7 @@ const Projection* FileProjections::createProjection(unsigned nodeId)
             loadedProjection = nullptr;
         }
         else if (!loadedProjection->isEmpty())
-            return;
+            return loadedProjection;
     }
     const Projection* pr = Projections::createProjection(nodeId);
     loadedProjection = const_cast<Projection*>(pr);

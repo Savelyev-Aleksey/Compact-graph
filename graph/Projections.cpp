@@ -112,7 +112,7 @@ void Projections::createAllProjections()
 
 
 
-    auto func = [](Projection* pr, const GraphBase* graph){
+    auto func = [](Projection* pr, GraphBase* graph){
         pr->createProjection(*graph);
     };
 
@@ -182,7 +182,7 @@ void Projections::createAllProjections()
 const Projection* Projections::createProjection(unsigned nodeId)
 {
     if (!graph->getNode(nodeId))
-        return false;
+        return nullptr;
 
     Projection* pr = getProjection(nodeId);
     if (pr)

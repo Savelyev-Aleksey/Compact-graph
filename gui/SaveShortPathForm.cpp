@@ -102,8 +102,6 @@ void SaveShortPathForm::validateShortPath()
     ui->infoLabel->setText(info);
 
     QString example;
-    example += FileTypes::typeName(FileTypes::Type::BRACKETS_SHORT_PATH_VALUE);
-    example += '\n';
 
     if (printIndents)
     {

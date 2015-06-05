@@ -18,6 +18,8 @@ public:
     FileProjections(GraphBase& graph);
     virtual ~FileProjections();
 
+    friend class ProjectionsReader;
+
     enum class Status : unsigned
     {
         NONE = 0u,// projection info not readed

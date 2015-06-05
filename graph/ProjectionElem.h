@@ -18,7 +18,8 @@ public:
     ~ProjectionElem();
 
     static bool less(const ProjectionElem* a, const ProjectionElem* b);
-    static bool lessById(const ProjectionElem* a, const unsigned id);
+    static bool lessPrId(const ProjectionElem* a, const unsigned& id);
+    static bool lessIdPr(const unsigned& id, const ProjectionElem* a);
 
     unsigned getId() const;
     unsigned listCount() const;

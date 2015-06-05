@@ -1,7 +1,11 @@
+#include <cmath>
+
+
 #include "GraphBaseFacade.h"
 
 #include "GraphWriter.h"
 #include "GraphReader.h"
+#include "GraphGenerator.h"
 
 
 

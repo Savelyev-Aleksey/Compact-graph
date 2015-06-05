@@ -99,7 +99,7 @@ void NodeInfoForm::findNode()
 
 void NodeInfoForm::projectionInfo()
 {
-    const GraphWorker& graph = mainWindow->getGraph();
+    GraphWorker& graph = mainWindow->getGraph();
     const Projection* pr = graph.getProjection(currentNodeId);
     if (!pr)
     {

@@ -135,10 +135,12 @@ void GraphInfoForm::printGraphParameters()
     ui->projectionsLabel->setText( QString::number(value) );
 
     value = graph.getDiameter();
-    ui->diameterLabel->setText( QString::number(value) );
+    if (value)
+        ui->diameterLabel->setText( QString::number(value) );
 
     value = graph.getRadius();
-    ui->radiusLabel->setText( QString::number(value) );
+    if (value)
+        ui->radiusLabel->setText( QString::number(value) );
 
     unsigned proj = graph.projectionsCount();
     unsigned shortp = graph.shortPathsCount();
@@ -216,6 +218,7 @@ void GraphInfoForm::printGraphStatistic()
     bool detail = ui->nodesDetailCheck->isChecked();
     unsigned short limit = 6;
     bool shrink = !detail && map->size() > limit ? true : false;
+    ui->nodesDetailCheck->setEnabled(shrink);
 
     if (map->size() < 3 || detail)
         compact = map;
@@ -251,6 +254,7 @@ void GraphInfoForm::printEccentriciyStatistic()
     bool detail = ui->eccentrDetailCheck->isChecked();
     unsigned short limit = 6;
     bool shrink = !detail && map->size() > limit ? true : false;
+    ui->eccentrDetailCheck->setEnabled(shrink);
 
     if (map->size() < 3 || detail)
         compact = map;

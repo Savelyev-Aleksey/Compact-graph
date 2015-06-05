@@ -31,11 +31,7 @@ Graph::Graph() :
 
 
 Graph::~Graph()
-{
-    delete shortPath;
-    delete projections;
-    delete graph;
-}
+{}
 
 
 
@@ -221,6 +217,6 @@ bool Graph::isCanRead(const char *typeStr)
 void Graph::updateFileName(const char* newName)
 {
     GraphBaseFacade::updateFileName(newName);
-    FileProjections::updateGraphFileName(newName);
+    projections->updateGraphFileName(fileName);
 }
 

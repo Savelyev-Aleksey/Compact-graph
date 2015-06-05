@@ -165,7 +165,7 @@ bool FileProjectionsFacade::readFile(const char* fileName)
 {
     bool result = false;
 
-    ProjectionsReader projectionsReader(*shortPath);
+    ProjectionsReader projectionsReader(*projections);
     projectionsReader.setOptions(options);
     Type typeId;
     FILE* f = projectionsReader.openFile(fileName, typeId);
@@ -184,7 +184,7 @@ bool FileProjectionsFacade::readFile(const char* fileName)
 
 bool FileProjectionsFacade::readFile(FILE *f, Type typeId)
 {
-    ProjectionsReader projectionsReader(*shortPath);
+    ProjectionsReader projectionsReader(*projections);
     projectionsReader.setOptions(options);
     bool result = false;
     if (f)

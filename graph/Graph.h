@@ -22,6 +22,14 @@
  * GraphBaseFacade - facade for basic graph oprations (access, read, write)
  * ShortPathFacade - facade for short path oprations
  * FileProjectionsFacade - facade for projections operations
+ *
+ * Each small facade can be used as an individual interface. But for proper
+ * work of ShortPathFacade and FileProjectionsFacade needs connected
+ * GraphBaseFacade for operate with graph data.
+ *
+ * This class is recomends to connet with GUI class implentations.
+ * For some special tasks this class can be an example for more specific
+ * lighter class implemetation (example exclude short paths facade).
  */
 class Graph :
         virtual public ReaderBase,
@@ -53,6 +61,8 @@ public:
 protected:
     // Reader for text files
     bool readTxtFile(const char* fileName);
+
+    virtual void updateFileName(const char* newName);
 };
 
 #endif // GRAPH_H

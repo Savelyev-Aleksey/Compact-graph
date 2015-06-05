@@ -2,6 +2,7 @@
 #include "GraphBase.h"
 #include "FileProjections.h"
 #include "ProjectionsWriter.h"
+#include "Projection.h"
 
 
 
@@ -72,7 +73,8 @@ const Projection* FileProjectionsFacade::getLoadedProjection() const
 void FileProjectionsFacade::createAllProjections()
 {
     startProcess(projections);
-    projections->createAllProjections();
+    if (projections->getStatus() != FileProjections::Status::ALL)
+        projections->createAllProjections();
     completeProcess();
 }
 
@@ -193,5 +195,12 @@ bool FileProjectionsFacade::readFile(FILE *f, Type typeId)
         lastError = projectionsReader.getLastError();
     }
     return result;
+}
+
+
+
+bool FileProjectionsFacade::isProjectionsMemoryUsed() const
+{
+    return projections->isMemoryUsed();
 }
 

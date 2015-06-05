@@ -27,9 +27,6 @@ private:
     MainWindow *mainWindow;
 
     ulong nodeId;
-    FileTypes::Type fileTypeId;
-
-    FileTypes::Type getFileType();
 
     void prepareGraphWidgets();
 

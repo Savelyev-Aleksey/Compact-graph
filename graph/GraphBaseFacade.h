@@ -83,7 +83,7 @@ protected:
     unsigned girth;
 
 
-    void updateFileName(const char* newName);
+    virtual void updateFileName(const char* newName);
 };
 
 #endif // GRAPHBASEFACADE_H

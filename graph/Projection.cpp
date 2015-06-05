@@ -117,6 +117,13 @@ bool Projection::isEmpty() const
 
 
 
+bool Projection::fileExist() const
+{
+    return isFileExist;
+}
+
+
+
 /**
  * @brief Projection::createProjection create projection for current
  * projection element

@@ -36,6 +36,7 @@ public:
     void clear();
 
     bool isEmpty() const;
+    bool fileExist() const;
 
     unsigned getId() const;
     unsigned levelCount() const;

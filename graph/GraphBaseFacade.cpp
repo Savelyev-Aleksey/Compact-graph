@@ -59,6 +59,10 @@ const std::string& GraphBaseFacade::getFileName() const
 
 
 
+/**
+ * @brief GraphBaseFacade::updateFileName updates graph saved file name.
+ * @param newName new file name were saved graph
+ */
 void GraphBaseFacade::updateFileName(const char *newName)
 {
     fileName = newName;
@@ -292,7 +296,8 @@ bool GraphBaseFacade::readFile(FILE *f, Type typeId)
 
 /**
  * @brief GraphBaseFacade::writeEdges - Facade function.
- * More info in GraphWriter::writeEdges.
+ * More info in GraphWriter::writeEdges. Update file name for graph.
+ * If graph was readed from file, old file name will be overwriten.
  * @param fileName - file to save graph
  * @param options - available options look in GraphWriter::writeEdges
  * @return - true if file accessed to write and graph written.
@@ -303,6 +308,10 @@ bool GraphBaseFacade::writeEdges(const char* fileName, cuint options)
     startProcess(&writer);
     bool result = writer.writeEdges(fileName, options);
     completeProcess();
+
+    if (result)
+        updateFileName(fileName);
+
     return result;
 }
 
@@ -320,6 +329,10 @@ bool GraphBaseFacade::writeBracketsFlat(const char* fileName, cuint options)
     startProcess(&writer);
     bool result = writer.writeBracketsFlat(fileName, options);
     completeProcess();
+
+    if (result)
+        updateFileName(fileName);
+
     return result;
 }
 

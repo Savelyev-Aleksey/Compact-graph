@@ -72,38 +72,6 @@ void SaveGraphForm::prepareGraphWidgets()
 
 
 
-FileTypes::Type SaveGraphForm::getFileType()
-{
-    if (ui->nodeNodeValueRadio->isChecked())
-    {
-        if (ui->printValueCheck->isChecked())
-            return FileTypes::Type::NODE_NODE_VALUE;
-        else
-            return FileTypes::Type::NODE_NODE;
-    }
-    else if (ui->bracketsFlatRadio->isChecked())
-    {
-        if (ui->printValueCheck->isChecked())
-            return FileTypes::Type::BRACKETS_FLAT_VALUE;
-        else
-            return FileTypes::Type::BRACKETS_FLAT;
-    }
-    else if (ui->bracketsNestedRadio->isChecked())
-    {
-        if (ui->printValueCheck->isChecked())
-            return FileTypes::Type::BRACKETS_VALUE;
-        else
-            return FileTypes::Type::BRACKETS;
-    }
-    else if (ui->projectionRadio->isChecked())
-    {
-        return FileTypes::Type::PROJECTIONS;
-    }
-    return FileTypes::Type::UNDEFINED;
-}
-
-
-
 void SaveGraphForm::graphTypeChanged()
 {
     if (ui->nodeNodeValueRadio->isChecked())
@@ -170,10 +138,7 @@ bool SaveGraphForm::validateNodeNodeValue(QString& info)
         info += '\n';
     }
 
-    FileTypes::Type typeId = getFileType();
     QString example;
-    example += FileTypes::typeName(typeId);
-    example += '\n';
 
     if (printInfo)
     {
@@ -214,10 +179,7 @@ bool SaveGraphForm::validateBracketsFlat(QString& info)
         info += '\n';
     }
 
-    FileTypes::Type typeId = getFileType();
     QString example;
-    example += FileTypes::typeName(typeId);
-    example += '\n';
 
     if (printInfo)
     {
@@ -265,10 +227,7 @@ bool SaveGraphForm::validateBracketsNested(QString& info, bool isGraphEmpty)
 
     isValid = !isGraphEmpty && checkStartNodeEdit(info);
 
-    FileTypes::Type typeId = getFileType();
     QString example;
-    example += FileTypes::typeName(typeId);
-    example += '\n';
 
     if (printInfo)
     {
@@ -311,13 +270,33 @@ bool SaveGraphForm::validateProjections(QString &info, bool isGraphEmpty)
         const GraphWorker& graph = mainWindow->getGraph();
         if (printAll)
         {
-            unsigned gSize = graph.nodeCount();
-            unsigned pSize = graph.projectionsCount();
-            if (gSize != pSize)
+            if (graph.isProjectionsMemoryUsed())
             {
-                info += tr("Not all projections are created yet. "
-                           "Will be created on save. It's take a time.");
-                info += '\n';
+                unsigned gSize = graph.nodeCount();
+                unsigned pSize = graph.projectionsCount();
+                if (gSize != pSize)
+                {
+                    info += tr("Not all projections are created yet. "
+                               "Will be created on save. It's take a time.");
+                    info += '\n';
+                }
+            }
+            else
+            {
+                if(graph.getFileName().length())
+                {
+                    info += tr("Projections are to large.");
+                }
+                else
+                {
+                    // Graph not saved. Big projections can't be saved.
+                    isValid = false;
+                    info += tr("Graph not saved yet. Before save projections "
+                               "save graph.");
+                }
+                info += ' ';
+                info += tr("Each projection will be saved in own file "
+                           "near graph file.");
             }
         }
         else
@@ -337,11 +316,6 @@ bool SaveGraphForm::validateProjections(QString &info, bool isGraphEmpty)
     }
 
     QString example;
-    FileTypes::Type typeId = getFileType();
-
-    example += FileTypes::typeName(typeId);
-    example += '\n';
-    example += "{WEIGHT=1}\n";
 
     if (printIndents)
         example += "1(\n    2(\n        4\n        5\n        6\n    )\n)\n";
@@ -403,15 +377,6 @@ bool SaveGraphForm::checkStartNodeEdit(QString &info)
  */
 void SaveGraphForm::validateInputs()
 {
-    FileTypes::Type typeId = getFileType();
-    if (typeId == FileTypes::Type::UNDEFINED)
-    {
-        ui->infoLabel->setText(tr("File type is not recognised. "
-                                  "Please check save settings"));
-        return;
-    }
-    fileTypeId = typeId;
-
     bool isValid = true;
 
     bool isEmpty = mainWindow->getGraph().isGraphEmpty();
@@ -451,17 +416,6 @@ void SaveGraphForm::validateInputs()
 
 void SaveGraphForm::saveGraph()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save graph"), "",
-        tr("Text files (*.txt)"));
-
-    if (fileName.isEmpty())
-    {
-        return;
-    }
-    if (!fileName.endsWith(".txt"))
-    {
-        fileName += ".txt";
-    }
     unsigned options = (unsigned) WriterBase::Option::NONE;
 
     if (ui->printValueCheck->isEnabled() &&
@@ -485,58 +439,71 @@ void SaveGraphForm::saveGraph()
                          ui->printAllNodesCheck->isChecked();
 
     GraphWorker& graph = mainWindow->getGraph();
-    QByteArray file = fileName.toLatin1();
 
     bool result = false;
-    unsigned startNodeId, pathLimit;
+    unsigned startId, pathLimit;
+    QString fileName;
+    QByteArray file;
 
-    switch (fileTypeId)
+    // For projecyions all projections in big graph
+    if (!ui->projectionRadio->isChecked() ||
+        (!ui->printAllNodesCheck->isChecked() &&
+         graph.isProjectionsMemoryUsed()) )
     {
-    case FileTypes::Type::NODE_NODE: // no break
-    case FileTypes::Type::NODE_NODE_VALUE:
+
+        fileName = QFileDialog::getSaveFileName(this, tr("Save graph"), "",
+            tr("Text files (*.txt)"));
+
+        if (fileName.isEmpty())
+        {
+            return;
+        }
+        if (!fileName.endsWith(".txt"))
+        {
+            fileName += ".txt";
+        }
+        file = fileName.toLatin1();
+    }
+
+
+    if (ui->nodeNodeValueRadio->isChecked())
+    {
         result = graph.writeEdges(file.data(), options);
-        break;
-
-    case FileTypes::Type::BRACKETS_FLAT: // no break
-    case FileTypes::Type::BRACKETS_FLAT_VALUE:
+    }
+    else if (ui->bracketsFlatRadio->isChecked())
+    {
         result = graph.writeBracketsFlat(file.data(), options);
-        break;
-
-    case FileTypes::Type::BRACKETS: // no break
-    case FileTypes::Type::BRACKETS_VALUE:
-        startNodeId = ui->startNodeLineEdit->text().toUInt(&result);
-        if (!result)
-            break;
-        pathLimit = ui->pathLimitLineEdit->text().toUInt(&result);
-        if (!result)
-            break;
-        result = graph.writeBrackets(file.data(), startNodeId, pathLimit,
-                                      options);
-        break;
-
-    case FileTypes::Type::PROJECTIONS:
+    }
+    else if (ui->bracketsNestedRadio->isChecked())
+    {
+        startId = ui->startNodeLineEdit->text().toUInt();
+        pathLimit = ui->pathLimitLineEdit->text().toUInt();
+        result = graph.writeBrackets(file.data(), startId, pathLimit, options);
+    }
+    else if (ui->projectionRadio->isChecked())
+    {
         if (printAllNodes)
         {
             graph.createAllProjections();
             if (graph.isInterrupted())
                 result = false;
-            else
+            else if (graph.isProjectionsMemoryUsed())
                 result = graph.saveProjections(file.data(), options);
         }
         else
         {
-            startNodeId = ui->startNodeLineEdit->text().toUInt(&result);
+            startId = ui->startNodeLineEdit->text().toUInt(&result);
             if (!result)
                 break;
-            graph.createProjection(startNodeId);
-            result = graph.saveProjection(file.data(), startNodeId,options);
+            graph.createProjection(startId);
+            result = graph.saveProjection(file.data(), startId,options);
         }
-        break;
-
-    default:
-        ui->infoLabel->setText(tr("File type is unknown. Check settings."));
-        break;
     }
+    else
+    {
+        ui->infoLabel->setText(tr("File type is unknown. Check settings."));
+    }
+
 
     if (graph.isInterrupted())
     {
@@ -556,7 +523,6 @@ void SaveGraphForm::saveGraph()
                                   "File not accessed to write."));
         mainWindow->showStatusMessage(tr("Graph not saved."), 5000);
     }
-
 }
 
 

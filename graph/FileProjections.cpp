@@ -181,9 +181,9 @@ void FileProjections::createAllProjections()
                                       Projection::lessById);
             if (e != oldEnd && (*e)->getId() == currentId)
             {
-                // TODO: check exist non empty file
                 pr = *e;
-                continue;
+                if (pr->fileExist())
+                    continue;
             }
         }
         if (!pr)
@@ -287,6 +287,23 @@ ProjShortPaths* FileProjections::findShortPaths(unsigned fromId, unsigned toId,
         return nullptr;
     }
     return Projections::findShortPaths(fromId, toId, reverse);
+}
+
+
+
+bool FileProjections::isProjectionExist(unsigned nodeId) const
+{
+    if (useMemory)
+    {
+        return Projections::isProjectionExist(nodeId);
+    }
+    Projection* pr = nullptr;
+    if (loadedProjection && loadedProjection->getId() == nodeId)
+        pr = loadedProjection;
+    else
+        pr = Projections::getProjection(nodeId);
+
+    return !pr ? false : pr->fileExist();
 }
 
 

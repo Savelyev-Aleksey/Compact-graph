@@ -31,6 +31,7 @@ public:
 
     const std::string& getFileName() const;
 
+    bool isProjectionExist(unsigned nodeId) const;
     const Projection* getLoadedProjection() const;
     virtual const Projection* getProjection(unsigned nodeId);
     virtual const Projection* createProjection(unsigned nodeId);

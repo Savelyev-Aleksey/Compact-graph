@@ -8,12 +8,11 @@
 #include "Worker.h"
 #include "WriterBase.h"
 #include "ProjectionsReader.h"
-#include "Projection.h"
+#include "FileProjections.h"
 
 
 
 class GraphBase;
-class FileProjections;
 class Projection;
 
 
@@ -24,6 +23,7 @@ class FileProjectionsFacade :
 public:
     typedef const WriterBase::Option WOption;
     typedef ProjectionsReader::Type Type;
+    typedef FileProjections::Status Status;
 
     FileProjectionsFacade(GraphBase& graph);
     virtual ~FileProjectionsFacade();
@@ -36,7 +36,7 @@ public:
     virtual bool readFile(const char* fileName);
     bool readFile(FILE* f, Type typeId);
 
-
+    bool isProjectionsMemoryUsed() const;
 
     bool isProjectionExist(unsigned nodeId) const;
     unsigned projectionsCount() const;

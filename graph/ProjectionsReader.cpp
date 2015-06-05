@@ -111,13 +111,13 @@ bool ProjectionsReader::readProjectionsInfo(const std::string& fileName)
     if (wasMissing)
     {
         if (!wasReaded)
-            projections->projectionStatus = Projections::Status::EMPTY;
+            projections->projectionStatus = FileProjections::Status::EMPTY;
         else
-            projections->projectionStatus = Projections::Status::PARTIAL;
+            projections->projectionStatus = FileProjections::Status::PARTIAL;
     }
     else
     {
-        projections->projectionStatus = Projections::Status::ALL;
+        projections->projectionStatus = FileProjections::Status::ALL;
     }
 
 

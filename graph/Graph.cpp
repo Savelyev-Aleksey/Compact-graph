@@ -215,3 +215,12 @@ bool Graph::isCanRead(const char *typeStr)
 
     return false;
 }
+
+
+
+void Graph::updateFileName(const char* newName)
+{
+    GraphBaseFacade::updateFileName(newName);
+    FileProjections::updateGraphFileName(newName);
+}
+

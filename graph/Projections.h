@@ -41,7 +41,7 @@ public:
     UintMap* getEccentriciyStatistic() const;
     unsigned getGraphGirth() const;
 
-    bool isProjectionExist(unsigned nodeId) const;
+    virtual bool isProjectionExist(unsigned nodeId) const;
 
     virtual void createAllProjections();
     virtual const Projection* createProjection(unsigned nodeId);

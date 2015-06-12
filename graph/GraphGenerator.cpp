@@ -45,7 +45,7 @@ void GraphGenerator::generateHypercube(unsigned dimention, float weight)
 
     auto end = (unsigned) pow(2, dimention);
     unsigned distance, onesCount;
-    for (unsigned i = 0; i < end; ++i)
+    for (unsigned i = 0u; i < end; ++i)
     {
         graph->addNode(i);
     }
@@ -60,7 +60,7 @@ void GraphGenerator::generateHypercube(unsigned dimention, float weight)
         {
             // Binary distance - count different bits
             distance = i->first ^ j->first;
-            for (onesCount = 0; onesCount < 2 && distance; distance >>= 1)
+            for (onesCount = 0u; onesCount < 2 && distance; distance >>= 1)
             {
                 if (distance & 1)
                 {
@@ -102,22 +102,22 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
     Node** currrentList = nullptr;
     Node** firstList = nullptr;
 
-    unsigned id = 0;
+    unsigned id = 0u;
     // Move by circle rotation
-    for (unsigned i = 0; i < bigRadius; ++i)
+    for (unsigned i = 0u; i < bigRadius; ++i)
     {
         currrentList = new Node*[smallRadius];
         // Create new circle on i angle
-        for (unsigned j = 0; j < smallRadius; ++j, ++id)
+        for (unsigned j = 0u; j < smallRadius; ++j, ++id)
         {
             currrentList[j] = graph->newNode(id);
-            if (j > 0)
+            if (j > 0u)
             {
                 graph->addEdge(currrentList[j - 1], currrentList[j], weight);
             }
         }
         // connect first and last node to circle
-        graph->addEdge(currrentList[0], currrentList[smallRadius - 1], weight);
+        graph->addEdge(currrentList[0u], currrentList[smallRadius - 1], weight);
 
         if (prevList == nullptr)
         {
@@ -125,7 +125,7 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
             continue;
         }
         // Connect i-1 angle circle to i circle
-        for (unsigned j = 0; j < smallRadius; ++j)
+        for (unsigned j = 0u; j < smallRadius; ++j)
         {
             graph->addEdge(prevList[j], currrentList[j], weight);
         }
@@ -137,7 +137,7 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
         prevList = currrentList;
     }
     // Connect bigRadius angle circle to first circle
-    for (unsigned j = 0; j < smallRadius; ++j)
+    for (unsigned j = 0u; j < smallRadius; ++j)
     {
         graph->addEdge(firstList[j], currrentList[j], weight);
     }

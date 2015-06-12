@@ -41,7 +41,7 @@ void Projections::clear()
 
 bool Projections::isEmpty() const
 {
-    return projectionsList->size() == 0;
+    return projectionsList->size() == 0u;
 }
 
 
@@ -67,6 +67,9 @@ GraphBase& Projections::getGraph() const
  */
 Projection* Projections::getProjection(unsigned nodeId) const
 {
+    if (!projectionsList->size())
+        return nullptr;
+
     auto start = projectionsList->begin();
     auto end = projectionsList->end();
     auto it = std::lower_bound(start, end, nodeId, Projection::lessById);
@@ -89,10 +92,6 @@ void Projections::createAllProjections()
     NodeMap* nodeList = graph->getNodeMap();
     unsigned count = nodeList->size();
 
-    // all projections exist - skip
-    if (projectionsList->size() == count)
-        return;
-
     unsigned oldSize = projectionsList->size();
     bool isWasEmpty = !oldSize;
 
@@ -113,22 +112,27 @@ void Projections::createAllProjections()
 
 
     auto func = [](Projection* pr, GraphBase* graph){
-        pr->createProjection(*graph);
+        // skip non empty projections
+        if (!pr->levelCount())
+            pr->createProjection(*graph);
     };
 
     auto it = nodeList->begin();
-    startProcess(0, count - 1);
+    startProcess(0u, count - 1);
 
-    unsigned i = 0, end, currentId;
+    unsigned i = 0u, end, currentId;
     unsigned pos = oldSize;
     while (i < count)
     {
         if (isInterrupted())
-            return;
+        {
+            projectionsList->resize(pos);
+            break;
+        }
 
         end = std::min(count - i, threadsCount);
 
-        unsigned j = 0;
+        unsigned j = 0u;
         while (j < end && i < count)
         {
             currentId = it->first;
@@ -153,7 +157,7 @@ void Projections::createAllProjections()
             ++j;
             ++it;
         }
-        for (j = 0; j < end; ++j)
+        for (j = 0u; j < end; ++j)
         {
             if (threads[j])
             {
@@ -179,7 +183,7 @@ void Projections::createAllProjections()
  * graph.
  * @param nodeId - node id wich will be respectived node.
  */
-const Projection* Projections::createProjection(unsigned nodeId)
+Projection* Projections::createProjection(unsigned nodeId)
 {
     if (!graph->getNode(nodeId))
         return nullptr;

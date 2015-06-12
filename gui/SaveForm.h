@@ -24,6 +24,7 @@ private:
 private slots:
     void menuShowGraph();
     void menuShowShortPath();
+    void menuShowProjection();
 };
 
 #endif // SAVEFORM_H

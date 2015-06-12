@@ -2,7 +2,6 @@
 #include "GraphBase.h"
 #include "FileProjections.h"
 #include "ProjectionsWriter.h"
-#include "Projection.h"
 
 
 
@@ -30,10 +29,11 @@ void FileProjectionsFacade::clear()
  * @brief FileProjectionsFacade::createProjection
  * create one projection for nodeId node.
  * @param nodeId - node for which will create projection
+ * @return const projection pointer
  */
-void FileProjectionsFacade::createProjection(unsigned nodeId)
+const Projection* FileProjectionsFacade::createProjection(unsigned nodeId)
 {
-    projections->createProjection(nodeId);
+    return projections->createProjection(nodeId);
 }
 
 
@@ -59,6 +59,11 @@ const Projection* FileProjectionsFacade::getProjection(unsigned nodeId)
 
 
 
+/**
+ * @brief FileProjectionsFacade::getLoadedProjection
+ * @return pointer on current loaded projection for all graph size type
+ * will be returned last used/loaded projection
+ */
 const Projection* FileProjectionsFacade::getLoadedProjection() const
 {
     return projections->getLoadedProjection();
@@ -123,17 +128,17 @@ bool FileProjectionsFacade::saveProjections(const char* fileName, cuint options)
  * @brief FileProjectionsFacade::saveProjection - save created projection for
  * one node in fileName file.
  * @param fileName - file to write projections
- * @param rootNode - node id for create projection
+ * @param pr - created non empty projection
  * @param options - some options (PRINT_INDENTS)
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
 bool FileProjectionsFacade::saveProjection(const char* fileName,
-                                           unsigned rootNode, cuint options)
+                                           const Projection* pr, cuint options)
 {
     ProjectionsWriter writer(*projections);
     startProcess(&writer);
-    bool result = writer.saveProjection(fileName, rootNode, options);
+    bool result = writer.saveProjection(fileName, pr, options);
     completeProcess();
     return result;
 }
@@ -202,5 +207,41 @@ bool FileProjectionsFacade::readFile(FILE *f, Type typeId)
 bool FileProjectionsFacade::isProjectionsMemoryUsed() const
 {
     return projections->isMemoryUsed();
+}
+
+
+
+/**
+ * @brief FileProjectionsFacade::getProjectionsStatus return status about
+ * projections files. Useful for large graph, which projections stored in
+ * files. All available statuses in FileProjection class.
+ * @return current projections status
+ */
+FileProjectionsFacade::Status FileProjectionsFacade::getProjectionsStatus()
+const
+{
+    return projections->getStatus();
+}
+
+
+
+void FileProjectionsFacade::readProjectionsInfo()
+{
+    startProcess(projections);
+    projections->readProjectionsInfo();
+    lastError = projections->getLastError();
+    completeProcess();
+}
+
+
+
+bool FileProjectionsFacade::saveProjectionShortPaths(const char *fileName,
+                                           const ProjShortPaths *paths)
+{
+    ProjectionsWriter writer(*projections);
+    startProcess(&writer);
+    bool result = writer.saveShortPaths(fileName, paths);
+    completeProcess();
+    return result;
 }
 

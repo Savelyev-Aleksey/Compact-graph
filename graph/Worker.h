@@ -14,7 +14,7 @@ public:
     bool isInterrupted() const;
 
     void startProcess();
-    void startProcess(Worker* newWorker);
+    void startProcess(Worker* newWorker, unsigned begin = 0u, unsigned end =0u);
     void startProcess(unsigned begin, unsigned end);
     void interruptProcess();
 
@@ -22,7 +22,7 @@ public:
     unsigned getProgressEnd() const;
 
 protected:
-    void setWorker(Worker* newWorker);
+    void setWorker(Worker* newWorker, bool useCurrentProgress = false);
     void completeProcess();
     void updateProgress(unsigned current);
 
@@ -32,6 +32,7 @@ private:
     unsigned progress;
     unsigned progressEnd;
     Worker* worker;
+    bool useCurrentProgress;
 };
 
 #endif // WORKER_H

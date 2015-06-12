@@ -25,7 +25,7 @@ ShortPathElem::~ShortPathElem()
 unsigned ShortPathElem::size() const
 {
     if (!list)
-        return 0;
+        return 0u;
     return list->size();
 }
 

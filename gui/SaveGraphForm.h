@@ -10,7 +10,6 @@ namespace Ui {
 }
 
 class MainWindow;
-class SaveFrom;
 
 
 
@@ -40,7 +39,6 @@ private slots:
     bool validateNodeNodeValue(QString &info);
     bool validateBracketsFlat(QString &info);
     bool validateBracketsNested(QString &info, bool isGraphEmpty);
-    bool validateProjections(QString &info, bool isGraphEmpty);
 
 
     void saveGraph();

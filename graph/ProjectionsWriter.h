@@ -7,10 +7,10 @@
 
 #include "types.h"
 #include "WriterBase.h"
+#include "Projection.h"
 
 
 class FileProjections;
-class Projection;
 
 
 
@@ -22,8 +22,10 @@ public:
 
     bool saveProjections(const char* fileName,
                          cuint options = (cuint) Option::NONE);
-    bool saveProjection(const char* fileName, unsigned rootNode,
+    bool saveProjection(const char* fileName, const Projection* pr,
                         cuint options = (cuint) Option::NONE);
+
+    bool saveShortPaths(const char* fileName, const ProjShortPaths* paths);
 
 protected:
     FileProjections* projections;

@@ -2,6 +2,7 @@
 #define READERBASE_H
 
 
+
 class ReaderBase
 {
 public:
@@ -12,7 +13,7 @@ public:
     };
     enum class Error : unsigned
     {
-        NONE = 0,
+        NONE = 0u,
         TYPE,
         READ,
         SYNTAX,
@@ -20,6 +21,9 @@ public:
 
 
     ReaderBase();
+    ~ReaderBase();
+
+
     void setOptions(unsigned options);
     Error getLastError() const;
 

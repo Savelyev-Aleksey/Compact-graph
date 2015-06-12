@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>851</width>
-    <height>464</height>
+    <height>574</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -119,26 +119,63 @@
         <property name="horizontalSpacing">
          <number>20</number>
         </property>
-        <item row="13" column="1">
-         <widget class="QLabel" name="shortPathsLabel">
+        <item row="8" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Graph degree:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="EdgeCountLabel">
           <property name="text">
            <string notr="true">-</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
-         <widget class="QLabel" name="radiusLabel">
+        <item row="22" column="0" colspan="2">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="diameterLabel">
           <property name="text">
            <string notr="true">-</string>
           </property>
          </widget>
         </item>
-        <item row="13" column="0">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Short paths:</string>
-          </property>
-         </widget>
+        <item row="16" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="createProjectionsButton">
+            <property name="text">
+             <string>Create projections</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
         <item row="11" column="0">
          <widget class="QLabel" name="label_7">
@@ -150,7 +187,35 @@
           </property>
          </widget>
         </item>
-        <item row="16" column="0" colspan="2">
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Radius:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Node conut:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Edge Count:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>Graph girth:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="17" column="0" colspan="2">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="spacing">
            <number>0</number>
@@ -187,45 +252,10 @@ After will be found diameter, radius and eccentricity statistic.</string>
           </item>
          </layout>
         </item>
-        <item row="14" column="0">
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>Projections:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_12">
-          <property name="text">
-           <string>Graph girth:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Edge Count:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Node conut:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="11" column="1">
-         <widget class="QLabel" name="maxDegreeLabel">
+        <item row="14" column="1">
+         <widget class="QLabel" name="projectionsLabel">
           <property name="text">
            <string notr="true">-</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Radius:</string>
           </property>
          </widget>
         </item>
@@ -233,6 +263,13 @@ After will be found diameter, radius and eccentricity statistic.</string>
          <widget class="QLabel" name="graphGirthLabel">
           <property name="text">
            <string notr="true">-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="14" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Projections:</string>
           </property>
          </widget>
         </item>
@@ -246,23 +283,17 @@ After will be found diameter, radius and eccentricity statistic.</string>
           </property>
          </widget>
         </item>
-        <item row="21" column="0" colspan="2">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="EdgeCountLabel">
+        <item row="10" column="1">
+         <widget class="QLabel" name="minDegreeLabel">
           <property name="text">
            <string notr="true">-</string>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Short paths:</string>
           </property>
          </widget>
         </item>
@@ -273,15 +304,8 @@ After will be found diameter, radius and eccentricity statistic.</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
-         <widget class="QLabel" name="diameterLabel">
-          <property name="text">
-           <string notr="true">-</string>
-          </property>
-         </widget>
-        </item>
-        <item row="14" column="1">
-         <widget class="QLabel" name="projectionsLabel">
+        <item row="13" column="1">
+         <widget class="QLabel" name="shortPathsLabel">
           <property name="text">
            <string notr="true">-</string>
           </property>
@@ -294,31 +318,37 @@ After will be found diameter, radius and eccentricity statistic.</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
-         <widget class="QLabel" name="label_5">
+        <item row="4" column="1">
+         <widget class="QLabel" name="radiusLabel">
           <property name="text">
-           <string>Graph degree:</string>
+           <string notr="true">-</string>
           </property>
          </widget>
         </item>
-        <item row="10" column="1">
-         <widget class="QLabel" name="minDegreeLabel">
+        <item row="11" column="1">
+         <widget class="QLabel" name="maxDegreeLabel">
           <property name="text">
            <string notr="true">-</string>
           </property>
          </widget>
         </item>
         <item row="15" column="0" colspan="2">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
-           <widget class="QPushButton" name="createProjectionsButton">
+           <widget class="QPushButton" name="graphInfoButton">
+            <property name="toolTip">
+             <string>Read info from projections files</string>
+            </property>
             <property name="text">
-             <string>Create projections</string>
+             <string>Read info</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_3">
+           <spacer name="horizontalSpacer_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -347,25 +377,6 @@ After will be found diameter, radius and eccentricity statistic.</string>
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>Parameters:</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QLabel" name="paramsLabel">
-          <property name="text">
-           <string notr="true"/>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </item>
     </layout>
    </item>
@@ -451,7 +462,10 @@ After will be found diameter, radius and eccentricity statistic.</string>
       <item>
        <widget class="QLabel" name="infoLabel">
         <property name="text">
-         <string>TextLabel</string>
+         <string notr="true"/>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

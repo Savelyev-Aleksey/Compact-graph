@@ -21,7 +21,7 @@ public:
     static Type typeId(const char* typeStr, const char* const types[])
     {
         unsigned end = (unsigned) Type::UNDEFINED;
-        for (unsigned i = 0; i < end; ++i)
+        for (unsigned i = 0u; i < end; ++i)
         {
             if (!strncmp(typeStr, types[i], strlen(types[i])))
             {

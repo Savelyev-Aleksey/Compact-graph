@@ -36,13 +36,20 @@ public:
                        cuint options = (cuint) WriterBase::Option::PRINT_VALUE);
 
 
+public:
     // Projections writers
     virtual bool saveProjections(const char* fileName,
                                  cuint options = (cuint) Option::NONE);
-    virtual bool saveProjection(const char* fileName, cuint rootNode,
+    virtual bool saveProjection(const char* fileName, const Projection* pr,
                                 cuint options = (cuint) Option::NONE);
 
     virtual void createAllProjections();
+
+    // Projections finder
+    virtual ProjShortPaths* findShortPaths(unsigned fromId, unsigned toId,
+                                           bool reverse = false);
+
+    virtual void readProjectionsInfo();
 
 public:
     // Short path

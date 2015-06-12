@@ -80,11 +80,12 @@ bool GraphWriter::writeEdges(const char *fileName, cuint options)
         graph->printInfo(f);
     }
 
-    unsigned nodeFromId, nodeToId, progress = 0;
+    unsigned nodeFromId, nodeToId, progress = 0u;
     const EdgeList* edges;
     NodeMap* nodeList = graph->getNodeMap();
+    unsigned count = nodeList->size();
 
-    startProcess(0, nodeList->size());
+    startProcess(0u, count);
 
     for (auto it = nodeList->begin(); it != nodeList->end(); ++it, ++progress)
     {
@@ -153,11 +154,11 @@ bool GraphWriter::writeBracketsFlat(const char* fileName, cuint options)
 
     const EdgeList* edges;
     Node* node;
-    unsigned toNodeNum, progress = 0;
+    unsigned toNodeNum, progress = 0u;
     float edgeValue;
     bool isFirst;
     NodeMap* nodeList = graph->getNodeMap();
-    startProcess(0, nodeList->size() - 1);
+    startProcess(0u, nodeList->size() - 1);
 
     for (auto nodeIt = nodeList->begin(); nodeIt != nodeList->end();
          ++nodeIt, ++progress)
@@ -272,7 +273,7 @@ bool GraphWriter::writeBrackets(const char *fileName, cuint startNodeId,
 
     bool isFirst = true;
     float weight;
-    unsigned nodeId, process = 0;
+    unsigned nodeId, process = 0u;
     const Node* node;
     unsigned currentLimit = 1;
 
@@ -282,7 +283,7 @@ bool GraphWriter::writeBrackets(const char *fileName, cuint startNodeId,
     auto edgeIt = edgeList->begin();
     auto edgeEnd = edgeList->end();
 
-    startProcess(0, edgeList->size() - 1);
+    startProcess(0u, edgeList->size() - 1);
 
     nodeStack.push_front(startNodeId);
     edgeStack.push_front(EdgeListPairIt(edgeIt, edgeEnd));
@@ -308,7 +309,7 @@ bool GraphWriter::writeBrackets(const char *fileName, cuint startNodeId,
             }
             if (printIndents)
             {
-                for(unsigned i = 0; i < currentLimit; ++i)
+                for(unsigned i = 0u; i < currentLimit; ++i)
                 {
                     fputc('\t', f);
                 }
@@ -332,7 +333,7 @@ bool GraphWriter::writeBrackets(const char *fileName, cuint startNodeId,
         }
         if (printIndents)
         {
-            for(unsigned i = 0; i < currentLimit; ++i)
+            for(unsigned i = 0u; i < currentLimit; ++i)
             {
                 fputc('\t', f);
             }

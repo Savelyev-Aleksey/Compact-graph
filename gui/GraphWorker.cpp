@@ -2,6 +2,7 @@
 #include <QString>
 #include <QProgressDialog>
 #include <thread>
+#include <iostream>
 
 #include "GraphWorker.h"
 #include "graph/Node.h"
@@ -27,12 +28,16 @@ GraphWorker::~GraphWorker()
 void GraphWorker::progressDialog(unsigned size, const QString& title,
                                  std::function<void ()> progressFn)
 {
+    if (!size)
+        return;
+
     QString titleP = title + QString(" %1");
 
-    QProgressDialog progress(titleP.arg(0), QObject::tr("Cancel"), 0, 100,
+    QProgressDialog progressDg(titleP.arg(0), QObject::tr("Cancel"),0,INT32_MAX,
                              parent);
-    progress.setWindowModality(Qt::WindowModal);
-    progress.setMinimumDuration(300);
+
+    progressDg.setWindowModality(Qt::WindowModal);
+    progressDg.setMinimumDuration(800);
 
     startProcess();
     std::thread creator(progressFn);
@@ -40,18 +45,22 @@ void GraphWorker::progressDialog(unsigned size, const QString& title,
 
     unsigned current;
     int value;
+
+    progressDg.show();
     do
     {
-        if (progress.wasCanceled())
+        if (progressDg.wasCanceled())
             interruptProcess();
 
         current = getProgress();
-        value = current / (float) size * 100;
-        progress.setValue(value);
-        progress.setLabelText(titleP.arg(current));
+        value = static_cast<int>(static_cast<double>(current)/size *INT32_MAX);
+
+        progressDg.setValue(value);
+        progressDg.setLabelText(titleP.arg(current));
 
     }
     while (isProcessed());
+    progressDg.close();
 }
 
 
@@ -66,7 +75,7 @@ void GraphWorker::createAllShortPaths()
     QString title = QObject::tr("Creating short path");
 
     std::function<void()> fn = [this]{
-        ::Graph::createAllShortPaths();
+        this->Graph::createAllShortPaths();
     };
 
     progressDialog(size, title, fn);
@@ -84,7 +93,7 @@ void GraphWorker::createAllProjections()
     QString title = QObject::tr("Creating projections");
 
     std::function<void()> fn = [this]{
-        Graph::createAllProjections();
+        this->Graph::createAllProjections();
     };
 
     progressDialog(size, title, fn);
@@ -100,7 +109,7 @@ bool GraphWorker::writeEdges(const char *fileName, cuint options)
     bool result = false;
 
     std::function<void()> fn = [this, &fileName, &options, &result] {
-        result = Graph::writeEdges(fileName, options);
+        result = this->Graph::writeEdges(fileName, options);
     };
     progressDialog(size, title, fn);
     return result;
@@ -116,7 +125,7 @@ bool GraphWorker::writeBracketsFlat(const char *fileName, cuint options)
     bool result = false;
 
     std::function<void()> fn = [this, &fileName, &options, &result] {
-        result = Graph::writeBracketsFlat(fileName, options);
+        result = this->Graph::writeBracketsFlat(fileName, options);
     };
 
     progressDialog(size, title, fn);
@@ -138,7 +147,7 @@ bool GraphWorker::writeBrackets(const char *fileName, cuint startNodeId,
 
     std::function<void()> fn = [this, &fileName, &startNodeId, &pathLimit,
                                 &options, &result] {
-        result = Graph::writeBrackets(fileName, startNodeId, pathLimit,
+        result = this->Graph::writeBrackets(fileName, startNodeId, pathLimit,
                                         options);
     };
 
@@ -159,7 +168,7 @@ bool GraphWorker::saveProjections(const char *fileName, cuint options)
     bool result = false;
 
     std::function<void()> fn = [this, &fileName, &options, &result] {
-        result = Graph::saveProjections(fileName, options);
+        result = this->Graph::saveProjections(fileName, options);
     };
 
     progressDialog(size, title, fn);
@@ -168,10 +177,9 @@ bool GraphWorker::saveProjections(const char *fileName, cuint options)
 
 
 
-bool GraphWorker::saveProjection(const char *fileName, cuint rootNode,
+bool GraphWorker::saveProjection(const char *fileName, const Projection* pr,
                                  cuint options)
 {
-    const Projection* pr = getProjection(rootNode);
     if (!pr)
     {
         return false;
@@ -184,8 +192,8 @@ bool GraphWorker::saveProjection(const char *fileName, cuint rootNode,
     QString title = QObject::tr("Writing projection");
     bool result = false;
 
-    std::function<void()> fn = [this, &fileName, &rootNode, &options, &result] {
-        result = Graph::saveProjection(fileName, rootNode, options);
+    std::function<void()> fn = [this, &fileName, &pr, &options, &result] {
+        result = this->Graph::saveProjection(fileName, pr, options);
     };
 
     progressDialog(size, title, fn);
@@ -226,5 +234,33 @@ const Node* GraphWorker::findNode(unsigned nodeId, QString& info) const
 
 
 
+ProjShortPaths* GraphWorker::findShortPaths(unsigned fromId, unsigned toId,
+                                            bool reverse)
+{
+    QString title = QObject::tr("Finding short paths");
+    ProjShortPaths* result = nullptr;
 
+    std::function<void()> fn = [this, &fromId, &toId, &reverse, &result] {
+        result = this->Graph::findShortPaths(fromId, toId, reverse);
+    };
+    progressDialog(1, title, fn);
+    return result;
+}
+
+
+
+void GraphWorker::readProjectionsInfo()
+{
+    QString title = QObject::tr("Reading projections info");
+
+    unsigned size = nodeCount();
+    if (!size)
+        return;
+    --size;
+
+    std::function<void()> fn = [this] {
+        this->Graph::readProjectionsInfo();
+    };
+    progressDialog(size, title, fn);
+}
 

@@ -14,7 +14,7 @@ namespace {
      * all projections are operated in memory, more nodes must store
      * all projections in files and operate by one projection.
      */
-    const unsigned memoryEdgeLimit = 1000;
+    const unsigned memoryEdgeLimit = 2500;
 }
 
 
@@ -23,8 +23,7 @@ FileProjections::FileProjections(GraphBase& graph) :
     Projections(graph),
     ReaderBase(),
     loadedProjection(nullptr),
-    projectionStatus(Status::NONE),
-    useMemory(graph.edgeCount() <= memoryEdgeLimit)
+    projectionStatus(Status::NONE)
 {}
 
 
@@ -60,14 +59,14 @@ void FileProjections::updateGraphFileName(const std::string& newName)
 
 
 
-const Projection* FileProjections::getProjection(unsigned nodeId)
+Projection* FileProjections::getProjection(unsigned nodeId)
 {
     lastError = Error::NONE;
 
     if (loadedProjection && loadedProjection->getId() == nodeId)
         return loadedProjection;
 
-    if (useMemory)
+    if (isMemoryUsed())
     {
         loadedProjection = Projections::getProjection(nodeId);
         return loadedProjection;
@@ -100,6 +99,8 @@ bool FileProjections::loadProjection(Projection *pr)
 
     unsigned id = pr->getId();
     ProjectionsReader reader(*this);
+    startProcess(&reader, 0u, pr->getEccentricity());
+
     std::string prName(graphFileName);
     prName += "_pr_";
     prName += std::to_string(id);
@@ -113,6 +114,7 @@ bool FileProjections::loadProjection(Projection *pr)
         fclose(f);
     }
     lastError = reader.getLastError();
+    completeProcess();
     return result;
 }
 
@@ -133,7 +135,7 @@ void FileProjections::createAllProjections()
         return;
     }
 
-    if(useMemory)
+    if(isMemoryUsed())
     {
         Projections::createAllProjections();
         return;
@@ -143,9 +145,12 @@ void FileProjections::createAllProjections()
     NodeMap* nodeList = graph->getNodeMap();
     unsigned count = nodeList->size();
 
-    // all projections exist - skip
-    if (projectionsList->size() == count)
+    if (!count)
         return;
+
+    ProjectionsWriter writer(*this);
+    setWorker(&writer, true);
+    startProcess(0u, count - 1);
 
     unsigned oldSize = projectionsList->size();
     bool isWasEmpty = !oldSize;
@@ -158,19 +163,21 @@ void FileProjections::createAllProjections()
     auto it = nodeList->begin();
     Projection* pr;
 
-    ProjectionsWriter writer(*this);
     std::string saveName(graphFileName);
     unsigned nameSize = saveName.size();
-
-    startProcess(0, count - 1);
 
     unsigned currentId;
     unsigned pos = oldSize;
 
-    for(unsigned i = 0; i < count; ++i, ++it)
+    for(unsigned i = 0u; i < count; ++i, ++it)
     {
         if (isInterrupted())
-            return;
+        {
+            projectionStatus = Status::PARTIAL;
+            // if interrupted on null filled projections, shrink list
+            projectionsList->resize(pos);
+            break;
+        }
 
         updateProgress(i);
 
@@ -195,13 +202,19 @@ void FileProjections::createAllProjections()
             ++pos;
         }
         pr->createProjection(*graph);
+        if (pr->isInterrupted())
+        {
+            continue;
+        }
 
-        saveName.resize(nameSize);
-        saveName += "_pr_";
-        saveName += std::to_string(currentId);
-        saveName += ".txt";
-        writer.saveProjection(saveName.data(), currentId);
+        ProjectionsReader::projectionFileName(saveName, nameSize, currentId);
 
+        bool result = writer.saveProjection(saveName.data(), pr);
+
+        if (result)
+        {
+            pr->setFileExist(true);
+        }
         // stay loaded last projection
         if (count - i > 1)
         {
@@ -218,14 +231,16 @@ void FileProjections::createAllProjections()
         auto end = projectionsList->end();
         std::sort(oldStart, end, Projection::less);
     }
+    if (!isInterrupted())
+        projectionStatus = Status::ALL;
     completeProcess();
 }
 
 
 
-const Projection* FileProjections::createProjection(unsigned nodeId)
+Projection* FileProjections::createProjection(unsigned nodeId)
 {
-    if (useMemory)
+    if (isMemoryUsed())
     {
         return Projections::createProjection(nodeId);
     }
@@ -240,8 +255,8 @@ const Projection* FileProjections::createProjection(unsigned nodeId)
         else if (!loadedProjection->isEmpty())
             return loadedProjection;
     }
-    const Projection* pr = Projections::createProjection(nodeId);
-    loadedProjection = const_cast<Projection*>(pr);
+    Projection* pr = Projections::createProjection(nodeId);
+    loadedProjection = pr;
     return pr;
 }
 
@@ -258,7 +273,7 @@ const Projection* FileProjections::createProjection(unsigned nodeId)
 ProjShortPaths* FileProjections::findShortPaths(unsigned fromId, unsigned toId,
                                                 bool reverse)
 {
-    if(useMemory)
+    if(isMemoryUsed())
     {
         return Projections::findShortPaths(fromId, toId, reverse);
     }
@@ -266,11 +281,11 @@ ProjShortPaths* FileProjections::findShortPaths(unsigned fromId, unsigned toId,
     {
         if (loadedProjection->getId() == fromId)
         {
-            return Projections::findShortPaths(fromId, toId, reverse);
+            return loadedProjection->findShortPaths(toId, reverse);
         }
         else if(loadedProjection->getId() == toId)
         {
-            return Projections::findShortPaths(toId, fromId, !reverse);
+            return loadedProjection->findShortPaths(fromId, !reverse);
         }
         else
         {
@@ -278,24 +293,19 @@ ProjShortPaths* FileProjections::findShortPaths(unsigned fromId, unsigned toId,
             loadedProjection = nullptr;
         }
     }
-    auto pr = Projections::getProjection(fromId);
+    auto pr = getProjection(fromId);
     if (!pr)
     {
         return nullptr;
     }
-    bool res = loadProjection(pr);
-    if (!res)
-    {
-        return nullptr;
-    }
-    return Projections::findShortPaths(fromId, toId, reverse);
+    return pr->findShortPaths(toId, reverse);
 }
 
 
 
 bool FileProjections::isProjectionExist(unsigned nodeId) const
 {
-    if (useMemory)
+    if (isMemoryUsed())
     {
         return Projections::isProjectionExist(nodeId);
     }
@@ -312,5 +322,100 @@ bool FileProjections::isProjectionExist(unsigned nodeId) const
 
 bool FileProjections::isMemoryUsed() const
 {
-    return useMemory;
+    return graph->edgeCount() <= memoryEdgeLimit;
 }
+
+
+
+void FileProjections::readProjectionsInfo()
+{
+    // Prepare nodes
+    NodeMap* nodeList = graph->getNodeMap();
+    unsigned count = nodeList->size();
+
+    if (!count)
+        return;
+
+    unsigned oldSize = projectionsList->size();
+    bool isProjectionsWasEmpty = !oldSize;
+
+    projectionsList->resize(count, nullptr);
+    projectionsList->shrink_to_fit();
+
+    auto oldStart = projectionsList->begin();
+    auto oldEnd = projectionsList->begin() + oldSize;
+    auto it = nodeList->begin();
+    Projection* pr;
+
+    ProjectionsReader reader(*this);
+    std::string saveName(graphFileName);
+    unsigned nameSize = saveName.size();
+    bool someMissing = false, someReaded = false;
+
+    startProcess(0u, count - 1);
+
+    unsigned currentId;
+    unsigned pos = oldSize;
+
+    for(unsigned i = 0u; i < count; ++i, ++it)
+    {
+        if (isInterrupted())
+        {
+            projectionStatus = Status::PARTIAL;
+            return;
+        }
+
+        updateProgress(i);
+
+        currentId = it->first;
+        pr = nullptr;
+        // Projection exist - skip
+        if (!isProjectionsWasEmpty)
+        {
+            auto e = std::lower_bound(oldStart, oldEnd, currentId,
+                                      Projection::lessById);
+            if (e != oldEnd && (*e)->getId() == currentId)
+            {
+                pr = *e;
+            }
+        }
+        if (!pr)
+        {
+            pr = new Projection(currentId);
+            (*projectionsList)[pos] = pr;
+            ++pos;
+        }
+
+        ProjectionsReader::projectionFileName(saveName, nameSize, currentId);
+
+        bool result = reader.readProjectionInfo(saveName.data(), pr);
+        if (result)
+        {
+            someReaded = true;
+        }
+        else
+        {
+            someMissing = true;
+            if (reader.getLastError() == ProjectionsReader::Error::TYPE)
+            {
+                lastError = Error::TYPE;
+            }
+        }
+    }
+    if (someReaded)
+    {
+        projectionStatus = someMissing ? Status::PARTIAL : Status::ALL;
+    }
+    else
+    {
+        projectionStatus = Status::EMPTY;
+    }
+
+    if (!isProjectionsWasEmpty)
+    {
+        auto end = projectionsList->end();
+        std::sort(oldStart, end, Projection::less);
+    }
+    completeProcess();
+}
+

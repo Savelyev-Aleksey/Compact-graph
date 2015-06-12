@@ -6,6 +6,7 @@
 #include "MainWindow.h"
 #include "SaveGraphForm.h"
 #include "SaveShortPathForm.h"
+#include "SaveProjectionForm.h"
 
 SaveForm::SaveForm(MainWindow *parent) :
     QWidget(parent),
@@ -16,12 +17,15 @@ SaveForm::SaveForm(MainWindow *parent) :
 
     ui->saveStackedWidget->addWidget(new SaveGraphForm(mainWindow, this));
     ui->saveStackedWidget->addWidget(new SaveShortPathForm(mainWindow, this));
+    ui->saveStackedWidget->addWidget(new SaveProjectionForm(mainWindow, this));
 
     // Save menu buttons connect
     connect(ui->menuSaveGraph, &QToolButton::clicked,
             this, &SaveForm::menuShowGraph);
     connect(ui->menuSaveShortPath, &QToolButton::clicked,
             this, &SaveForm::menuShowShortPath);
+    connect(ui->menuSaveProjection, &QToolButton::clicked,
+            this, &SaveForm::menuShowProjection);
 }
 
 
@@ -43,5 +47,12 @@ void SaveForm::menuShowGraph()
 void SaveForm::menuShowShortPath()
 {
     ui->saveStackedWidget->setCurrentIndex(1);
+}
+
+
+
+void SaveForm::menuShowProjection()
+{
+    ui->saveStackedWidget->setCurrentIndex(2);
 }
 

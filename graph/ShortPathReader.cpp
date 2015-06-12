@@ -58,8 +58,8 @@ FILE* ShortPathReader::openFile(const char* fileName, Type& typeId)
         return nullptr;
     }
 
-    char typeStr[200];
-    fgets(typeStr, 200, f);
+    char typeStr[200u];
+    fgets(typeStr, 200u, f);
     typeId = FileTypes::typeId<Type>(typeStr, types);
     if (typeId == Type::UNDEFINED)
     {
@@ -218,9 +218,9 @@ bool ShortPathReader::readShortPath(FILE* fp, Type typeId)
         }
         else
         {
-            char buf[20] = "";
-            buf[19] = '\0';
-            fread(buf, sizeof(char), 19, fp);
+            char buf[20u] = "";
+            buf[19u] = '\0';
+            fread(buf, sizeof(char), 19u, fp);
             std::clog << "[!!!] Error while reading from file near: "
                       << buf << std::endl;
         }

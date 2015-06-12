@@ -25,9 +25,10 @@ const char* const ProjectionsReader::types[] = {
 
 ProjectionsReader::ProjectionsReader(FileProjections& projections) :
     ReaderBase(),
+    Worker(),
     projections(&projections),
-    eccesntricity(0),
-    shortestLoop(0)
+    eccesntricity(0u),
+    shortestLoop(0u)
 {}
 
 
@@ -48,83 +49,19 @@ bool ProjectionsReader::isCanRead(const char* type)
 
 
 /**
- * @brief ProjectionsReader::readProjectionsInfo read projections info from
- * files, stored near current graph file
- * @param fileName - loaded graph file name.
- * @return true if file found and no errors. false if file type wrong.
+ * @brief ProjectionsReader::projectionFileName function to get file name
+ * for saved projection.
+ * @param prName - current file name
+ * @param length - file name prefix length (without extension and suffix)
+ * @param id - projection id
  */
-bool ProjectionsReader::readProjectionsInfo(const std::string& fileName)
+void ProjectionsReader::projectionFileName(std::string &prName, unsigned length,
+                                           unsigned id)
 {
-    if (!fileName.size())
-    {
-        lastError = Error::READ;
-        return false;
-    }
-
-    std::string projectionName(fileName);
-    auto end = projectionName.find_last_of('.');
-    if (end == std::string::npos)
-        end = fileName.size();
-
-    const auto nodes = projections->getGraph().getNodeMap();
-    projections->clear();
-
-    unsigned nodesCount = nodes->size();
-
-    auto prList = projections->projectionsList;
-    prList->resize(nodesCount, nullptr);
-    prList->shrink_to_fit();
-
-
-    bool wasMissing = false, wasReaded = false, res;
-
-    unsigned nodeId, pos = 0;
-    Projection* pr;
-
-    for (const auto &it : *nodes)
-    {
-        nodeId = it.first;
-        projectionName.resize(end);
-        projectionName += "_pr_";
-        projectionName += std::to_string(nodeId);
-        projectionName += ".txt";
-
-        pr = new Projection(nodeId);
-        (*prList)[pos++] = pr;
-
-        res = readProjectionInfo(projectionName.data(), pr);
-        if (res)
-        {
-            wasReaded = true;
-        }
-        else
-        {
-            if (lastError == Error::TYPE)
-            {
-                return false;
-            }
-            else if (lastError == Error::READ)
-            {
-                wasMissing = true;
-            }
-        }
-    }
-
-    if (wasMissing)
-    {
-        if (!wasReaded)
-            projections->projectionStatus = FileProjections::Status::EMPTY;
-        else
-            projections->projectionStatus = FileProjections::Status::PARTIAL;
-    }
-    else
-    {
-        projections->projectionStatus = FileProjections::Status::ALL;
-    }
-
-
-    lastError = Error::NONE;
-    return true;
+    prName.resize(length);
+    prName += "_pr_";
+    prName += std::to_string(id);
+    prName += ".txt";
 }
 
 
@@ -141,8 +78,8 @@ bool ProjectionsReader::readProjectionInfo(const char *fileName, Projection* pr)
         return false;
     }
 
-    char typeStr[200];
-    fgets(typeStr, 200, f);
+    char typeStr[200u];
+    fgets(typeStr, 200u, f);
 
     Type typeId = FileTypes::typeId<Type>(typeStr, types);
 
@@ -155,6 +92,7 @@ bool ProjectionsReader::readProjectionInfo(const char *fileName, Projection* pr)
         return false;
     }
     readInfo(f);
+    fclose(f);
 
     pr->eccesntricity = eccesntricity;
     pr->shortestLoop = shortestLoop;
@@ -184,8 +122,8 @@ FILE* ProjectionsReader::openFile(const char *fileName, Type& typeId)
         return nullptr;
     }
 
-    char typeStr[200];
-    fgets(typeStr, 200, f);
+    char typeStr[200u];
+    fgets(typeStr, 200u, f);
 
     typeId = FileTypes::typeId<Type>(typeStr, types);
 
@@ -282,7 +220,7 @@ bool ProjectionsReader::readProjections(FILE *fp, Type typeId)
             }
             // This is root level with respectived node
             parent = new ProjectionElem(nodeFromNum);
-            parent->setLevel(0);
+            parent->setLevel(0u);
             levelList = new ProjectionLevelList;
             projection->rootNode = parent;
             projection->levelList = levelList;
@@ -299,6 +237,12 @@ bool ProjectionsReader::readProjections(FILE *fp, Type typeId)
             nodesElemStack.push_front(parent);
         }
         count = fscanf(fp, "%u", &nodeToNum);
+
+        if (isInterrupted())
+        {
+            projection->clear();
+            return false;
+        }
 
         // If readed add new node.
         if (count == 1)
@@ -362,20 +306,17 @@ bool ProjectionsReader::readProjections(FILE *fp, Type typeId)
     }
     if (readError)
     {
-        char buf[20] = "";
-        buf[19] = '\0';
-        fread(buf, sizeof(char), 19, fp);
+        char buf[20u] = "";
+        buf[19u] = '\0';
+        fread(buf, sizeof(char), 19u, fp);
         std::clog << "[!!!] Error while reading from file near: "
                   << buf << std::endl;
         lastError = Error::SYNTAX;
         return false;
     }
 
-    // for last loop to be shure that data updated
-    if (projection && !projection->getEccentricity())
-    {
-        projection->updateAfterRead();
-    }
+    projection->updateAfterRead();
+
     return true;
 }
 
@@ -389,7 +330,7 @@ bool ProjectionsReader::readProjections(FILE *fp, Type typeId)
  */
 void ProjectionsReader::readInfo(FILE *f)
 {
-    char buf[200], bracket;
+    char buf[200u], bracket;
     fpos_t position;
     while (true)
     {
@@ -400,7 +341,7 @@ void ProjectionsReader::readInfo(FILE *f)
             fsetpos(f, &position);
             return;
         }
-        fgets(buf, 200, f);
+        fgets(buf, 200u, f);
         setInfo(buf);
     }
 }
@@ -431,14 +372,14 @@ void ProjectionsReader::setInfo(const char *str)
     std::transform(name.begin(), name.end(), name.begin(),
                    (int (*)(int))std::toupper);
     // trim
-    name.erase(0, name.find_first_not_of(" \t") );
+    name.erase(0u, name.find_first_not_of(" \t") );
     name.erase(name.find_last_not_of(" \t") +1, name.size() );
 
     // upper case
     std::transform(value.begin(), value.end(), value.begin(),
                    (int (*)(int))std::toupper);
     // trim
-    value.erase(0, value.find_first_not_of(" \r\n\t") );
+    value.erase(0u, value.find_first_not_of(" \r\n\t") );
     value.erase(value.find_last_not_of(" \r\n\t}") + 1, value.size() );
 
     setInfo(name, value);
@@ -448,7 +389,7 @@ void ProjectionsReader::setInfo(const char *str)
 
 void ProjectionsReader::setInfo(const std::string& prop, std::string& value)
 {
-    if (prop.compare("ECCESNTRICITY") == 0)
+    if (prop.compare("ECCENTRICITY") == 0)
     {
         eccesntricity = static_cast <unsigned> ( std::stoul(value) );
     }

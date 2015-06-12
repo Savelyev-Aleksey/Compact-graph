@@ -29,6 +29,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="TorusBigRadiusEdit">
+        <property name="toolTip">
+         <string>Big radius is number in range 3..1024</string>
+        </property>
         <property name="maxLength">
          <number>4</number>
         </property>
@@ -43,6 +46,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="TorusSmallRadiusEdit">
+        <property name="toolTip">
+         <string>Small radius is number in range 3..1024</string>
+        </property>
         <property name="maxLength">
          <number>4</number>
         </property>
@@ -57,6 +63,10 @@
       </item>
       <item row="2" column="1">
        <widget class="QLineEdit" name="TorusWeightEdit">
+        <property name="toolTip">
+         <string>Edge weight is float number in range 0,0000 ..1000,0000.
+Delimiter is comma ,</string>
+        </property>
         <property name="maxLength">
          <number>10</number>
         </property>
@@ -96,6 +106,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="hypercybeDimentionEdit">
+        <property name="toolTip">
+         <string>Dimention is number in range 3..18</string>
+        </property>
         <property name="maxLength">
          <number>4</number>
         </property>
@@ -110,6 +123,10 @@
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="hypercubeWeightEdit">
+        <property name="toolTip">
+         <string>Edge weight is float number in range 0,0000 ..1000,0000.
+Delimiter is comma ,</string>
+        </property>
         <property name="maxLength">
          <number>4</number>
         </property>

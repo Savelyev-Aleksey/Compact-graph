@@ -7,13 +7,14 @@
 
 #include "FileTypes.h"
 #include "ReaderBase.h"
+#include "Worker.h"
 
 class GraphBase;
 class Projection;
 class FileProjections;
 
 
-class ProjectionsReader : public ReaderBase
+class ProjectionsReader : public ReaderBase, public Worker
 {
 public:
     ProjectionsReader(FileProjections& projections);
@@ -31,17 +32,18 @@ public:
     static bool isCanRead(const char* typeStr);
     static Type getType(const char *type);
 
+    static void projectionFileName(std::string& prName, unsigned length,
+                                   unsigned id);
+
     FILE* openFile(const char* fileName, Type& typeId);
     bool readProjections(FILE* fp, Type typeId);
-    bool readProjectionsInfo(const std::string& fileName);
+    bool readProjectionInfo(const char* fileName, Projection* pr);
 
 protected:
     FileProjections* projections;
 
     unsigned eccesntricity;
     unsigned shortestLoop;
-
-    bool readProjectionInfo(const char* fileName, Projection* pr);
 
     void readInfo(FILE* f);
     void setInfo(const char* str);

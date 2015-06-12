@@ -114,7 +114,7 @@ void ShortPath::clearPath(unsigned nodeId)
 
 bool ShortPath::isEmpty() const
 {
-    return shortPathNodes->size() == 0;
+    return shortPathNodes->size() == 0u;
 }
 
 
@@ -260,10 +260,10 @@ void ShortPath::createAllShortPaths(float pathLimit)
 
     std::thread* threads[threadsCount];
 
-    startProcess(0, count - 1);
+    startProcess(0u, count - 1);
 
     // create for each node root element
-    for (unsigned i = 0; i < count; ++i, ++it)
+    for (unsigned i = 0u; i < count; ++i, ++it)
     {
         initShortPath(it->first);
     }
@@ -274,19 +274,19 @@ void ShortPath::createAllShortPaths(float pathLimit)
         this->generateShortPath(nodeId, path);
     };
 
-    for (unsigned i = 0; i < count; i += threadsCount)
+    for (unsigned i = 0u; i < count; i += threadsCount)
     {
         if (isInterrupted())
             return;
 
         end = std::min(count - i, threadsCount);
 
-        for (unsigned j = 0; j < end; ++j, ++it)
+        for (unsigned j = 0u; j < end; ++j, ++it)
         {
             initShortPath(it->first);
             threads[j] = new std::thread(func, it->first, pathLimit);
         }
-        for (unsigned j = 0; j < end; ++j)
+        for (unsigned j = 0u; j < end; ++j)
         {
             threads[j]->join();
             delete threads[j];

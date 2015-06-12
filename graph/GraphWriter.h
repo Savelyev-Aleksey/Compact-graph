@@ -22,7 +22,7 @@ public:
     bool writeBracketsFlat(const char* fileName,
                            cuint options = (cuint) Option::PRINT_VALUE);
     bool writeBrackets(const char* fileName, cuint startNodeId,
-                       cuint pathLimit = 0,
+                       cuint pathLimit = 0u,
                        cuint options = (cuint) Option::PRINT_VALUE);
 
 protected:

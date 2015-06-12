@@ -25,8 +25,10 @@ private:
     bool readFileInfo(const QString &fileName);
 
 private slots:
-    void getFileInfo();
+    void chooseFile();
     void readFile();
+
+    void readProjectionsInfo();
 
 };
 

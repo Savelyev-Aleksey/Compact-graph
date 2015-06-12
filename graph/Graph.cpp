@@ -137,7 +137,10 @@ bool Graph::readFile(const char* fileName)
 {
     // if other file formats will be added
     // add file type definition here
-    return readTxtFile(fileName);
+    bool result;
+    result = readTxtFile(fileName);
+
+    return result;
 }
 
 
@@ -152,8 +155,8 @@ bool Graph::readTxtFile(const char *fileName)
         return false;
     }
 
-    char typeStr[200];
-    fgets(typeStr, 200, f);
+    char typeStr[200u];
+    fgets(typeStr, 200u, f);
 
     bool result = false;
     bool found = false;
@@ -166,8 +169,7 @@ bool Graph::readTxtFile(const char *fileName)
         result = GraphBaseFacade::readFile(f, graphTypeId);
         if (result)
         {
-            FileProjectionsFacade::updateGraphFileName(
-                                   GraphBaseFacade::fileName);
+            updateFileName(fileName);
         }
     }
     if (!found)

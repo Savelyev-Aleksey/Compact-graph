@@ -29,9 +29,7 @@ private:
 
     void printTableStat(const UintMap* map, QTableWidget* table, bool shrink);
 
-    void printGraphInfo();
     void printGraphParameters();
-
     void printGraphStatistic();
     void printEccentriciyStatistic();
 
@@ -39,6 +37,9 @@ private:
     void createProjections();
 
     void updateButtonsStatus();
+
+    void readProjectionsInfo();
+    void projectionsInfoStatus();
 };
 
 #endif // GRAPHINFOFORM_H

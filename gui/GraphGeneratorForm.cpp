@@ -9,7 +9,7 @@ GraphGeneratorForm::GraphGeneratorForm(MainWindow *parent) :
     mainWindow(parent)
 {
     ui->setupUi(this);
-    ui->hypercybeDimentionEdit->setValidator(new QIntValidator(3, 1024, this));
+    ui->hypercybeDimentionEdit->setValidator(new QIntValidator(3, 18, this));
     ui->hypercubeWeightEdit->setValidator(
                 new QDoubleValidator(0, 1000, 4, this));
 
@@ -23,21 +23,21 @@ GraphGeneratorForm::GraphGeneratorForm(MainWindow *parent) :
             this, &GraphGeneratorForm::generateTorus);
 
     connect(ui->hypercybeDimentionEdit, &QLineEdit::textChanged,
-            this, &GraphGeneratorForm::hypercubeDataValid);
+            this, &GraphGeneratorForm::hypercubeDataValidate);
     connect(ui->hypercubeWeightEdit, &QLineEdit::textChanged,
-            this, &GraphGeneratorForm::hypercubeDataValid);
+            this, &GraphGeneratorForm::hypercubeDataValidate);
 
     connect(ui->TorusBigRadiusEdit, &QLineEdit::textChanged,
-            this, &GraphGeneratorForm::torusDataValid);
+            this, &GraphGeneratorForm::torusDataValidate);
     connect(ui->TorusSmallRadiusEdit, &QLineEdit::textChanged,
-            this, &GraphGeneratorForm::torusDataValid);
+            this, &GraphGeneratorForm::torusDataValidate);
     connect(ui->TorusWeightEdit, &QLineEdit::textChanged,
-            this, &GraphGeneratorForm::torusDataValid);
+            this, &GraphGeneratorForm::torusDataValidate);
 }
 
 
 
-void GraphGeneratorForm::hypercubeDataValid()
+void GraphGeneratorForm::hypercubeDataValidate()
 {
     bool valid = ui->hypercybeDimentionEdit->hasAcceptableInput();
     valid = valid && ui->hypercubeWeightEdit->hasAcceptableInput();
@@ -46,11 +46,22 @@ void GraphGeneratorForm::hypercubeDataValid()
 
 
 
-void GraphGeneratorForm::torusDataValid()
+void GraphGeneratorForm::torusDataValidate()
 {
     bool valid = ui->TorusBigRadiusEdit->hasAcceptableInput();
     valid = valid && ui->TorusSmallRadiusEdit->hasAcceptableInput();
     valid = valid && ui->TorusWeightEdit->hasAcceptableInput();
+    if (valid)
+    {
+        unsigned small = ui->TorusSmallRadiusEdit->text().toUInt();
+        unsigned big = ui->TorusBigRadiusEdit->text().toUInt();
+        if (small * big > 262144)
+        {
+            valid = false;
+            mainWindow->showStatusMessage(tr("For torus parameters are to big. "
+                                             "Decrease radius."), 5000);
+        }
+    }
     ui->generateTorusButton->setEnabled(valid);
 }
 

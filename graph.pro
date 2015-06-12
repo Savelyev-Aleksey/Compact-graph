@@ -55,7 +55,8 @@ SOURCES += gui/main.cpp\
     graph/FileProjections.cpp \
     graph/GraphBaseFacade.cpp \
     graph/ShortPathFacade.cpp \
-    graph/FileProjectionsFacade.cpp
+    graph/FileProjectionsFacade.cpp \
+    gui/SaveProjectionForm.cpp
 
 HEADERS  += \
     graph/Edge.h \
@@ -94,7 +95,8 @@ HEADERS  += \
     graph/FileProjections.h \
     graph/GraphBaseFacade.h \
     graph/ShortPathFacade.h \
-    graph/FileProjectionsFacade.h
+    graph/FileProjectionsFacade.h \
+    gui/SaveProjectionForm.h
 
 FORMS    += \
     gui/OpenFileForm.ui \
@@ -106,7 +108,8 @@ FORMS    += \
     gui/GraphInfoForm.ui \
     gui/AboutForm.ui \
     gui/NodeInfoForm.ui \
-    gui/StatisticMenuForm.ui
+    gui/StatisticMenuForm.ui \
+    gui/SaveProjectionForm.ui
 
 DISTFILES += \
     gui/resources/translations/graph_ru.ts

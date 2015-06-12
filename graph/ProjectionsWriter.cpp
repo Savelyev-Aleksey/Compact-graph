@@ -61,7 +61,7 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
     }
 
     bool result = true;
-    unsigned pos = 0;
+    unsigned pos = 0u;
 
     startProcess(pos, list->size() - 1);
 
@@ -89,21 +89,16 @@ bool ProjectionsWriter::saveProjections(const char *fileName, cuint options)
  * @brief ProjectionsWriter::saveProjection - save created projection for
  * one node in fileName file.
  * @param fileName - file to write projections
- * @param rootNode - node id for create projection
+ * @param pr - created non empty projection
  * @param options - some options (PRINT_INDENTS PRINT_INFO)
  * @return true if writing was successful, false if write error file can't be
  * open on write or projections are empty.
  */
-bool ProjectionsWriter::saveProjection(const char *fileName, unsigned rootNode,
+bool ProjectionsWriter::saveProjection(const char *fileName,
+                                       const Projection* pr,
                                        cuint options)
 {
-    const Projection* pr = projections->getProjection(rootNode);
-    if (!pr)
-    {
-        return false;
-    }
-
-    if (!pr->levelCount())
+    if (!pr || !pr->levelCount())
     {
         return false;
     }
@@ -133,8 +128,9 @@ bool ProjectionsWriter::saveProjection(const char *fileName, unsigned rootNode,
     if (size)
         --size;
 
-    startProcess(0, size);
+    startProcess(0u, size);
     bool result = writeProjection(f, pr, options, true);
+
     completeProcess();
 
     fclose(f);
@@ -161,7 +157,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
         return false;
     }
 
-    unsigned nodeId, count = 0;
+    unsigned nodeId, count = 0u;
     bool isFirst = true;
     std::deque <ProjectionElemListItPair> pathStack;
     unsigned currentIndent = 1;
@@ -193,7 +189,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
             }
             if (printIndents)
             {
-                for(unsigned i = 0; i < currentIndent; ++i)
+                for(unsigned i = 0u; i < currentIndent; ++i)
                 {
                     fputc('\t', f);
                 }
@@ -211,7 +207,7 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
 
         if (printIndents)
         {
-            for(unsigned i = 0; i < currentIndent; ++i)
+            for(unsigned i = 0u; i < currentIndent; ++i)
             {
                 fputc('\t', f);
             }
@@ -255,6 +251,33 @@ bool ProjectionsWriter::writeProjection(FILE *f, const Projection *projection,
 
 void ProjectionsWriter::writeParameters(FILE *f, const Projection* pr)
 {
-    fprintf(f, "{ECCESNTRICITY=%u}\n", pr->getEccentricity());
+    fprintf(f, "{ECCENTRICITY=%u}\n", pr->getEccentricity());
     fprintf(f, "{SHORTEST_LOOP=%u}\n", pr->getShortestLoop());
 }
+
+
+
+bool ProjectionsWriter::saveShortPaths(const char *fileName,
+                                       const ProjShortPaths *paths)
+{
+    if (!paths || !paths->size())
+        return false;
+
+    FILE* f = fopen(fileName, "w");
+    if (f == nullptr)
+    {
+        return false;
+    }
+
+    for (auto &v : *paths)
+    {
+        for (auto &el : *v)
+        {
+            fprintf(f, "%u ", el);
+        }
+        fputs("\n#\n", f);
+    }
+    fclose(f);
+    return true;
+}
+

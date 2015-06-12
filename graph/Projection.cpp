@@ -1,6 +1,7 @@
 #include <set>
 #include <cstdint>
 #include <algorithm>
+#include <iostream>
 
 #include "Projection.h"
 #include "ProjectionElem.h"
@@ -11,11 +12,12 @@
 
 
 Projection::Projection(unsigned nodeId) :
+    Worker(),
     nodeId(nodeId),
     rootNode(nullptr),
     levelList(nullptr),
-    eccesntricity(0),
-    shortestLoop(0),
+    eccesntricity(0u),
+    shortestLoop(0u),
     isFileExist(false)
 {}
 
@@ -84,7 +86,7 @@ unsigned Projection::getId() const
 
 unsigned Projection::levelCount() const
 {
-    return levelList ? levelList->size() : 0;
+    return levelList ? levelList->size() : 0u;
 }
 
 
@@ -124,6 +126,13 @@ bool Projection::fileExist() const
 
 
 
+void Projection::setFileExist(bool exist)
+{
+    isFileExist = exist;
+}
+
+
+
 /**
  * @brief Projection::createProjection create projection for current
  * projection element
@@ -138,7 +147,7 @@ void Projection::createProjection(GraphBase &graph)
     NodeIdSet* graphNodes = graph.getNodeIds();
     // init perspectived node, for projection it's a root node
     ProjectionElem* elem = new ProjectionElem(nodeId);
-    elem->setLevel(0);
+    elem->setLevel(0u);
     rootNode = elem;
     // init zero level
     ProjectionLevelElem* curLevel = new ProjectionLevelElem;
@@ -155,8 +164,11 @@ void Projection::createProjection(GraphBase &graph)
     graphNodes->erase(nodeId);
 
     ProjectionLevelElem* parentLevel;
-    unsigned projectionLevel = 0;
+    unsigned projectionLevel = 0u;
     bool isComlpete = false;
+    unsigned originalProgress = 0u;
+
+    startProcess(0u, graphNodes->size());
 
     while (!isComlpete)
     {
@@ -176,6 +188,12 @@ void Projection::createProjection(GraphBase &graph)
             const EdgeList* edgeList = node->getEdges();
             for (const auto &edgeIt : *edgeList)
             {
+                if (isInterrupted())
+                {
+                    clear();
+                    return;
+                }
+
                 unsigned curId = edgeIt.first;
                 // skip node if already it's parent in path
                 if (parent->findInParents(curId))
@@ -194,6 +212,8 @@ void Projection::createProjection(GraphBase &graph)
                 {
                     // new original node visited, shrink unvisited nodes
                     graphNodes->erase(curId);
+
+                    updateProgress(++originalProgress);
                 }
                 else
                 {
@@ -231,6 +251,8 @@ void Projection::createProjection(GraphBase &graph)
 
     createLastLevelProjection(graph);
     updateShortestLoop();
+
+    completeProcess();
 }
 
 
@@ -254,7 +276,7 @@ void Projection::createLastLevelProjection(const GraphBase& graph)
     {
         unsigned size = nodes.size();
         ProjectionLevelElem* curLevel = new ProjectionLevelElem;
-        for(unsigned i = 0; i < size - 1; ++i)
+        for(unsigned i = 0u; i < size - 1; ++i)
         {
             ProjectionElem* elem = nodes.at(i);
             for (unsigned j = i + 1; j < size; ++j)
@@ -453,8 +475,8 @@ uint_vec* Projection::getProjectionNodeStat() const
     if (!levelList->size())
         return nullptr;
 
-    unsigned i = 0;
-    uint_vec* list = new uint_vec(levelList->size() * 2, 0);
+    unsigned i = 0u;
+    uint_vec* list = new uint_vec(levelList->size() * 2, 0u);
     for (const auto &level : *levelList)
     {
         for (const auto &it : *level)
@@ -476,7 +498,7 @@ uint_vec* Projection::getProjectionNodeStat() const
  * After sorting all original nodes will be first after same node id replicas.
  * It's added in less compare function.
  */
-void Projection::sortAllProjections()
+void Projection::sortAllLevels()
 {
     if (!levelList || !levelList->size())
         return;
@@ -494,7 +516,7 @@ void Projection::sortAllProjections()
 void Projection::updateAfterRead()
 {
     updateOriginalInfo();
-    sortAllProjections();
+    sortAllLevels();
     updateEccesntricity();
     updateShortestLoop();
 }
@@ -543,16 +565,17 @@ ProjShortPaths* Projection::findShortPaths(unsigned nodeId, bool reverse)
 
     // add elements in list
     ProjShortPaths* paths = new ProjShortPaths(count, nullptr);
-    unsigned i = 0;
-    for (; startI != stopI; ++startI)
+
+    for (unsigned i = 0u; startI != stopI; ++startI, ++i)
     {
+        // vector for path, length by level num from current to top
         auto v = new std::vector<unsigned>(levelNum + 1);
         (*paths)[i] = v;
         const ProjectionElem* el = (*startI);
         if (reverse)
         {
             // move from the current elem to the respectived (root) elem
-            unsigned j = 0;
+            unsigned j = 0u;
             do
             {
                 (*v)[j++] = el->getId();

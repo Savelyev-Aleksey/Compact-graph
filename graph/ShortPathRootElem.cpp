@@ -7,9 +7,9 @@
 
 
 ShortPathRootElem::ShortPathRootElem(unsigned nodeId) :
-    nodes(new ShortPathElem(nodeId, 0, 0)),
-    search(new ShortPathElem(nodeId, 0, 0)),
-    eccentricity(0),
+    nodes(new ShortPathElem(nodeId, 0, 0u)),
+    search(new ShortPathElem(nodeId, 0, 0u)),
+    eccentricity(0u),
     nodeId(nodeId)
 {}
 
@@ -58,7 +58,7 @@ void ShortPathRootElem::updateEccentricity()
     {
         return;
     }
-    unsigned eccentrMax = 0, eccentr;
+    unsigned eccentrMax = 0u, eccentr;
     for (auto it = list->begin(), end = list->end(); it != end; ++it)
     {
         eccentr = it->second->getIndent();

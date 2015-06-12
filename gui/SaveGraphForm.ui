@@ -46,13 +46,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="projectionRadio">
-          <property name="text">
-           <string>Projections</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QRadioButton" name="bracketsNestedRadio">
           <property name="text">
            <string>Brackets style, all paths</string>
@@ -167,13 +160,6 @@ Turned on:&lt;br&gt;
           </property>
           <property name="text">
            <string>Print indents</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="printAllNodesCheck">
-          <property name="text">
-           <string>Print all nodes</string>
           </property>
          </widget>
         </item>

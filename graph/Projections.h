@@ -24,10 +24,6 @@ public:
     friend bool ProjectionsReader::
                 readProjections(FILE *fp, ProjectionsReader::Type typeId);
 
-    friend bool ProjectionsReader::
-                readProjectionsInfo(const std::string& fileName);
-
-
     bool isEmpty() const;
 
     virtual void clear();
@@ -37,14 +33,14 @@ public:
     const ProjectionsList* getList() const;
     GraphBase& getGraph() const;
 
-    virtual Projection* getProjection(unsigned nodeId) const;
     UintMap* getEccentriciyStatistic() const;
     unsigned getGraphGirth() const;
 
     virtual bool isProjectionExist(unsigned nodeId) const;
+    virtual Projection* getProjection(unsigned nodeId) const;
 
     virtual void createAllProjections();
-    virtual const Projection* createProjection(unsigned nodeId);
+    virtual Projection* createProjection(unsigned nodeId);
 
     virtual ProjShortPaths* findShortPaths(unsigned fromId, unsigned toId,
                                            bool reverse = false);

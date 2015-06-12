@@ -10,6 +10,7 @@
 #include "types.h"
 
 #include "ProjectionsReader.h"
+#include "Worker.h"
 
 class GraphBase;
 class ProjectionElem;
@@ -21,7 +22,7 @@ typedef std::deque <ProjectionLevelElem*> ProjectionLevelList;
 typedef std::vector <std::vector<unsigned>*> ProjShortPaths;
 
 
-class Projection
+class Projection : public Worker
 {
 public:
     friend class ProjectionsReader;
@@ -37,6 +38,7 @@ public:
 
     bool isEmpty() const;
     bool fileExist() const;
+    void setFileExist(bool exist);
 
     unsigned getId() const;
     unsigned levelCount() const;
@@ -64,7 +66,7 @@ protected:
     bool isFileExist;
 
     void createLastLevelProjection(const GraphBase& graph);
-    void sortAllProjections();
+    void sortAllLevels();
 
     void updateAfterRead();
 

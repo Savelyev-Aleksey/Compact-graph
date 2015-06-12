@@ -11,9 +11,9 @@
 
 GraphBaseFacade::GraphBaseFacade() : ReaderBase(), Worker(),
     graph(new GraphBase),
-    radius(0),
-    diameter(0),
-    girth(0)
+    radius(0u),
+    diameter(0u),
+    girth(0u)
 {}
 
 
@@ -29,8 +29,8 @@ void GraphBaseFacade::clear()
 {
     graph->clear();
     fileName.clear();
-    diameter = 0;
-    radius = 0;
+    diameter = 0u;
+    radius = 0u;
 }
 
 
@@ -199,9 +199,9 @@ unsigned GraphBaseFacade::statisticParamSum(const UintMap *map) const
 {
     if (!map)
     {
-        return 0;
+        return 0u;
     }
-    unsigned sum = 0;
+    unsigned sum = 0u;
     for (const auto &it : *map)
     {
         sum += it.second;
@@ -235,7 +235,7 @@ uint_vec* GraphBaseFacade::findNearNode(unsigned nodeId) const
         return nullptr;
     }
 
-    unsigned start = nodeId < 5 ? 0 : nodeId - 5;
+    unsigned start = nodeId < 5 ? 0u : nodeId - 5;
     unsigned end = nodeId > UINT32_MAX - 5 ? UINT32_MAX : nodeId + 5;
     auto itLess = list->lower_bound(start);
     if (itLess == list->end())
@@ -358,6 +358,10 @@ bool GraphBaseFacade::writeBrackets(const char* fileName, cuint startNodeId,
     startProcess(&writer);
     bool res = writer.writeBrackets(fileName, startNodeId, pathLimit, options);
     completeProcess();
+
+    if (res)
+        updateFileName(fileName);
+
     return res;
 }
 

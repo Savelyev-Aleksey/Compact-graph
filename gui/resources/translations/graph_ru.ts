@@ -51,7 +51,7 @@
 &lt;ul&gt;
 &lt;li&gt;{NODE_NODE[_VALUE]} с базовым весом или с разным весом каждой вершины&lt;/li&gt;
 &lt;li&gt;{BRACKETS_FLAT[_VALUE]} граф в скобочной записи без вложений с базовым веом или с разным весом рёбер&lt;/li&gt;
-&lt;li&gt;{BRACKETS[_VALUE]} граф в скобочной записи с вложениями с базовым веом или с разным весом рёбер&lt;/li&gt;
+&lt;li&gt;{BRACKETS[_VALUE]} граф в скобочной записи с вложениями с базовым весом или с разным весом рёбер&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Сохарнять в файлы граф в такие же форматы как форматы чтения&lt;/li&gt;
@@ -88,70 +88,98 @@
         <translation>Большой радиус</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.ui" line="40"/>
+        <location filename="../../GraphGeneratorForm.ui" line="33"/>
+        <source>Big radius is number in range 3..1024</source>
+        <translation>Большой радиус - это число в диапазоне 3..1024</translation>
+    </message>
+    <message>
+        <location filename="../../GraphGeneratorForm.ui" line="43"/>
         <source>Small radius</source>
         <translation>Малый радиус</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.ui" line="54"/>
-        <location filename="../../GraphGeneratorForm.ui" line="107"/>
+        <location filename="../../GraphGeneratorForm.ui" line="50"/>
+        <source>Small radius is number in range 3..1024</source>
+        <translation>Малый радиус - это число в диапазоне 3..1024</translation>
+    </message>
+    <message>
+        <location filename="../../GraphGeneratorForm.ui" line="60"/>
+        <location filename="../../GraphGeneratorForm.ui" line="120"/>
         <source>Edge weight</source>
         <translation>Вес ребра</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.ui" line="71"/>
-        <location filename="../../GraphGeneratorForm.ui" line="130"/>
+        <location filename="../../GraphGeneratorForm.ui" line="67"/>
+        <location filename="../../GraphGeneratorForm.ui" line="127"/>
+        <source>Edge weight is float number in range 0,0000 ..1000,0000.
+Delimiter is comma ,</source>
+        <translation>Вес ребра это вещественное число в диапазоне 0,0000 ..1000,0000.
+Разделитель - запятая ,</translation>
+    </message>
+    <message>
+        <location filename="../../GraphGeneratorForm.ui" line="81"/>
+        <location filename="../../GraphGeneratorForm.ui" line="147"/>
         <source>Create</source>
         <translation>Создать</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.ui" line="84"/>
+        <location filename="../../GraphGeneratorForm.ui" line="94"/>
         <source>Hypercube</source>
         <translation>Гиперкуб</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.ui" line="93"/>
+        <location filename="../../GraphGeneratorForm.ui" line="103"/>
         <source>Dimention</source>
         <translation>Размерность</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="71"/>
+        <location filename="../../GraphGeneratorForm.ui" line="110"/>
+        <source>Dimention is number in range 3..18</source>
+        <translation>Размерность - это число в диапазоне 3..18</translation>
+    </message>
+    <message>
+        <location filename="../../GraphGeneratorForm.cpp" line="61"/>
+        <source>For torus parameters are to big. Decrease radius.</source>
+        <translation>Для тора параметры большие. Уменьшите радиус.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphGeneratorForm.cpp" line="82"/>
         <source>Hypercube dimention not a number</source>
         <translation>Размерность гиперкуба не число</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="77"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="88"/>
         <source>Hypercube edge weight not a number</source>
         <translation>Вес ребра гиперкуба не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="83"/>
-        <location filename="../../GraphGeneratorForm.cpp" line="114"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="94"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="125"/>
         <source>Clearing graph...</source>
         <translation>Очистка графа...</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="87"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="98"/>
         <source>Hypercube created</source>
         <translation>Гиперкуб создан</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="96"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="107"/>
         <source>Torus big radius not a number</source>
         <translation>Тор большой радус не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="102"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="113"/>
         <source>Torus small radius not a number</source>
         <translation>Тор малый радус не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="108"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="119"/>
         <source>Torus edge weight not a number</source>
         <translation>Вес ребра тора не является числом</translation>
     </message>
     <message>
-        <location filename="../../GraphGeneratorForm.cpp" line="118"/>
+        <location filename="../../GraphGeneratorForm.cpp" line="129"/>
         <source>Torus created</source>
         <translation>Тор создан</translation>
     </message>
@@ -159,38 +187,33 @@
 <context>
     <name>GraphInfoForm</name>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="223"/>
+        <location filename="../../GraphInfoForm.ui" line="386"/>
         <source>Nodes degree statistic</source>
         <translation>Статистика степеней вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="272"/>
+        <location filename="../../GraphInfoForm.ui" line="438"/>
         <source>Degree</source>
         <translation>Степень</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="277"/>
-        <location filename="../../GraphInfoForm.ui" line="419"/>
+        <location filename="../../GraphInfoForm.ui" line="98"/>
+        <location filename="../../GraphInfoForm.ui" line="443"/>
         <source>Count</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="26"/>
-        <source>Graph parameters</source>
-        <translation>Параметры графа</translation>
-    </message>
-    <message>
-        <location filename="../../GraphInfoForm.ui" line="45"/>
+        <location filename="../../GraphInfoForm.ui" line="193"/>
         <source>Radius:</source>
         <translation>Радиус:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="109"/>
+        <location filename="../../GraphInfoForm.ui" line="317"/>
         <source>Diameter:</source>
         <translation>Диаметр:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="70"/>
+        <location filename="../../GraphInfoForm.ui" line="232"/>
         <source>Before search parameters will be created short paths for each node.
 After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Перед поиском параметров будут созданы кратчайшие пути для каждой вершины.
@@ -198,75 +221,141 @@ After will be found diameter, radius and eccentricity statistic.</source>
     </message>
     <message>
         <location filename="../../GraphInfoForm.ui" line="20"/>
-        <location filename="../../GraphInfoForm.ui" line="293"/>
+        <location filename="../../GraphInfoForm.ui" line="116"/>
         <source>Graph info</source>
         <translation>Инормация о графе</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="74"/>
+        <location filename="../../GraphInfoForm.ui" line="236"/>
         <source>Create short paths</source>
         <translation>Создать кратчайшие пути</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="144"/>
+        <location filename="../../GraphInfoForm.ui" line="343"/>
+        <source>Read info from projections files</source>
+        <translation>Прочитать информацию из файлов проекций</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="346"/>
+        <source>Read info</source>
+        <translation>Прочитать информацию</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="459"/>
+        <source>Info</source>
+        <translation>информция</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.ui" line="296"/>
         <source>Short paths:</source>
         <translation>Кратчайшие пути:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="153"/>
+        <location filename="../../GraphInfoForm.ui" line="161"/>
         <source>Create projections</source>
         <translation>Создать проекции</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="130"/>
+        <location filename="../../GraphInfoForm.ui" line="272"/>
         <source>Projections:</source>
         <translation>Проекции:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="192"/>
+        <location filename="../../GraphInfoForm.ui" line="125"/>
         <source>Graph degree:</source>
         <translation>Степень графа:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="206"/>
+        <location filename="../../GraphInfoForm.ui" line="214"/>
         <source>Graph girth:</source>
         <translation>Обхват графа:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="312"/>
+        <location filename="../../GraphInfoForm.ui" line="37"/>
         <source>File name:</source>
         <translation>Имя файла:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="319"/>
         <source>Parameters:</source>
-        <translation>Параметры:</translation>
+        <translation type="vanished">Параметры:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="340"/>
+        <location filename="../../GraphInfoForm.ui" line="200"/>
         <source>Node conut:</source>
         <translation>Количество вершин:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="357"/>
+        <location filename="../../GraphInfoForm.ui" line="207"/>
         <source>Edge Count:</source>
         <translation>Количество рёбер:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="380"/>
+        <location filename="../../GraphInfoForm.ui" line="56"/>
         <source>Nodes eccentricity statistic</source>
         <translation>Статистика экцентриситетов вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="241"/>
-        <location filename="../../GraphInfoForm.ui" line="398"/>
+        <location filename="../../GraphInfoForm.ui" line="77"/>
+        <location filename="../../GraphInfoForm.ui" line="407"/>
         <source>Detail info</source>
         <translation>Подробная информация</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="414"/>
+        <location filename="../../GraphInfoForm.ui" line="93"/>
         <source>Eccentricity</source>
         <translation>Экцентриситет</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="109"/>
+        <location filename="../../GraphInfoForm.cpp" line="299"/>
+        <source>Graph not saved yet.</source>
+        <translation>Граф ещё не сохранён.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="110"/>
+        <source>Before save projections save graph.</source>
+        <translation>Перед сохранением проекций сохраните граф.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="111"/>
+        <source>Graph is large. Each projection will be saved in own file near graph file.</source>
+        <translation>Граф большой. Каждая проекция будт сохранена в отдельный файл возле файла графа.</translation>
+    </message>
+    <message>
+        <source>Projections info not readed from files yet.</source>
+        <translation type="vanished">Информация проекций ещё не прочитана с файлов.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="300"/>
+        <source>Before get graph info save graph in file and create projections.</source>
+        <translation>Перед получением информации о графе сохраните граф в файл, и создайте проекции.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="309"/>
+        <source>Some projection files have unknown format.</source>
+        <translation>Некоторые файлы проекций имеют неизвестный формат.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="311"/>
+        <location filename="../../GraphInfoForm.cpp" line="345"/>
+        <source>Not all projections files are readed.</source>
+        <translation>Не все файлы проекций были прочитаны.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="315"/>
+        <location filename="../../GraphInfoForm.cpp" line="343"/>
+        <source>Some projections files are not found.</source>
+        <translation>Некоторые файлы проекций не найдены.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="340"/>
+        <source>Projections files are not created yet.</source>
+        <translation>Файлы проекций ещё не созданы.</translation>
+    </message>
+    <message>
+        <location filename="../../GraphInfoForm.cpp" line="337"/>
+        <source>Projections files are not readed yet.</source>
+        <translation>Файлы проекций ещё не прочитаны.</translation>
     </message>
 </context>
 <context>
@@ -384,7 +473,7 @@ After will be found diameter, radius and eccentricity statistic.</source>
     </message>
     <message>
         <location filename="../../OpenFileForm.ui" line="35"/>
-        <location filename="../../OpenFileForm.cpp" line="54"/>
+        <location filename="../../OpenFileForm.cpp" line="56"/>
         <source>No file</source>
         <translation>Нет файла</translation>
     </message>
@@ -394,90 +483,100 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Информация о файле</translation>
     </message>
     <message>
+        <location filename="../../OpenFileForm.ui" line="121"/>
+        <source>Read projections info</source>
+        <translation>Прочитать информацию о проекциях</translation>
+    </message>
+    <message>
         <location filename="../../OpenFileForm.ui" line="14"/>
         <location filename="../../OpenFileForm.ui" line="111"/>
-        <location filename="../../OpenFileForm.cpp" line="39"/>
+        <location filename="../../OpenFileForm.cpp" line="41"/>
         <source>Open file</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="39"/>
+        <location filename="../../OpenFileForm.cpp" line="41"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="73"/>
+        <location filename="../../OpenFileForm.cpp" line="75"/>
         <source>Can&apos;t read file %1</source>
         <translation>Невозможно прочитать файл %1</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="75"/>
+        <location filename="../../OpenFileForm.cpp" line="77"/>
         <source>Can&apos;t read file. Please check that there is a right to read.</source>
         <translation>Невозможно прочитать файл. Пожалуйста проверьте права на чтение.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="85"/>
+        <location filename="../../OpenFileForm.cpp" line="87"/>
         <source>Can&apos;t read file. File type is not recognised.</source>
         <translation>Невозможно прочитать файл. Тип файла не распознан.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="90"/>
+        <location filename="../../OpenFileForm.cpp" line="92"/>
         <source>File type = %1
 </source>
         <translation>Тип файла = %1
 </translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="118"/>
+        <location filename="../../OpenFileForm.cpp" line="120"/>
         <source>Lines in file: %1
 </source>
         <translation>Строк в файле: %1
 </translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="119"/>
+        <location filename="../../OpenFileForm.cpp" line="121"/>
         <source>File size: %1 bytes</source>
         <translation>Размер файла: %1 байт</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="137"/>
+        <location filename="../../OpenFileForm.cpp" line="139"/>
         <source>Clearing graph...</source>
         <translation>Очистка графа...</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="146"/>
-        <location filename="../../OpenFileForm.cpp" line="147"/>
+        <location filename="../../OpenFileForm.cpp" line="150"/>
+        <location filename="../../OpenFileForm.cpp" line="151"/>
         <source>File &quot;%1&quot; readed</source>
         <translation>Файл %1 прочитан</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="156"/>
+        <location filename="../../OpenFileForm.cpp" line="160"/>
         <source>Can&apos;t read file.</source>
         <translation>Невозможно прочитать файл.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="159"/>
+        <location filename="../../OpenFileForm.cpp" line="163"/>
         <source>File have unknown type.</source>
         <translation>Тип файла неизвестен.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="162"/>
+        <location filename="../../OpenFileForm.cpp" line="166"/>
         <source>File have syntax error.</source>
         <translation>В файле синтаксическая ошибка.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="165"/>
+        <location filename="../../OpenFileForm.cpp" line="169"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="169"/>
+        <location filename="../../OpenFileForm.cpp" line="173"/>
         <source>
 Check log file to get more information about error.
 By default file graph.log located in same program directory.</source>
         <translation>
 Проверьте файл логов для получения большей информации об ошибке.
 По умолчанию файл graph.log расположен в директории программы.</translation>
+    </message>
+    <message>
+        <location filename="../../OpenFileForm.cpp" line="186"/>
+        <source>Projections info was readed. More info in statistics menu.</source>
+        <translation>Информация о проекциях была прочитана. Подробней в меню статистики.</translation>
     </message>
 </context>
 <context>
@@ -488,28 +587,28 @@ By default file graph.log located in same program directory.</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="66"/>
+        <location filename="../../GraphWorker.cpp" line="67"/>
         <source>Creating short path</source>
         <translation>Создание кратчайшего пути</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="84"/>
+        <location filename="../../GraphWorker.cpp" line="85"/>
         <source>Creating projections</source>
         <translation>Создание проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="99"/>
+        <location filename="../../GraphWorker.cpp" line="100"/>
         <source>Writing edges of node</source>
         <translation>Запись рёбер вершины</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="115"/>
-        <location filename="../../GraphWorker.cpp" line="136"/>
+        <location filename="../../GraphWorker.cpp" line="116"/>
+        <location filename="../../GraphWorker.cpp" line="137"/>
         <source>Writing adjacency list</source>
         <translation>Запись списка смежности</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="158"/>
+        <location filename="../../GraphWorker.cpp" line="159"/>
         <source>Writing projections</source>
         <translation>Запись проекций</translation>
     </message>
@@ -527,6 +626,16 @@ By default file graph.log located in same program directory.</source>
         <location filename="../../GraphWorker.cpp" line="214"/>
         <source>Nearest:</source>
         <translation>Ближайшие:</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="232"/>
+        <source>Finding short paths</source>
+        <translation>Поиск кратчайших путей</translation>
+    </message>
+    <message>
+        <location filename="../../GraphWorker.cpp" line="246"/>
+        <source>Reading projections info</source>
+        <translation>Чтение информации о проекциях</translation>
     </message>
 </context>
 <context>
@@ -546,6 +655,11 @@ By default file graph.log located in same program directory.</source>
         <source>Short path</source>
         <translation>Кратчайший
 путь</translation>
+    </message>
+    <message>
+        <location filename="../../SaveForm.ui" line="173"/>
+        <source>Projection</source>
+        <translation>Проекция</translation>
     </message>
 </context>
 <context>
@@ -567,21 +681,16 @@ By default file graph.log located in same program directory.</source>
     </message>
     <message>
         <location filename="../../SaveGraphForm.ui" line="51"/>
-        <source>Projections</source>
-        <translation>Проекции</translation>
-    </message>
-    <message>
-        <location filename="../../SaveGraphForm.ui" line="58"/>
         <source>Brackets style, all paths</source>
         <translation>Скобочная запись, все пути</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="87"/>
+        <location filename="../../SaveGraphForm.ui" line="80"/>
         <source>Options</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="93"/>
+        <location filename="../../SaveGraphForm.ui" line="86"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
 
 Print value used to print value for each edge. &lt;br&gt;
@@ -632,22 +741,22 @@ or 1(2 3 4)&lt;br&gt;
 &lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="119"/>
+        <location filename="../../SaveGraphForm.ui" line="112"/>
         <source>Print value</source>
         <translation>Печать веса</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="129"/>
+        <location filename="../../SaveGraphForm.ui" line="122"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Prints graph additional information. &lt;/p&gt;&lt;p&gt;For example: &lt;br/&gt;name of generated type (hypercube torus); &lt;br/&gt;parameters, used by generator (dimention, big raidus, small radius);&lt;br/&gt;basic weight of all edges;&lt;/p&gt;&lt;p&gt;Example in file:&lt;/p&gt;&lt;p&gt;{TYPE=HYPERCUBE}&lt;br/&gt;{DIMENTION=6}&lt;br/&gt;{WEIGHT=1}&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Печать дополнительной информации о графе. &lt;/p&gt;&lt;p&gt;Например: &lt;br/&gt;название сгенерированного типа графа (гиперкуб тор); &lt;br/&gt;параметры, введенные в генератор (размерность, большой радиус, малый радиус);&lt;br/&gt;базовый вес всех рёбер;&lt;/p&gt;&lt;p&gt;Пример в файле:&lt;/p&gt;&lt;p&gt;{TYPE=HYPERCUBE}&lt;br/&gt;{DIMENTION=6}&lt;br/&gt;{WEIGHT=1}&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="132"/>
+        <location filename="../../SaveGraphForm.ui" line="125"/>
         <source>Print graph info</source>
         <translation>Печать информации о графе</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="142"/>
+        <location filename="../../SaveGraphForm.ui" line="135"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
 &lt;p&gt;Print indents for more readable data. Used in bracket style.&lt;br/&gt;
 Each new nesting increase indent lewel.&lt;/p&gt;
@@ -700,112 +809,323 @@ Turned on:&lt;br&gt;
 &lt;/table&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="169"/>
+        <location filename="../../SaveGraphForm.ui" line="162"/>
         <source>Print indents</source>
         <translation>Печать отступов</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="176"/>
-        <source>Print all nodes</source>
-        <translation>Печать всех вершин</translation>
-    </message>
-    <message>
-        <location filename="../../SaveGraphForm.ui" line="185"/>
+        <location filename="../../SaveGraphForm.ui" line="171"/>
         <source>Start node</source>
         <translation>Начальная вершина</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="198"/>
+        <location filename="../../SaveGraphForm.ui" line="184"/>
         <source>Node id for start writing bracket style paths.</source>
         <translation>Номер вершины для начала пути в скобочной записи.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="211"/>
+        <location filename="../../SaveGraphForm.ui" line="197"/>
         <source>Path Limit</source>
         <translation>Ограничение пути</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="224"/>
+        <location filename="../../SaveGraphForm.ui" line="210"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path limit. It&apos;s nesting level limiter. &lt;/p&gt;&lt;p&gt;Useful if need crop graph or give some graph part that accessible in not more than &amp;quot;path limit&amp;quot; edges.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ограничение пути - это граничение уровня вложения. &lt;/p&gt;&lt;p&gt;Ипользуется, если нужно обрезать граф или получить часть пути которая достижима не более чем в &amp;quot;ограничение пути&amp;quot; ребер.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.ui" line="270"/>
+        <location filename="../../SaveGraphForm.ui" line="256"/>
         <source>Example</source>
         <translation>Пример</translation>
     </message>
     <message>
         <location filename="../../SaveGraphForm.ui" line="14"/>
-        <location filename="../../SaveGraphForm.ui" line="322"/>
-        <location filename="../../SaveGraphForm.cpp" line="454"/>
+        <location filename="../../SaveGraphForm.ui" line="308"/>
+        <location filename="../../SaveGraphForm.cpp" line="350"/>
         <source>Save graph</source>
         <translation>Сохранить граф</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="409"/>
-        <source>File type is not recognised. Please check save settings</source>
-        <translation>Тип файла не распознан. Пожалуйста проверьте настройки сохранения</translation>
-    </message>
-    <message>
-        <location filename="../../SaveGraphForm.cpp" line="423"/>
+        <location filename="../../SaveGraphForm.cpp" line="297"/>
         <source>Graph is empty. Nothing to save.</source>
         <translation>Граф пуст. Сохранять нечего.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="168"/>
-        <location filename="../../SaveGraphForm.cpp" line="212"/>
-        <location filename="../../SaveGraphForm.cpp" line="261"/>
+        <location filename="../../SaveGraphForm.cpp" line="116"/>
+        <location filename="../../SaveGraphForm.cpp" line="157"/>
+        <location filename="../../SaveGraphForm.cpp" line="203"/>
         <source>Print value and print info are turned off.
 Weight and other information will be lost.</source>
         <translation>Печать веса и печать информации отключены.
 Вес и другая информация будут потеряны.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="318"/>
-        <source>Not all projections are created yet. Will be created on save. It&apos;s take a time.</source>
-        <translation>Не все проекции ещё созданы. Будут созданы при сохранениию Это займёт время.</translation>
-    </message>
-    <message>
-        <location filename="../../SaveGraphForm.cpp" line="331"/>
-        <source>Projection not exist yet. Will be created on save.</source>
-        <translation>Проекция ещё не создана. Будет создана при сохранении.</translation>
-    </message>
-    <message>
-        <location filename="../../SaveGraphForm.cpp" line="372"/>
-        <location filename="../../SaveGraphForm.cpp" line="390"/>
+        <location filename="../../SaveGraphForm.cpp" line="255"/>
+        <location filename="../../SaveGraphForm.cpp" line="273"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="455"/>
+        <location filename="../../SaveGraphForm.cpp" line="351"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="537"/>
+        <location filename="../../SaveGraphForm.cpp" line="380"/>
         <source>File type is unknown. Check settings.</source>
         <translation>Тип файла неизвестен. Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="543"/>
-        <location filename="../../SaveGraphForm.cpp" line="544"/>
+        <location filename="../../SaveGraphForm.cpp" line="386"/>
+        <location filename="../../SaveGraphForm.cpp" line="387"/>
+        <location filename="../../SaveGraphForm.cpp" line="398"/>
+        <location filename="../../SaveGraphForm.cpp" line="400"/>
         <source>Saving interrupted.</source>
         <translation>Сохранение прервано.</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="550"/>
-        <source>Graph saved in file %1</source>
-        <translation>Граф сохранён в файле %1</translation>
+        <location filename="../../SaveGraphForm.cpp" line="393"/>
+        <source>Data saved in file %1</source>
+        <translation>Данные сохранены в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="555"/>
-        <source>Graph not saved.File not accessed to write.</source>
-        <translation>Граф не сохранён. Нет прав на запись в файл.</translation>
+        <location filename="../../SaveGraphForm.cpp" line="399"/>
+        <source>File not accessed to write.</source>
+        <translation>Файле не доступен для записи.</translation>
+    </message>
+</context>
+<context>
+    <name>SaveProjectionForm</name>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="14"/>
+        <source>Save projections</source>
+        <translation>Сохранение проецкий</translation>
     </message>
     <message>
-        <location filename="../../SaveGraphForm.cpp" line="557"/>
-        <source>Graph not saved.</source>
-        <translation>Граф не сохранён.</translation>
+        <location filename="../../SaveProjectionForm.ui" line="26"/>
+        <source>File type</source>
+        <translation>Тип файла</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="32"/>
+        <source>Writes in file projection from some selected respectived node.</source>
+        <translation>Записывает в файл проекцию из некоторой выбранно ракурсной вершины.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="35"/>
+        <source>Projections</source>
+        <translation>Проекции</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="45"/>
+        <source>Writes in file all available short paths from one node to another.</source>
+        <translation>Записывает в файл все доступные кратчайшие пути одной длинны от одной вершины до другой.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="48"/>
+        <source>Short paths</source>
+        <translation>Кратчайшие пути</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="71"/>
+        <source>Projection</source>
+        <translation>Проекция</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="77"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p&gt;Print indents for more readable data. Used in bracket style.&lt;br/&gt;
+Each new nesting increase indent lewel.&lt;/p&gt;
+&lt;p&gt;
+Example:
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Turned off:&lt;br&gt;
+1(2(3(4 5) 7))
+&lt;/td&gt;
+&lt;td&gt;
+Turned on:&lt;br&gt;
+1(&lt;br&gt;
+&amp;middot; &amp;middot; 2(&lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; 3(&lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; 4&lt;br&gt; 
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; 5&lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; ) &lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; 7&lt;br&gt;
+&amp;middot; &amp;middot; )&lt;br&gt;
+)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p&gt;Печать отступов используется для более читаемого вида данных. Используется в скобочной записи.&lt;br/&gt;
+Каждое новое вложение увеличивает уровень отступа.&lt;/p&gt;
+&lt;p&gt;
+Пример:
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Выключено:&lt;br&gt;
+1(2(3(4 5) 7))
+&lt;/td&gt;
+&lt;td&gt;
+Включено:&lt;br&gt;
+1(&lt;br&gt;
+&amp;middot; &amp;middot; 2(&lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; 3(&lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; 4&lt;br&gt; 
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; &amp;middot; 5&lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; ) &lt;br&gt;
+&amp;middot; &amp;middot; &amp;middot; &amp;middot; 7&lt;br&gt;
+&amp;middot; &amp;middot; )&lt;br&gt;
+)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="104"/>
+        <source>Print indents</source>
+        <translation>Печать отступов</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="111"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Prints graph additional information. &lt;/p&gt;&lt;p&gt;For example: &lt;br/&gt;name of generated type (hypercube torus); &lt;br/&gt;parameters, used by generator (dimention, big raidus, small radius);&lt;br/&gt;basic weight of all edges;&lt;/p&gt;&lt;p&gt;Example in file:&lt;/p&gt;&lt;p&gt;{TYPE=HYPERCUBE}&lt;br/&gt;{DIMENTION=6}&lt;br/&gt;{WEIGHT=1}&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Печать дополнительной информации о графе. &lt;/p&gt;&lt;p&gt;Например: &lt;br/&gt;название сгенерированного типа графа (гиперкуб тор); &lt;br/&gt;параметры, введенные в генератор (размерность, большой радиус, малый радиус);&lt;br/&gt;базовый вес всех рёбер;&lt;/p&gt;&lt;p&gt;Пример в файле:&lt;/p&gt;&lt;p&gt;{TYPE=HYPERCUBE}&lt;br/&gt;{DIMENTION=6}&lt;br/&gt;{WEIGHT=1}&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="114"/>
+        <source>Print graph info</source>
+        <translation>Печать информации о графе</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="124"/>
+        <source>Print all nodes</source>
+        <translation>Печать всех вершин</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="131"/>
+        <source>In reverse</source>
+        <translation>В обратном порядке</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="140"/>
+        <source>Start node</source>
+        <translation>Начальная вершина</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="153"/>
+        <source>Node id for start writing bracket style paths.</source>
+        <translation>Номер вершины для начала пути в скобочной записи.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="173"/>
+        <source>Second node</source>
+        <translation>Вторая вершина</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="195"/>
+        <source>info</source>
+        <translation>информция</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="208"/>
+        <source>Example</source>
+        <translation>Пример</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="248"/>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="111"/>
+        <source>Not all projections are created yet. Will be created on save. It&apos;s take a time.</source>
+        <translation>Не все проекции ещё созданы. Будут созданы при сохранениию Это займёт время.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="118"/>
+        <source>Projections are to large.</source>
+        <translation>Проекции слишком большие.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="125"/>
+        <source>Graph not saved yet. Before save projections save graph.</source>
+        <translation>Граф ещё не сохранён. Перед сохранением проекций сохраните граф.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="129"/>
+        <source>Each projection will be saved in own file near graph file.</source>
+        <translation>Каждая проекция будет сохранена в отдельный файл возле файла графа.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="141"/>
+        <source>Projection not exist yet. Will be created on save.</source>
+        <translation>Проекция ещё не создана. Будет создана при сохранении.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="177"/>
+        <location filename="../../SaveProjectionForm.cpp" line="195"/>
+        <source>Start node is not number.</source>
+        <translation>Начальная вершина не является числом.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="213"/>
+        <location filename="../../SaveProjectionForm.cpp" line="231"/>
+        <source>Second node is not number.</source>
+        <translation>Вторая вершина не является числом.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="255"/>
+        <source>Graph is empty. Nothing to save.</source>
+        <translation>Граф пуст. Сохранять нечего.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="306"/>
+        <location filename="../../SaveProjectionForm.cpp" line="407"/>
+        <source>Save graph</source>
+        <translation>Сохранить граф</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="307"/>
+        <location filename="../../SaveProjectionForm.cpp" line="408"/>
+        <source>Text files (*.txt)</source>
+        <translation>Текстовые файлы (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="352"/>
+        <location filename="../../SaveProjectionForm.cpp" line="353"/>
+        <location filename="../../SaveProjectionForm.cpp" line="364"/>
+        <location filename="../../SaveProjectionForm.cpp" line="366"/>
+        <source>Saving interrupted.</source>
+        <translation>Сохранение прервано.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="359"/>
+        <source>Data saved in file %1</source>
+        <translation>Данные сохранены в файле %1</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="365"/>
+        <source>File not accessed to write.</source>
+        <translation>Файл не доступен для записи.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="400"/>
+        <source>Short paths not found.</source>
+        <translation>Кратчайшие пути не найдены.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="423"/>
+        <location filename="../../SaveProjectionForm.cpp" line="424"/>
+        <source>Short paths was saved.</source>
+        <translation>Кратчайшие пути сохранены.</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.cpp" line="428"/>
+        <source>Can&apos;t save file. Not accessed to write.</source>
+        <translation>Невозможно сохранить файл. Нет доступа на запись.</translation>
     </message>
 </context>
 <context>
@@ -915,13 +1235,13 @@ Turned on:&lt;br&gt;
     </message>
     <message>
         <location filename="../../SaveShortPathForm.cpp" line="71"/>
-        <location filename="../../SaveShortPathForm.cpp" line="128"/>
+        <location filename="../../SaveShortPathForm.cpp" line="126"/>
         <source>Start node is not number.</source>
         <translation>Начальная вершина не является числом.</translation>
     </message>
     <message>
         <location filename="../../SaveShortPathForm.cpp" line="78"/>
-        <location filename="../../SaveShortPathForm.cpp" line="135"/>
+        <location filename="../../SaveShortPathForm.cpp" line="133"/>
         <source>Path limit is not number.</source>
         <translation>Ограничение пути не является числом.</translation>
     </message>
@@ -931,27 +1251,27 @@ Turned on:&lt;br&gt;
         <translation>Путь не создан. Будет создан перед сохранением.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="139"/>
+        <location filename="../../SaveShortPathForm.cpp" line="137"/>
         <source>Save graph</source>
         <translation>Сохранить граф</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="140"/>
+        <location filename="../../SaveShortPathForm.cpp" line="138"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="169"/>
+        <location filename="../../SaveShortPathForm.cpp" line="167"/>
         <source>Short path saved in file %1</source>
         <translation>Кратчайший путь сохранён в файле %1</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="174"/>
+        <location filename="../../SaveShortPathForm.cpp" line="172"/>
         <source>Short path not saved.File not accessed to write.</source>
         <translation>Кратчайший путь не сохранён. Нет прав на запись в файл.</translation>
     </message>
     <message>
-        <location filename="../../SaveShortPathForm.cpp" line="176"/>
+        <location filename="../../SaveShortPathForm.cpp" line="174"/>
         <source>Short path not saved.</source>
         <translation>Кратчайший путь не сохранён.</translation>
     </message>

@@ -24,8 +24,8 @@ private:
 private slots:
     void generateHypercube();
     void generateTorus();
-    void hypercubeDataValid();
-    void torusDataValid();
+    void hypercubeDataValidate();
+    void torusDataValidate();
 };
 
 #endif // GRAPHGENERATORFORM_H

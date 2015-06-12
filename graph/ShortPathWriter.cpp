@@ -143,7 +143,7 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
             --currentIndent;
             if (printIndents)
             {
-                for(unsigned i = 0; i < currentIndent; ++i)
+                for(unsigned i = 0u; i < currentIndent; ++i)
                 {
                     fputc('\t', fp);
                 }
@@ -161,7 +161,7 @@ void ShortPathWriter::writeShortPath(FILE* fp, RootPathList::iterator pathIt,
 
         if (printIndents)
         {
-            for(unsigned i = 0; i < currentIndent; ++i)
+            for(unsigned i = 0u; i < currentIndent; ++i)
             {
                 fputc('\t', fp);
             }

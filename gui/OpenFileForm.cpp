@@ -15,9 +15,11 @@ OpenFileForm::OpenFileForm(MainWindow* parent) :
     ui->setupUi(this);
 
     connect(ui->chooseFileButton, &QPushButton::clicked,
-            this, &OpenFileForm::getFileInfo);
+            this, &OpenFileForm::chooseFile);
     connect(ui->openFileButton,   &QPushButton::clicked,
             this, &OpenFileForm::readFile);
+    connect(ui->projectionsInfoButton, &QPushButton::clicked,
+            this, &OpenFileForm::readProjectionsInfo);
 }
 
 
@@ -33,7 +35,7 @@ OpenFileForm::~OpenFileForm()
  * @brief OpenFileForm::getFileInfo - slot for execute file open dialog
  * choose file to get info before read file.
  */
-void OpenFileForm::getFileInfo()
+void OpenFileForm::chooseFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
                         tr("Open file"), "", tr("Text files (*.txt)") );
@@ -140,6 +142,9 @@ void OpenFileForm::readFile()
     bool isReaded = graph.readFile(name.data());
     if (isReaded)
     {
+        if(!graph.isProjectionsMemoryUsed())
+            ui->projectionsInfoButton->setEnabled(true);
+
         mainWindow->setOpenFileName(fileName);
         int p = fileName.lastIndexOf(QDir::separator());
         QString shortName = fileName.mid(++p);
@@ -172,4 +177,14 @@ void OpenFileForm::readFile()
     }
 }
 
+
+
+void OpenFileForm::readProjectionsInfo()
+{
+    GraphWorker& graph = mainWindow->getGraph();
+    graph.readProjectionsInfo();
+
+    ui->infoLabel->setText(tr("Projections info was readed. "
+                              "More info in statistics menu."));
+}
 

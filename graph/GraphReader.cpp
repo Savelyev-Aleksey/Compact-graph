@@ -69,8 +69,8 @@ FILE* GraphReader::openFile(const char* fileName, Type &typeId)
         return nullptr;
     }
 
-    char typeStr[200];
-    fgets(typeStr, 200, f);
+    char typeStr[200u];
+    fgets(typeStr, 200u, f);
     typeId = FileTypes::typeId<Type>(typeStr, types);
     if (typeId == Type::UNDEFINED)
     {
@@ -140,7 +140,7 @@ bool GraphReader::readFile(FILE *f, Type typeId)
  */
 bool GraphReader::readEdges(FILE* f, bool readValue)
 {
-    unsigned nodeFromNum, nodeToNum, readLine = 0;
+    unsigned nodeFromNum, nodeToNum, readLine = 0u;
     float value;
     int count;
     bool isEdgeAdded;
@@ -172,9 +172,9 @@ bool GraphReader::readEdges(FILE* f, bool readValue)
 
         if (count == 0)
         {
-            char buf[20];
-            buf[19] = '\0';
-            fread(buf, sizeof(char), 19, f);
+            char buf[20u];
+            buf[19u] = '\0';
+            fread(buf, sizeof(char), 19u, f);
             std::clog << "[!!!] Error while reading from file on: "
                       << buf << std::endl;
             lastError = Error::SYNTAX;
@@ -322,9 +322,9 @@ bool GraphReader::readBrackets(FILE* f, bool readValue)
         }
         else
         {
-            char buf[20] = "";
-            buf[19] = '\0';
-            fread(buf, sizeof(char), 19, f);
+            char buf[20u] = "";
+            buf[19u] = '\0';
+            fread(buf, sizeof(char), 19u, f);
             std::clog << "[!!!] Error while reading from file near: "
                       << buf << std::endl;
         }

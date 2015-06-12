@@ -37,8 +37,6 @@ void SaveGraphForm::prepareGraphWidgets()
             this, &SaveGraphForm::graphTypeChanged);
     connect(ui->bracketsNestedRadio, &QRadioButton::clicked,
             this, &SaveGraphForm::graphTypeChanged);
-    connect(ui->projectionRadio, &QRadioButton::clicked,
-            this, &SaveGraphForm::graphTypeChanged);
 
 
     // Set validators
@@ -53,11 +51,6 @@ void SaveGraphForm::prepareGraphWidgets()
             this, &SaveGraphForm::validateInputs);
     connect(ui->printValueCheck, &QCheckBox::clicked,
             this, &SaveGraphForm::validateInputs);
-
-    connect(ui->printAllNodesCheck, &QCheckBox::clicked,
-            this, &SaveGraphForm::validateInputs);
-    connect(ui->printAllNodesCheck, &QCheckBox::clicked,
-            ui->startNodeLineEdit,  &QLineEdit::setDisabled);
 
     connect(ui->startNodeLineEdit, &QLineEdit::textEdited,
             this, &SaveGraphForm::validateInputs);
@@ -79,7 +72,6 @@ void SaveGraphForm::graphTypeChanged()
         ui->printValueCheck->setEnabled(true);
         ui->printInfoCheck->setEnabled(true);
         ui->printIndentsCheck->setEnabled(false);
-        ui->printAllNodesCheck->setEnabled(false);
 
         ui->startNodeLineEdit->setEnabled(false);
         ui->pathLimitLineEdit->setEnabled(false);
@@ -89,7 +81,6 @@ void SaveGraphForm::graphTypeChanged()
         ui->printValueCheck->setEnabled(true);
         ui->printInfoCheck->setEnabled(true);
         ui->printIndentsCheck->setEnabled(false);
-        ui->printAllNodesCheck->setEnabled(false);
 
         ui->startNodeLineEdit->setEnabled(false);
         ui->pathLimitLineEdit->setEnabled(false);
@@ -99,22 +90,11 @@ void SaveGraphForm::graphTypeChanged()
         ui->printValueCheck->setEnabled(true);
         ui->printInfoCheck->setEnabled(true);
         ui->printIndentsCheck->setEnabled(true);
-        ui->printAllNodesCheck->setEnabled(false);
 
         ui->startNodeLineEdit->setEnabled(true);
         ui->pathLimitLineEdit->setEnabled(true);
     }
-    else if (ui->projectionRadio->isChecked())
-    {
-        ui->printValueCheck->setEnabled(false);
-        ui->printInfoCheck->setEnabled(true);
-        ui->printIndentsCheck->setEnabled(true);
-        ui->printAllNodesCheck->setEnabled(true);
 
-        bool isAll = ui->printAllNodesCheck->isChecked();
-        ui->startNodeLineEdit->setEnabled(!isAll);
-        ui->pathLimitLineEdit->setEnabled(false);
-    }
     validateInputs();
 }
 
@@ -258,77 +238,6 @@ bool SaveGraphForm::validateBracketsNested(QString& info, bool isGraphEmpty)
 
 
 
-bool SaveGraphForm::validateProjections(QString &info, bool isGraphEmpty)
-{
-    bool isValid = true;
-    bool printAll = ui->printAllNodesCheck->isChecked();
-    bool printIndents = ui->printIndentsCheck->isChecked();
-
-
-    if (!isGraphEmpty)
-    {
-        const GraphWorker& graph = mainWindow->getGraph();
-        if (printAll)
-        {
-            if (graph.isProjectionsMemoryUsed())
-            {
-                unsigned gSize = graph.nodeCount();
-                unsigned pSize = graph.projectionsCount();
-                if (gSize != pSize)
-                {
-                    info += tr("Not all projections are created yet. "
-                               "Will be created on save. It's take a time.");
-                    info += '\n';
-                }
-            }
-            else
-            {
-                if(graph.getFileName().length())
-                {
-                    info += tr("Projections are to large.");
-                }
-                else
-                {
-                    // Graph not saved. Big projections can't be saved.
-                    isValid = false;
-                    info += tr("Graph not saved yet. Before save projections "
-                               "save graph.");
-                }
-                info += ' ';
-                info += tr("Each projection will be saved in own file "
-                           "near graph file.");
-            }
-        }
-        else
-        {
-            isValid = checkStartNodeEdit(info);
-            if (isValid)
-            {
-                unsigned nodeId = ui->startNodeLineEdit->text().toULong();
-                if (!graph.isProjectionExist(nodeId))
-                {
-                    info += tr("Projection not exist yet. "
-                               "Will be created on save.");
-                    info += '\n';
-                }
-            }
-        }
-    }
-
-    QString example;
-
-    if (printIndents)
-        example += "1(\n    2(\n        4\n        5\n        6\n    )\n)\n";
-    else
-        example += "1(2(4 5 6))\n";
-
-    ui->exampleLabel->setText(example);
-
-    return isValid;
-}
-
-
-
 /**
  * @brief SaveGraphForm::checkStartNodeEdit - check on exist node in graph.
  * If node not fonud print nearest this id other nodes.
@@ -402,10 +311,6 @@ void SaveGraphForm::validateInputs()
     {
         isValid = validateBracketsNested(info, isEmpty);
     }
-    else if (ui->projectionRadio->isChecked())
-    {
-        isValid = validateProjections(info, isEmpty);
-    }
 
     ui->infoLabel->setText(info);
 
@@ -435,9 +340,6 @@ void SaveGraphForm::saveGraph()
         options = options | (unsigned) WriterBase::Option::PRINT_INDENTS;
     }
 
-    bool printAllNodes = ui->printAllNodesCheck->isEnabled() &&
-                         ui->printAllNodesCheck->isChecked();
-
     GraphWorker& graph = mainWindow->getGraph();
 
     bool result = false;
@@ -445,24 +347,18 @@ void SaveGraphForm::saveGraph()
     QString fileName;
     QByteArray file;
 
-    // For projecyions all projections in big graph
-    if (!ui->projectionRadio->isChecked() ||
-        (!ui->printAllNodesCheck->isChecked() &&
-         graph.isProjectionsMemoryUsed()) )
-    {
-        fileName = QFileDialog::getSaveFileName(this, tr("Save graph"),
-            QString(), tr("Text files (*.txt)"));
+    fileName = QFileDialog::getSaveFileName(this, tr("Save graph"),
+        QString(), tr("Text files (*.txt)"));
 
-        if (fileName.isEmpty())
-        {
-            return;
-        }
-        if (!fileName.endsWith(".txt"))
-        {
-            fileName += ".txt";
-        }
-        file = fileName.toLatin1();
+    if (fileName.isEmpty())
+    {
+        return;
     }
+    if (!fileName.endsWith(".txt"))
+    {
+        fileName += ".txt";
+    }
+    file = fileName.toLocal8Bit();
 
 
     if (ui->nodeNodeValueRadio->isChecked())
@@ -479,23 +375,6 @@ void SaveGraphForm::saveGraph()
         pathLimit = ui->pathLimitLineEdit->text().toUInt();
         result = graph.writeBrackets(file.data(), startId, pathLimit, options);
     }
-    else if (ui->projectionRadio->isChecked())
-    {
-        if (printAllNodes)
-        {
-            graph.createAllProjections();
-            if (graph.isInterrupted())
-                result = false;
-            else if (graph.isProjectionsMemoryUsed())
-                result = graph.saveProjections(file.data(), options);
-        }
-        else
-        {
-            startId = ui->startNodeLineEdit->text().toUInt();
-            graph.createProjection(startId);
-            result = graph.saveProjection(file.data(), startId,options);
-        }
-    }
     else
     {
         ui->infoLabel->setText(tr("File type is unknown. Check settings."));
@@ -509,16 +388,18 @@ void SaveGraphForm::saveGraph()
     }
     else if (result)
     {
+        mainWindow->setOpenFileName(fileName);
+
         int p = fileName.lastIndexOf(QDir::separator());
         QString shortName = fileName.mid(++p);
-        mainWindow->showStatusMessage(tr("Graph saved in file %1").
+        mainWindow->showStatusMessage(tr("Data saved in file %1").
                                     arg(shortName), 5000);
     }
     else
     {
-        ui->infoLabel->setText(tr("Graph not saved."
-                                  "File not accessed to write."));
-        mainWindow->showStatusMessage(tr("Graph not saved."), 5000);
+        ui->infoLabel->setText(tr("Saving interrupted.") + ' ' +
+                               tr("File not accessed to write."));
+        mainWindow->showStatusMessage(tr("Saving interrupted."), 5000);
     }
 }
 

@@ -35,9 +35,11 @@ public:
 
     bool isProjectionExist(unsigned nodeId) const;
     const Projection* getLoadedProjection() const;
-    virtual const Projection* getProjection(unsigned nodeId);
-    virtual const Projection* createProjection(unsigned nodeId);
+    virtual Projection* getProjection(unsigned nodeId);
+    virtual Projection* createProjection(unsigned nodeId);
     virtual void createAllProjections();
+
+    void readProjectionsInfo();
 
     virtual ProjShortPaths* findShortPaths(unsigned fromId, unsigned toId,
                                            bool reverse = false);
@@ -48,8 +50,6 @@ protected:
     std::string graphFileName;
     Projection* loadedProjection;
     Status projectionStatus;
-    bool useMemory;
-
 
     bool loadProjection(Projection* pr);
 };

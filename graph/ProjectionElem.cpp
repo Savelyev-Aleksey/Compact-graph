@@ -29,7 +29,7 @@ unsigned ProjectionElem::getId() const
 unsigned ProjectionElem::listCount() const
 {
     if (!listElem)
-        return 0;
+        return 0u;
     return listElem->size();
 }
 
@@ -86,7 +86,7 @@ bool ProjectionElem::isOriginal() const
 
 bool ProjectionElem::isLeaf() const
 {
-    return listElem ? listElem->size() == 0 : true;
+    return listElem ? listElem->size() == 0u : true;
 }
 
 

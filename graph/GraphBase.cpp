@@ -13,7 +13,7 @@
 GraphBase::GraphBase() :
     nodeList(new NodeMap),
     info(new InfoDeque),
-    edgeSize(0)
+    edgeSize(0u)
 { }
 
 
@@ -41,7 +41,7 @@ void GraphBase::clear()
 
 bool GraphBase::isEmpty() const
 {
-    return nodeList->size() == 0;
+    return nodeList->size() == 0u;
 }
 
 
@@ -70,7 +70,7 @@ void GraphBase::clearNodes()
         delete it.second;
     }
     nodeList->clear();
-    edgeSize = 0;
+    edgeSize = 0u;
 }
 
 
@@ -164,14 +164,14 @@ void GraphBase::addInfo(const char *str)
     std::transform(name.begin(), name.end(), name.begin(),
                    (int (*)(int))std::toupper);
     // trim
-    name.erase(0, name.find_first_not_of(" \t") );
+    name.erase(0u, name.find_first_not_of(" \t") );
     name.erase(name.find_last_not_of(" \t") +1, name.size() );
 
     // upper case
     std::transform(value.begin(), value.end(), value.begin(),
                    (int (*)(int))std::toupper);
     // trim
-    value.erase(0, value.find_first_not_of(" \r\n\t") );
+    value.erase(0u, value.find_first_not_of(" \r\n\t") );
     value.erase(value.find_last_not_of(" \r\n\t}") + 1, value.size() );
 
     addInfo(name.data(), value.data());
@@ -235,7 +235,7 @@ const InfoDeque* GraphBase::getAllInfo() const
  */
 void GraphBase::printInfo(FILE *f) const
 {
-    for (unsigned i = 0; i < info->size(); ++i)
+    for (unsigned i = 0u; i < info->size(); ++i)
     {
         fprintf(f, "{%s=%s}\n", info->at(i).first, info->at(i).second);
     }
@@ -250,7 +250,7 @@ void GraphBase::printInfo(FILE *f) const
  */
 void GraphBase::scanInfo(FILE *f)
 {
-    char buf[200], bracket;
+    char buf[200u], bracket;
     fpos_t position;
     while (true)
     {
@@ -261,7 +261,7 @@ void GraphBase::scanInfo(FILE *f)
             fsetpos(f, &position);
             return;
         }
-        fgets(buf, 200, f);
+        fgets(buf, 200u, f);
         addInfo(buf);
     }
 }

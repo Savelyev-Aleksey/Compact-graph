@@ -10,6 +10,11 @@ ReaderBase::ReaderBase() :
 
 
 
+ReaderBase::~ReaderBase()
+{}
+
+
+
 /**
  * @brief ReaderBase::setOptions - set options for reading
  * @param options - set options

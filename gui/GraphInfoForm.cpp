@@ -17,6 +17,8 @@ GraphInfoForm::GraphInfoForm(MainWindow *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->graphInfoButton, &QPushButton::clicked,
+            this, &GraphInfoForm::readProjectionsInfo);
     connect(ui->createShorPathButton, &QPushButton::clicked,
             this, &GraphInfoForm::createShortPaths);
     connect(ui->createProjectionsButton, &QPushButton::clicked,
@@ -30,8 +32,8 @@ GraphInfoForm::GraphInfoForm(MainWindow *parent) :
     ui->degreeStatTable->resizeColumnsToContents();
     ui->EccentrStatTable->resizeColumnsToContents();
 
+    projectionsInfoStatus();
     updateButtonsStatus();
-    printGraphInfo();
     printGraphStatistic();
     printGraphParameters();
 }
@@ -52,15 +54,30 @@ void GraphInfoForm::updateButtonsStatus()
     unsigned size = graph.nodeCount();
     bool isProj = false;
     bool isShort = false;
+    bool getInfo = false;
     if (size)
     {
         unsigned proj = graph.projectionsCount();
         unsigned shortp = graph.shortPathsCount();
         isProj = proj ? proj != size : true;
         isShort = shortp ? shortp != size : true;
+
+        getInfo = true;
+
+        if (graph.isProjectionsMemoryUsed())
+        {
+            getInfo = false;
+        }
+        else if (graph.getProjectionsStatus() != GraphWorker::Status::ALL)
+        {
+            getInfo = true;
+            isProj = true;
+        }
     }
     ui->createProjectionsButton->setEnabled(isProj);
     ui->createShorPathButton->setEnabled(isShort);
+
+    ui->graphInfoButton->setEnabled(getInfo);
 }
 
 
@@ -87,8 +104,23 @@ void GraphInfoForm::createProjections()
     ui->createProjectionsButton->setEnabled(false);
 
     GraphWorker& graph = mainWindow->getGraph();
+    if (!graph.isProjectionsMemoryUsed() &&
+        !graph.getFileName().length())
+    {
+        ui->infoLabel->setText(
+            tr("Graph not saved yet.") + ' '
+            + tr("Before save projections save graph.") + ' '
+            + tr("Graph is large. Each projection will be saved in "
+                 "own file near graph file.") );
+
+        ui->createShorPathButton->setEnabled(false);
+        return;
+    }
 
     graph.createAllProjections();
+    if (graph.isInterrupted())
+        ui->createProjectionsButton->setEnabled(true);
+
     graph.updateParametersByProjections();
 
     printGraphParameters();
@@ -98,35 +130,16 @@ void GraphInfoForm::createProjections()
 
 
 
-void GraphInfoForm::printGraphInfo()
+void GraphInfoForm::printGraphParameters()
 {
+    const GraphWorker& graph = mainWindow->getGraph();
+
     ui->FileNameLabel->setText( mainWindow->getOpenFileName() );
     ui->FileNameLabel->setToolTip( mainWindow->getOpenFile() );
-
-    const GraphWorker& graph = mainWindow->getGraph();
 
     ui->nodeCountLabel->setText( QString::number( graph.nodeCount() ) );
     ui->EdgeCountLabel->setText( QString::number( graph.edgeCount() ) );
 
-
-
-    const InfoDeque *info = graph.getAllInfo();
-    QString infoStr;
-    for (const auto &it : *info)
-    {
-        infoStr += it.first;
-        infoStr += " = ";
-        infoStr += it.second;
-        infoStr += '\n';
-    }
-    ui->paramsLabel->setText(infoStr);
-}
-
-
-
-void GraphInfoForm::printGraphParameters()
-{
-    const GraphWorker& graph = mainWindow->getGraph();
 
     unsigned value = graph.shortPathsCount();
     ui->shortPathsLabel->setText( QString::number(value) );
@@ -149,13 +162,22 @@ void GraphInfoForm::printGraphParameters()
     {
         eccentrType = 1;
         printEccentriciyStatistic();
-        QString g("\u221E (inf)");
-        unsigned girth = graph.getGraphGirth();
-        if (girth != UINT32_MAX)
+        if (graph.isProjectionsMemoryUsed() ||
+            graph.getProjectionsStatus() == FileProjectionsFacade::Status::ALL)
         {
-            g = QString::number(girth);
+            QString g("\u221E (inf)");
+            unsigned girth = graph.getGraphGirth();
+            if (girth == 0)
+            {
+                g = '-';
+            }
+            else if (girth != UINT32_MAX)
+            {
+                g = QString::number(girth);
+            }
+            ui->graphGirthLabel->setText(g);
         }
-        ui->graphGirthLabel->setText(g);
+        projectionsInfoStatus();
     }
     else if (shortp)
     {
@@ -187,9 +209,6 @@ void GraphInfoForm::printTableStat(const UintMap* map, QTableWidget* table,
             item = new QTableWidgetItem("<=");
             table->setItem(row, 0, item);
         }
-
-
-
 
         item = new QTableWidgetItem( QString::number(it->first) );
         table->setItem(row, 1, item);
@@ -265,4 +284,75 @@ void GraphInfoForm::printEccentriciyStatistic()
     }
     printTableStat(compact, ui->EccentrStatTable, shrink);
     delete compact;
+}
+
+
+
+/**
+ * @brief GraphInfoForm::readProjectionsInfo for saved graph reading file
+ * projections for get projections parameters and update graph parameters
+ * (diameter, radius, girth).
+ */
+void GraphInfoForm::readProjectionsInfo()
+{
+    GraphWorker& graph = mainWindow->getGraph();
+    if (!graph.isProjectionsMemoryUsed() &&
+        !graph.getFileName().length())
+    {
+        ui->infoLabel->setText(tr("Graph not saved yet.") + ' ' +
+            tr("Before get graph info save graph in file and "
+               "create projections."));
+        return;
+    }
+
+    graph.readProjectionsInfo();
+
+    if (graph.getLastError() == GraphWorker::Error::TYPE)
+    {
+        ui->infoLabel->setText(tr("Some projection files have unknown format.")
+                               + ' ' +
+                               tr("Not all projections files are readed."));
+    }
+    else if (graph.getProjectionsStatus() == GraphWorker::Status::PARTIAL)
+    {
+        ui->infoLabel->setText(tr("Some projections files are not found."));
+    }
+    else
+    {
+        ui->infoLabel->setText("");
+    }
+
+    printGraphParameters();
+    updateButtonsStatus();
+}
+
+
+
+void GraphInfoForm::projectionsInfoStatus()
+{
+    GraphWorker& graph = mainWindow->getGraph();
+
+    if (graph.isProjectionsMemoryUsed())
+        return;
+
+    QString info;
+    switch (graph.getProjectionsStatus())
+    {
+    case GraphWorker::Status::NONE:
+        info = tr("Projections files are not readed yet.");
+        break;
+    case GraphWorker::Status::EMPTY:
+        info = tr("Projections files are not created yet.");
+        break;
+    case GraphWorker::Status::PARTIAL:
+        info = tr("Some projections files are not found.")
+                + ' ' +
+                tr("Not all projections files are readed.");
+        break;
+    case GraphWorker::Status::ALL: // no break
+    default:
+        info = "";
+        break;
+    }
+    ui->infoLabel->setText(info);
 }

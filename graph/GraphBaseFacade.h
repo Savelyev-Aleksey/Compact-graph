@@ -71,7 +71,7 @@ public:
                                    (cuint) WOption::PRINT_VALUE );
 
     virtual bool writeBrackets(const char* fileName, cuint startNodeId,
-                               cuint pathLimit = 0,
+                               cuint pathLimit = 0u,
                                cuint options = (cuint) WOption::PRINT_VALUE);
 
 protected:

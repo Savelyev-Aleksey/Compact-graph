@@ -9,7 +9,7 @@ GraphGeneratorForm::GraphGeneratorForm(MainWindow *parent) :
     mainWindow(parent)
 {
     ui->setupUi(this);
-    ui->hypercybeDimentionEdit->setValidator(new QIntValidator(3, 18, this));
+    ui->hypercybeDimentionEdit->setValidator(new QIntValidator(3, 19, this));
     ui->hypercubeWeightEdit->setValidator(
                 new QDoubleValidator(0, 1000, 4, this));
 
@@ -55,11 +55,16 @@ void GraphGeneratorForm::torusDataValidate()
     {
         unsigned small = ui->TorusSmallRadiusEdit->text().toUInt();
         unsigned big = ui->TorusBigRadiusEdit->text().toUInt();
-        if (small * big > 262144)
+        if (small * big > (1u << 19u))
         {
             valid = false;
-            mainWindow->showStatusMessage(tr("For torus parameters are to big. "
-                                             "Decrease radius."), 5000);
+            ui->infoLabel->setText(tr("For torus parameters are to big: "
+            "%1 nodes. Decrease radius to %2 nodes.").arg(small * big)
+                                                     .arg(1u<<19u));
+        }
+        else
+        {
+            ui->infoLabel->setText("");
         }
     }
     ui->generateTorusButton->setEnabled(valid);

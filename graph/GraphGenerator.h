@@ -4,10 +4,13 @@
 #include <cstddef>
 
 
+#include "Worker.h"
+
+
 class GraphBase;
 
 
-class GraphGenerator
+class GraphGenerator : public Worker
 {
 public:
     GraphGenerator(GraphBase& graph);
@@ -18,6 +21,8 @@ public:
 
 private:
     GraphBase* graph;
+
+    unsigned number_capacity(unsigned number);
 };
 
 #endif // GRAPHGENERATOR_H

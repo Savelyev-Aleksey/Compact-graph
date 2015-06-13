@@ -26,7 +26,7 @@ public:
     unsigned  getId() const;
     void setId(unsigned num);
     bool addEdge(Edge* edge);
-    const Edge* getEdge(unsigned nodeToNum) const;
+    Edge* getEdge(unsigned nodeToNum) const;
     const EdgeList* getEdges() const;
     size_t getEdgeCount() const;
     void deleteEdgePointer(unsigned nodeToNum);

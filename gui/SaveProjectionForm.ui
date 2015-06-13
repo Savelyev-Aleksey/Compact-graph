@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>595</width>
-    <height>336</height>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -181,6 +181,9 @@ Turned on:&lt;br&gt;
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="maxLength">
+           <number>10</number>
           </property>
          </widget>
         </item>

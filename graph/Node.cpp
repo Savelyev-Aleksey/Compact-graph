@@ -58,7 +58,7 @@ bool Node::addEdge(Edge* edge)
  * @param nodeToNum - second node id.
  * @return pointer on Edge if exists, else null returned.
  */
-const Edge* Node::getEdge(unsigned nodeToNum) const
+Edge* Node::getEdge(unsigned nodeToNum) const
 {
     auto edgeIterator = edgeList->find(nodeToNum);
     if (edgeIterator == edgeList->end())

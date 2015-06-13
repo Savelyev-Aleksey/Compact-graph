@@ -388,7 +388,7 @@ Node *GraphBase::getNodeOrCreate(unsigned nodeNum)
  * @param nodeNum - node id
  * @return pointer on node or nullptr
  */
-const Node* GraphBase::getNode(unsigned nodeNum) const
+Node* GraphBase::getNode(unsigned nodeNum) const
 {
     auto nodeIterator = nodeList->find(nodeNum);
     if (nodeIterator != nodeList->end())
@@ -406,9 +406,9 @@ const Node* GraphBase::getNode(unsigned nodeNum) const
  * @param nodeToNum - second node id
  * @return const edge pointer or nullptr
  */
-const Edge* GraphBase::getEdge(unsigned nodeFromNum, unsigned nodeToNum) const
+Edge* GraphBase::getEdge(unsigned nodeFromNum, unsigned nodeToNum) const
 {
-    const auto nodeIterator = nodeList->find(nodeFromNum);
+    auto nodeIterator = nodeList->find(nodeFromNum);
     if (nodeIterator == nodeList->end())
     {
         return nullptr;

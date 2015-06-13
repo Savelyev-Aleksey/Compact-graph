@@ -111,7 +111,9 @@ void GraphBaseFacade::generateHypercube(unsigned dimention, float weight)
 {
     clear();
     GraphGenerator generator(*graph);
+    startProcess(&generator);
     generator.generateHypercube(dimention, weight);
+    completeProcess();
 }
 
 
@@ -127,7 +129,9 @@ void GraphBaseFacade::generateTorus(unsigned bigRadius, unsigned smallRadius,
 {
     clear();
     GraphGenerator generator(*graph);
+    startProcess(&generator);
     generator.generateTorus(bigRadius, smallRadius, weight);
+    completeProcess();
 }
 
 

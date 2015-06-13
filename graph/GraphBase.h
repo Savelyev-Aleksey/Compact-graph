@@ -38,8 +38,8 @@ public:
     unsigned edgeCount() const;
 
           Node* getNodeOrCreate(unsigned nodeNum);
-    const Node* getNode(unsigned nodeNum) const;
-    const Edge* getEdge(unsigned nodeFromNum, unsigned nodeToNum) const;
+    Node* getNode(unsigned nodeNum) const;
+    Edge* getEdge(unsigned nodeFromNum, unsigned nodeToNum) const;
     NodeMap* getNodeMap() const;
     NodeIdSet* getNodeIds();
 

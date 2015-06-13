@@ -1,5 +1,3 @@
-
-#include <cmath>
 #include <vector>
 #include <cstring>
 
@@ -14,6 +12,7 @@
  * @param graph - Object graph to save structure
  */
 GraphGenerator::GraphGenerator(GraphBase& graph) :
+    Worker(),
     graph(&graph)
 { }
 
@@ -21,6 +20,28 @@ GraphGenerator::GraphGenerator(GraphBase& graph) :
 
 GraphGenerator::~GraphGenerator()
 { }
+
+
+
+/**
+ * @brief GraphGenerator::number_capacity find number binary length
+ * @param number - decimal number for seak length
+ * @return bits number of binary length
+ */
+unsigned GraphGenerator::number_capacity(unsigned number)
+{
+    unsigned n = 1u, x = number;
+
+    if (x == 0u) return 0u;
+
+    if ((x >> 16u) == 0u) {n = n + 16u; x = x << 16u;}
+    if ((x >> 24u) == 0u) {n = n + 8u;  x = x << 8u;}
+    if ((x >> 28u) == 0u) {n = n + 4u;  x = x << 4u;}
+    if ((x >> 30u) == 0u) {n = n + 2u;  x = x << 2u;}
+    n = n - (x >> 31u);
+
+    return 32u - n;
+}
 
 
 
@@ -36,43 +57,58 @@ void GraphGenerator::generateHypercube(unsigned dimention, float weight)
     graph->clear();
 
     graph->addInfo("TYPE", "HYPERCUBE");
-    char dimentionStr[4], weightStr[16];
-    snprintf(dimentionStr, 4, "%hhu", dimention);
-    snprintf(weightStr, 16, "%g", weight);
+    char dimentionStr[4u], weightStr[16u];
+    snprintf(dimentionStr, 4u, "%u", dimention);
+    snprintf(weightStr, 16u, "%g", weight);
 
     graph->addInfo("DIMENTION", dimentionStr);
     graph->addInfo("WEIGHT", weightStr);
 
-    auto end = (unsigned) pow(2, dimention);
-    unsigned distance, onesCount;
+    // 2^dimention
+    unsigned end = 1u << dimention;
+
+    startProcess(0u, end - 2u);
+
+    // prepare nodes
     for (unsigned i = 0u; i < end; ++i)
     {
+        if (isInterrupted())
+            return;
+
         graph->addNode(i);
     }
-    NodeMap* nodeList = graph->getNodeMap();
-    auto itEnd = nodeList->end();
-    auto itPrevEnd = nodeList->end()--;
 
-    for (auto i = nodeList->begin(); i != itPrevEnd; ++i)
+    NodeMap* nodeList = graph->getNodeMap();
+    auto itPrevEnd = nodeList->end();
+    --itPrevEnd;
+    Node* j;
+
+    unsigned current = 0u;
+    for (auto i = nodeList->begin(); i != itPrevEnd; ++i, ++current)
     {
-        auto j = i;
-        for (++j; j != itEnd; ++j)
+        updateProgress(current);
+        unsigned mask, toId, fromId = i->first;
+        for(unsigned char pow = 0; pow < dimention; ++pow)
         {
-            // Binary distance - count different bits
-            distance = i->first ^ j->first;
-            for (onesCount = 0u; onesCount < 2 && distance; distance >>= 1)
+            if (isInterrupted())
             {
-                if (distance & 1)
-                {
-                    ++onesCount;
-                }
+                graph->clear();
+                return;
             }
-            if (onesCount == 1)
+
+            mask = 1u << pow;
+            // if mask bit is zero - we can increase number
+            // Only increase number, because less number nodes
+            // already added edge in current node (by binary distance == 1)
+            if (!(fromId & mask))
             {
-                graph->addEdge(i->second, j->second, weight);
+                toId = fromId | mask;
+                j = graph->getNode(toId);
+                graph->addEdge(i->second, j, weight);
             }
         }
     }
+    completeProcess();
 }
 
 
@@ -88,11 +124,14 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
     // Be shure graph is empty
     graph->clear();
 
+    if (bigRadius < 3 || smallRadius < 3)
+        return;
+
     graph->addInfo("TYPE", "TORUS");
-    char bigRadiusStr[6], smallRadiusStr[6], weightStr[16];
-    snprintf(bigRadiusStr, 6, "%u", bigRadius);
-    snprintf(smallRadiusStr, 6, "%u", smallRadius);
-    snprintf(weightStr, 16, "%g", weight);
+    char bigRadiusStr[6u], smallRadiusStr[6u], weightStr[16u];
+    snprintf(bigRadiusStr, 6u, "%u", bigRadius);
+    snprintf(smallRadiusStr, 6u, "%u", smallRadius);
+    snprintf(weightStr, 16u, "%g", weight);
     graph->addInfo("BIG_RADIUS", bigRadiusStr);
     graph->addInfo("SMALL_RADIUS", smallRadiusStr);
     graph->addInfo("WEIGHT", weightStr);
@@ -102,6 +141,8 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
     Node** currrentList = nullptr;
     Node** firstList = nullptr;
 
+    startProcess(0u, smallRadius * bigRadius - 1u);
+
     unsigned id = 0u;
     // Move by circle rotation
     for (unsigned i = 0u; i < bigRadius; ++i)
@@ -110,14 +151,22 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
         // Create new circle on i angle
         for (unsigned j = 0u; j < smallRadius; ++j, ++id)
         {
+            if(isInterrupted())
+            {
+                graph->clear();
+                return;
+            }
+
+            updateProgress(id);
+
             currrentList[j] = graph->newNode(id);
             if (j > 0u)
             {
-                graph->addEdge(currrentList[j - 1], currrentList[j], weight);
+                graph->addEdge(currrentList[j - 1u], currrentList[j], weight);
             }
         }
         // connect first and last node to circle
-        graph->addEdge(currrentList[0u], currrentList[smallRadius - 1], weight);
+        graph->addEdge(currrentList[0u], currrentList[smallRadius - 1u],weight);
 
         if (prevList == nullptr)
         {
@@ -143,5 +192,7 @@ void GraphGenerator::generateTorus(unsigned bigRadius, unsigned smallRadius,
     }
     delete[] firstList;
     delete[] currrentList;
+
+    completeProcess();
 }
 

@@ -1,8 +1,12 @@
+#include <chrono>
+#include <thread>
+#include <cmath>
+
+
 #include <QWidget>
 #include <QString>
 #include <QProgressDialog>
-#include <thread>
-#include <iostream>
+
 
 #include "GraphWorker.h"
 #include "graph/Node.h"
@@ -21,6 +25,26 @@ GraphWorker::GraphWorker(QWidget* parent) : Graph(),
 GraphWorker::~GraphWorker()
 {
 
+}
+
+
+
+void GraphWorker::clear()
+{
+    QProgressDialog progressDg(QObject::tr("Graph is cleaning"),
+                               "", 0, 100);
+
+    progressDg.setWindowModality(Qt::WindowModal);
+    progressDg.setMinimumDuration(800);
+
+    auto fn = [this]{
+        this->Graph::clear();
+    };
+
+    std::thread creator(fn);
+    creator.join();
+
+    progressDg.close();
 }
 
 
@@ -46,7 +70,9 @@ void GraphWorker::progressDialog(unsigned size, const QString& title,
     unsigned current;
     int value;
 
-    progressDg.show();
+    std::chrono::milliseconds dura( 400 );
+
+    progressDg.setValue(0);
     do
     {
         if (progressDg.wasCanceled())
@@ -57,6 +83,8 @@ void GraphWorker::progressDialog(unsigned size, const QString& title,
 
         progressDg.setValue(value);
         progressDg.setLabelText(titleP.arg(current));
+
+        std::this_thread::sleep_for( dura );
 
     }
     while (isProcessed());
@@ -264,3 +292,38 @@ void GraphWorker::readProjectionsInfo()
     progressDialog(size, title, fn);
 }
 
+
+void GraphWorker::generateHypercube(unsigned dimention, float weight)
+{
+    QString title = QObject::tr("Creating hypercube");
+
+    unsigned size = 1u << dimention;
+    if (size < 3)
+        return;
+    size -= 2;
+
+    startProcess();
+
+    std::function<void()> fn = [this, dimention, weight] {
+        this->Graph::generateHypercube(dimention, weight);
+    };
+    progressDialog(size, title, fn);
+}
+
+
+
+void GraphWorker::generateTorus(unsigned bigRadius, unsigned smallRadius,
+                                float weight)
+{
+    QString title = QObject::tr("Creating torus");
+
+    unsigned size = bigRadius * smallRadius;
+    if (!size)
+        return;
+    --size;
+
+    std::function<void()> fn = [this, bigRadius, smallRadius, weight] {
+        this->Graph::generateTorus(bigRadius, smallRadius, weight);
+    };
+    progressDialog(size, title, fn);
+}

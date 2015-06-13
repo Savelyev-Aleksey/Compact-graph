@@ -21,8 +21,14 @@ public:
     GraphWorker(QWidget* parent);
     virtual ~GraphWorker();
 
+    virtual void clear();
+
     const Node* findNode(unsigned nodeId, QString& info) const;
 
+    // Generators
+    virtual void generateHypercube(unsigned dimention, float weight);
+    virtual void generateTorus(unsigned bigRadius, unsigned smallRadius,
+                               float weight);
 
     // Graph writers
     virtual bool writeEdges(const char* fileName, cuint options = (cuint)

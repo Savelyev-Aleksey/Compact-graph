@@ -43,8 +43,9 @@ public:
     const std::string& getFileName() const;
 
     // Generators
-    void generateHypercube(unsigned dimention, float weight);
-    void generateTorus(unsigned bigRadius, unsigned smallRadius, float weight);
+    virtual void generateHypercube(unsigned dimention, float weight);
+    virtual void generateTorus(unsigned bigRadius, unsigned smallRadius,
+                               float weight);
 
     // Statistics
     UintMap* getNodeDegreeStatistic() const;

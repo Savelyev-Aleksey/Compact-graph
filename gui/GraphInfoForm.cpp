@@ -322,6 +322,8 @@ void GraphInfoForm::readProjectionsInfo()
         ui->infoLabel->setText("");
     }
 
+    graph.updateParametersByProjections();
+
     printGraphParameters();
     updateButtonsStatus();
 }

@@ -91,20 +91,13 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
     QString info;
     info = tr("File type = %1\n").arg(QLatin1String(typeIdStr.trimmed()));
 
-    unsigned long lines = 1;
     QByteArray text;
     QByteArray example;
 
-    while (!file.atEnd())
+    while (!file.atEnd() && example.length() < 600)
     {
-        ++lines;
-        text = file.readLine();
-        if (example.length() < 600)
-        {
-            int end = 600 - example.length();
-            end = qMin(text.length(), end);
-            example.append(QByteArray::fromRawData(text, end));
-        }
+        text = file.readLine();        
+
         if (text.at(0) == '{')
         {
             QByteArray str(text);
@@ -114,10 +107,15 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
             QByteArray value = str.mid(pos + 1);
             info += name + " = " + value + "\n";
         }
+        else
+        {
+            int end = 600 - example.length();
+            end = qMin(text.length(), end);
+            example.append(QByteArray::fromRawData(text, end));
+        }
     }
 
     info += '\n';
-    info += tr("Lines in file: %1\n").arg(lines);
     info += tr("File size: %1 bytes").arg(file.size());
     info += "\n\n";
     info += example;

@@ -411,7 +411,8 @@ void FileProjections::readProjectionsInfo()
         projectionStatus = Status::EMPTY;
     }
 
-    if (!isProjectionsWasEmpty)
+    // check that list was not empty and some new projections added
+    if (oldSize && oldSize != count)
     {
         auto end = projectionsList->end();
         std::sort(oldStart, end, Projection::less);

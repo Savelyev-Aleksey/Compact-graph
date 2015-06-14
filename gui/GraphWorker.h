@@ -19,9 +19,7 @@ class GraphWorker : public Graph
 {
 public:
     GraphWorker(QWidget* parent);
-    virtual ~GraphWorker();
-
-    virtual void clear();
+    virtual ~GraphWorker();    
 
     const Node* findNode(unsigned nodeId, QString& info) const;
 

@@ -29,26 +29,6 @@ GraphWorker::~GraphWorker()
 
 
 
-void GraphWorker::clear()
-{
-    QProgressDialog progressDg(QObject::tr("Graph is cleaning"),
-                               "", 0, 100);
-
-    progressDg.setWindowModality(Qt::WindowModal);
-    progressDg.setMinimumDuration(800);
-
-    auto fn = [this]{
-        this->Graph::clear();
-    };
-
-    std::thread creator(fn);
-    creator.join();
-
-    progressDg.close();
-}
-
-
-
 void GraphWorker::progressDialog(unsigned size, const QString& title,
                                  std::function<void ()> progressFn)
 {

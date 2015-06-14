@@ -162,7 +162,7 @@ void SaveShortPathForm::saveShortPath()
 
     if (result)
     {
-        int p = fileName.lastIndexOf(QDir::separator());
+        int p = fileName.lastIndexOf('/');
         QString shortName = fileName.mid(++p);
         mainWindow->showStatusMessage(tr("Short path saved in file %1").
                                     arg(shortName));

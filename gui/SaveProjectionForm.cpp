@@ -354,7 +354,7 @@ void SaveProjectionForm::saveProjection()
     }
     else if (result)
     {
-        int p = fileName.lastIndexOf(QDir::separator());
+        int p = fileName.lastIndexOf('/');
         QString shortName = fileName.mid(++p);
         mainWindow->showStatusMessage(tr("Data saved in file %1").
                                     arg(shortName), 5000);

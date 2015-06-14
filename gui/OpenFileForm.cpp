@@ -41,7 +41,7 @@ void OpenFileForm::chooseFile()
                         tr("Open file"), "", tr("Text files (*.txt)") );
     if (fileName.length())
     {
-        int p = fileName.lastIndexOf(QDir::separator());
+        int p = fileName.lastIndexOf('/');
         QString name = fileName.mid(++p);
         bool isReaded = readFileInfo(fileName);
         if (isReaded)
@@ -146,7 +146,7 @@ void OpenFileForm::readFile()
             ui->projectionsInfoButton->setEnabled(true);
 
         mainWindow->setOpenFileName(fileName);
-        int p = fileName.lastIndexOf(QDir::separator());
+        int p = fileName.lastIndexOf('/');
         QString shortName = fileName.mid(++p);
         ui->infoLabel->setText( tr("File \"%1\" readed").arg(shortName) );
         mainWindow->showStatusMessage(tr("File \"%1\" readed").arg(shortName),

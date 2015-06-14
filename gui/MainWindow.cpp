@@ -46,7 +46,7 @@ MainWindow::~MainWindow()
 void MainWindow::setOpenFileName(const QString &fileName)
 {
     openFile = fileName;
-    int p = fileName.lastIndexOf(QDir::separator());
+    int p = fileName.lastIndexOf('/');
     openFileName = fileName.mid(++p);
 }
 

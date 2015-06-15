@@ -525,7 +525,7 @@ void Projection::updateAfterRead()
 
 /**
  * @brief Projection::findShortPaths finds paths from current node to root elem
- * (respectived node). Functions returns all available not intersected paths
+ * (respectived node). Functions returns all available paths
  * from respectived node to the current same length.
  * @param nodeId - node id to search in current projection
  * @param reverse - by default path order from root elem to find elem

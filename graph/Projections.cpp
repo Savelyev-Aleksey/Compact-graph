@@ -273,7 +273,7 @@ unsigned Projections::getGraphGirth() const
 
 /**
  * @brief Projections::findShortPaths finds paths between fromId and toId
- * nodes Functions returns all available not intersected paths same length.
+ * nodes Functions returns all available paths same length.
  * @param fromId - node id for seach paths.
  * @param toId - node id for seatch paths
  * @param reverse - by default path order from root elem to find elem

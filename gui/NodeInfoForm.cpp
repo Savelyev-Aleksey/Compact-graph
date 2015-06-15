@@ -18,7 +18,7 @@ NodeInfoForm::NodeInfoForm(MainWindow *parent) :
 
     ui->nodeNumEdit->setValidator(new QIntValidator(0, INT_MAX, this));
 
-    connect(ui->nodeNumEdit, &QLineEdit::textChanged,
+    connect(ui->nodeNumEdit, &QLineEdit::editingFinished,
             this, &NodeInfoForm::findNode);
     connect(ui->createProjectionButton, &QPushButton::clicked,
             this, &NodeInfoForm::createProjection);

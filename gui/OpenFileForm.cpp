@@ -96,7 +96,7 @@ bool OpenFileForm::readFileInfo(const QString &fileName)
 
     while (!file.atEnd() && example.length() < 600)
     {
-        text = file.readLine();        
+        text = file.readLine();
 
         if (text.at(0) == '{')
         {
@@ -181,6 +181,7 @@ void OpenFileForm::readProjectionsInfo()
 {
     GraphWorker& graph = mainWindow->getGraph();
     graph.readProjectionsInfo();
+    graph.updateParametersByProjections();
 
     ui->infoLabel->setText(tr("Projections info was readed. "
                               "More info in statistics menu."));

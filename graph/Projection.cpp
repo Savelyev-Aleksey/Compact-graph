@@ -420,7 +420,8 @@ void Projection::updateShortestLoop()
 
             if (!find)
             {
-                for(++replN; replN != endL; ++replN)
+                for(++replN; replN != endL && shortestLoop < origN + replN;
+                    ++replN)
                 {
                     const auto &repLevel = *levelList->at(replN);
                     const auto repB = repLevel.begin();

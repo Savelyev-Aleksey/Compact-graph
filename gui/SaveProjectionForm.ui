@@ -120,8 +120,11 @@ Turned on:&lt;br&gt;
       </item>
       <item>
        <widget class="QCheckBox" name="printAllNodesCheck">
+        <property name="toolTip">
+         <string>Save in one file projections for all nodes. Useful for small graphs.</string>
+        </property>
         <property name="text">
-         <string>Print all nodes</string>
+         <string>Print all projections</string>
         </property>
        </widget>
       </item>

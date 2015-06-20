@@ -187,33 +187,33 @@ Delimiter is comma ,</source>
 <context>
     <name>GraphInfoForm</name>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="386"/>
+        <location filename="../../GraphInfoForm.ui" line="374"/>
         <source>Nodes degree statistic</source>
         <translation>Статистика степеней вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="438"/>
+        <location filename="../../GraphInfoForm.ui" line="414"/>
         <source>Degree</source>
         <translation>Степень</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="98"/>
-        <location filename="../../GraphInfoForm.ui" line="443"/>
+        <location filename="../../GraphInfoForm.ui" line="86"/>
+        <location filename="../../GraphInfoForm.ui" line="419"/>
         <source>Count</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="193"/>
+        <location filename="../../GraphInfoForm.ui" line="181"/>
         <source>Radius:</source>
         <translation>Радиус:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="317"/>
+        <location filename="../../GraphInfoForm.ui" line="305"/>
         <source>Diameter:</source>
         <translation>Диаметр:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="232"/>
+        <location filename="../../GraphInfoForm.ui" line="220"/>
         <source>Before search parameters will be created short paths for each node.
 After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Перед поиском параметров будут созданы кратчайшие пути для каждой вершины.
@@ -221,52 +221,52 @@ After will be found diameter, radius and eccentricity statistic.</source>
     </message>
     <message>
         <location filename="../../GraphInfoForm.ui" line="20"/>
-        <location filename="../../GraphInfoForm.ui" line="116"/>
+        <location filename="../../GraphInfoForm.ui" line="104"/>
         <source>Graph info</source>
         <translation>Инормация о графе</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="236"/>
+        <location filename="../../GraphInfoForm.ui" line="224"/>
         <source>Create short paths</source>
         <translation>Создать кратчайшие пути</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="343"/>
+        <location filename="../../GraphInfoForm.ui" line="331"/>
         <source>Read info from projections files</source>
         <translation>Прочитать информацию из файлов проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="346"/>
+        <location filename="../../GraphInfoForm.ui" line="334"/>
         <source>Read info</source>
         <translation>Прочитать информацию</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="459"/>
+        <location filename="../../GraphInfoForm.ui" line="435"/>
         <source>Info</source>
         <translation>информция</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="296"/>
+        <location filename="../../GraphInfoForm.ui" line="284"/>
         <source>Short paths:</source>
         <translation>Кратчайшие пути:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="161"/>
+        <location filename="../../GraphInfoForm.ui" line="149"/>
         <source>Create projections</source>
         <translation>Создать проекции</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="272"/>
+        <location filename="../../GraphInfoForm.ui" line="260"/>
         <source>Projections:</source>
         <translation>Проекции:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="125"/>
+        <location filename="../../GraphInfoForm.ui" line="113"/>
         <source>Graph degree:</source>
         <translation>Степень графа:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="214"/>
+        <location filename="../../GraphInfoForm.ui" line="202"/>
         <source>Graph girth:</source>
         <translation>Обхват графа:</translation>
     </message>
@@ -276,12 +276,12 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Имя файла:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="200"/>
+        <location filename="../../GraphInfoForm.ui" line="188"/>
         <source>Node conut:</source>
         <translation>Количество вершин:</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="207"/>
+        <location filename="../../GraphInfoForm.ui" line="195"/>
         <source>Edge Count:</source>
         <translation>Количество рёбер:</translation>
     </message>
@@ -291,13 +291,13 @@ After will be found diameter, radius and eccentricity statistic.</source>
         <translation>Статистика экцентриситетов вершин</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="77"/>
-        <location filename="../../GraphInfoForm.ui" line="407"/>
+        <location filename="../../GraphInfoForm.ui" line="65"/>
+        <location filename="../../GraphInfoForm.ui" line="383"/>
         <source>Detail info</source>
         <translation>Подробная информация</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.ui" line="93"/>
+        <location filename="../../GraphInfoForm.ui" line="81"/>
         <source>Eccentricity</source>
         <translation>Экцентриситет</translation>
     </message>
@@ -329,23 +329,23 @@ After will be found diameter, radius and eccentricity statistic.</source>
     </message>
     <message>
         <location filename="../../GraphInfoForm.cpp" line="314"/>
-        <location filename="../../GraphInfoForm.cpp" line="350"/>
+        <location filename="../../GraphInfoForm.cpp" line="352"/>
         <source>Not all projections files are readed.</source>
         <translation>Не все файлы проекций были прочитаны.</translation>
     </message>
     <message>
         <location filename="../../GraphInfoForm.cpp" line="318"/>
-        <location filename="../../GraphInfoForm.cpp" line="348"/>
+        <location filename="../../GraphInfoForm.cpp" line="350"/>
         <source>Some projections files are not found.</source>
         <translation>Некоторые файлы проекций не найдены.</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.cpp" line="345"/>
+        <location filename="../../GraphInfoForm.cpp" line="347"/>
         <source>Projections files are not created yet.</source>
         <translation>Файлы проекций ещё не созданы.</translation>
     </message>
     <message>
-        <location filename="../../GraphInfoForm.cpp" line="342"/>
+        <location filename="../../GraphInfoForm.cpp" line="344"/>
         <source>Projections files are not readed yet.</source>
         <translation>Файлы проекций ещё не прочитаны.</translation>
     </message>
@@ -514,50 +514,43 @@ After will be found diameter, radius and eccentricity statistic.</source>
 </translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="120"/>
-        <source>Lines in file: %1
-</source>
-        <translation>Строк в файле: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../../OpenFileForm.cpp" line="121"/>
+        <location filename="../../OpenFileForm.cpp" line="119"/>
         <source>File size: %1 bytes</source>
         <translation>Размер файла: %1 байт</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="139"/>
+        <location filename="../../OpenFileForm.cpp" line="137"/>
         <source>Clearing graph...</source>
         <translation>Очистка графа...</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="151"/>
-        <location filename="../../OpenFileForm.cpp" line="152"/>
+        <location filename="../../OpenFileForm.cpp" line="149"/>
+        <location filename="../../OpenFileForm.cpp" line="150"/>
         <source>File &quot;%1&quot; readed</source>
         <translation>Файл %1 прочитан</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="161"/>
+        <location filename="../../OpenFileForm.cpp" line="159"/>
         <source>Can&apos;t read file.</source>
         <translation>Невозможно прочитать файл.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="164"/>
+        <location filename="../../OpenFileForm.cpp" line="162"/>
         <source>File have unknown type.</source>
         <translation>Тип файла неизвестен.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="167"/>
+        <location filename="../../OpenFileForm.cpp" line="165"/>
         <source>File have syntax error.</source>
         <translation>В файле синтаксическая ошибка.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="170"/>
+        <location filename="../../OpenFileForm.cpp" line="168"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="174"/>
+        <location filename="../../OpenFileForm.cpp" line="172"/>
         <source>
 Check log file to get more information about error.
 By default file graph.log located in same program directory.</source>
@@ -566,7 +559,7 @@ By default file graph.log located in same program directory.</source>
 По умолчанию файл graph.log расположен в директории программы.</translation>
     </message>
     <message>
-        <location filename="../../OpenFileForm.cpp" line="187"/>
+        <location filename="../../OpenFileForm.cpp" line="186"/>
         <source>Projections info was readed. More info in statistics menu.</source>
         <translation>Информация о проекциях была прочитана. Подробней в меню статистики.</translation>
     </message>
@@ -574,73 +567,68 @@ By default file graph.log located in same program directory.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../GraphWorker.cpp" line="34"/>
-        <source>Graph is cleaning</source>
-        <translation>Граф очищается</translation>
-    </message>
-    <message>
-        <location filename="../../GraphWorker.cpp" line="60"/>
+        <location filename="../../GraphWorker.cpp" line="40"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="103"/>
+        <location filename="../../GraphWorker.cpp" line="83"/>
         <source>Creating short path</source>
         <translation>Создание кратчайшего пути</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="121"/>
+        <location filename="../../GraphWorker.cpp" line="101"/>
         <source>Creating projections</source>
         <translation>Создание проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="136"/>
+        <location filename="../../GraphWorker.cpp" line="116"/>
         <source>Writing edges of node</source>
         <translation>Запись рёбер вершины</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="152"/>
-        <location filename="../../GraphWorker.cpp" line="173"/>
+        <location filename="../../GraphWorker.cpp" line="132"/>
+        <location filename="../../GraphWorker.cpp" line="153"/>
         <source>Writing adjacency list</source>
         <translation>Запись списка смежности</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="195"/>
+        <location filename="../../GraphWorker.cpp" line="175"/>
         <source>Writing projections</source>
         <translation>Запись проекций</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="220"/>
+        <location filename="../../GraphWorker.cpp" line="200"/>
         <source>Writing projection</source>
         <translation>Запись проекции</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="245"/>
+        <location filename="../../GraphWorker.cpp" line="225"/>
         <source>Node %1 not found.</source>
         <translation>Вершина %1 не найдена.</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="250"/>
+        <location filename="../../GraphWorker.cpp" line="230"/>
         <source>Nearest:</source>
         <translation>Ближайшие:</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="268"/>
+        <location filename="../../GraphWorker.cpp" line="248"/>
         <source>Finding short paths</source>
         <translation>Поиск кратчайших путей</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="282"/>
+        <location filename="../../GraphWorker.cpp" line="262"/>
         <source>Reading projections info</source>
         <translation>Чтение информации о проекциях</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="298"/>
+        <location filename="../../GraphWorker.cpp" line="278"/>
         <source>Creating hypercube</source>
         <translation>Создание гиперкуба</translation>
     </message>
     <message>
-        <location filename="../../GraphWorker.cpp" line="318"/>
+        <location filename="../../GraphWorker.cpp" line="298"/>
         <source>Creating torus</source>
         <translation>Создание тора</translation>
     </message>
@@ -1008,41 +996,46 @@ Turned on:&lt;br&gt;
     </message>
     <message>
         <location filename="../../SaveProjectionForm.ui" line="124"/>
-        <source>Print all nodes</source>
-        <translation>Печать всех вершин</translation>
+        <source>Save in one file projections for all nodes. Useful for small graphs.</source>
+        <translation>Сохраняет в одном файле проекции для всех вершин. Полезно использовать для маленьких графов.</translation>
     </message>
     <message>
-        <location filename="../../SaveProjectionForm.ui" line="131"/>
+        <location filename="../../SaveProjectionForm.ui" line="127"/>
+        <source>Print all projections</source>
+        <translation>Печать всех проекций</translation>
+    </message>
+    <message>
+        <location filename="../../SaveProjectionForm.ui" line="134"/>
         <source>In reverse</source>
         <translation>В обратном порядке</translation>
     </message>
     <message>
-        <location filename="../../SaveProjectionForm.ui" line="140"/>
+        <location filename="../../SaveProjectionForm.ui" line="143"/>
         <source>Start node</source>
         <translation>Начальная вершина</translation>
     </message>
     <message>
-        <location filename="../../SaveProjectionForm.ui" line="153"/>
+        <location filename="../../SaveProjectionForm.ui" line="156"/>
         <source>Node id for start writing bracket style paths.</source>
         <translation>Номер вершины для начала пути в скобочной записи.</translation>
     </message>
     <message>
-        <location filename="../../SaveProjectionForm.ui" line="173"/>
+        <location filename="../../SaveProjectionForm.ui" line="176"/>
         <source>Second node</source>
         <translation>Вторая вершина</translation>
     </message>
     <message>
-        <location filename="../../SaveProjectionForm.ui" line="198"/>
+        <location filename="../../SaveProjectionForm.ui" line="201"/>
         <source>info</source>
         <translation>информция</translation>
     </message>
     <message>
-        <location filename="../../SaveProjectionForm.ui" line="211"/>
+        <location filename="../../SaveProjectionForm.ui" line="214"/>
         <source>Example</source>
         <translation>Пример</translation>
     </message>
     <message>
-        <location filename="../../SaveProjectionForm.ui" line="251"/>
+        <location filename="../../SaveProjectionForm.ui" line="254"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
